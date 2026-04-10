@@ -26,6 +26,8 @@
   --toast-bg: #ffffff;
   --toast-border: #e5e5e5;
   --btn-invert-bg: #f5f5f5;
+  --toggle-bg: #e5e5e5;
+  --toggle-knob: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -47,6 +49,8 @@
   --toast-bg: #141414;
   --toast-border: #2a2a2a;
   --btn-invert-bg: #2a2a2a;
+  --toggle-bg: #2a2a2a;
+  --toggle-knob: #ffffff;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -59,7 +63,7 @@ body {
   font-weight: 400;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 header {
@@ -92,27 +96,57 @@ header {
   opacity: 0.5;
 }
 
-.theme-toggle {
-  background: var(--btn-invert-bg);
-  border: 1.5px solid var(--border);
-  color: var(--text);
-  padding: 8px 12px;
-  border-radius: 100px;
-  font-family: var(--font);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
+/* INTERRUPTOR ANIMADO */
+.theme-toggle-wrapper {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   margin-right: auto;
 }
 
-.theme-toggle:hover {
-  background: var(--text);
-  color: var(--bg);
-  border-color: var(--text);
+.theme-toggle {
+  background: var(--toggle-bg);
+  border: 1.5px solid var(--border);
+  width: 56px;
+  height: 30px;
+  border-radius: 100px;
+  padding: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.theme-toggle-knob {
+  width: 22px;
+  height: 22px;
+  background: var(--toggle-knob);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] .theme-toggle-knob {
+  left: calc(100% - 25px);
+}
+
+.theme-icon {
+  font-size: 14px;
+  transition: opacity 0.2s ease;
+}
+
+.theme-toggle-wrapper span:last-child {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-width: 45px;
 }
 
 .user-info {
@@ -373,6 +407,9 @@ header {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .new-area button:hover {
@@ -392,6 +429,9 @@ header {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .owner-btn:hover {
@@ -461,6 +501,9 @@ header {
   border-radius: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .session-selector button:hover {
@@ -942,12 +985,8 @@ header {
     display: none;
   }
   
-  .theme-toggle span:not(:first-child) {
+  .theme-toggle-wrapper span:last-child {
     display: none;
-  }
-
-  .theme-toggle {
-    padding: 8px;
   }
   
   .dashboard {
@@ -1012,25 +1051,25 @@ header {
 
 <div id="auth-container" class="auth-container">
   <div id="login-panel" class="auth-card">
-    <h2>Bienvenido</h2>
+    <h2>👋 Bienvenido</h2>
     <p>Accede a tu panel de control</p>
     <input type="text" id="login-user" placeholder="Usuario" autocomplete="off">
     <input type="password" id="login-pass" placeholder="Contraseña">
-    <button onclick="login()">Iniciar sesión</button>
-    <button class="secondary-btn" onclick="showRegister()">Crear cuenta</button>
+    <button onclick="login()">🚪 Iniciar sesión</button>
+    <button class="secondary-btn" onclick="showRegister()">📝 Crear cuenta</button>
     <div class="switch-link">
       <a onclick="showRegister()">¿Primera vez? Regístrate →</a>
     </div>
   </div>
 
   <div id="register-panel" class="auth-card" style="display:none;">
-    <h2>Crear cuenta</h2>
+    <h2>📝 Crear cuenta</h2>
     <p>Únete a FrikiBot</p>
     <input type="text" id="register-user" placeholder="Usuario" autocomplete="off">
     <input type="password" id="register-pass" placeholder="Contraseña">
     <input type="password" id="register-pass2" placeholder="Confirmar contraseña">
-    <button onclick="register()">Registrarse</button>
-    <button class="secondary-btn" onclick="showLogin()">Volver</button>
+    <button onclick="register()">✅ Registrarse</button>
+    <button class="secondary-btn" onclick="showLogin()">← Volver</button>
     <div class="switch-link">
       <a onclick="showLogin()">← Ya tengo cuenta</a>
     </div>
@@ -1039,46 +1078,51 @@ header {
 
 <div id="app-container" class="app-container">
   <header>
-    <div class="logo">Friki<span>Bot</span><span class="owner-badge-header" id="owner-badge-header"></span></div>
-    <button class="theme-toggle" onclick="toggleTheme()">
-      <span>◐</span>
-      <span>Tema</span>
-    </button>
+    <div class="logo">🤖 Friki<span>Bot</span><span class="owner-badge-header" id="owner-badge-header"></span></div>
+    
+    <div class="theme-toggle-wrapper">
+      <span>🌙</span>
+      <div class="theme-toggle" id="theme-toggle-btn">
+        <div class="theme-toggle-knob" id="theme-knob">🌙</div>
+      </div>
+      <span>☀️</span>
+    </div>
+    
     <span class="user-info" id="user-info"></span>
-    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    <button class="logout-btn" onclick="logout()">🚪 Cerrar sesión</button>
     <span class="conn-lbl" id="conn-lbl">Conectando...</span>
     <span class="conn-dot" id="conn-dot"></span>
   </header>
 
   <div class="dashboard owner-only" id="owner-dashboard">
     <div class="stat-card">
-      <div class="stat-label">Sesiones Activas</div>
+      <div class="stat-label">🟢 Sesiones Activas</div>
       <div class="stat-value" id="stat-active">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">QR Pendientes</div>
+      <div class="stat-label">📷 QR Pendientes</div>
       <div class="stat-value" id="stat-qr">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Sesiones Pausadas</div>
+      <div class="stat-label">⏸️ Sesiones Pausadas</div>
       <div class="stat-value" id="stat-paused">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Total Usuarios</div>
+      <div class="stat-label">👥 Total Usuarios</div>
       <div class="stat-value" id="stat-users">0</div>
     </div>
   </div>
 
   <div class="controls-bar owner-only" id="owner-controls">
     <div class="new-area">
-      <select id="new-n"><option value="">[+] Nueva sesión...</option></select>
-      <button onclick="iniciarNueva()">Crear sesión</button>
+      <select id="new-n"><option value="">➕ Nueva sesión...</option></select>
+      <button onclick="iniciarNueva()">✨ Crear sesión</button>
     </div>
-    <button class="owner-btn" onclick="exportData()">Exportar</button>
-    <button class="owner-btn" onclick="showLogs()">Historial</button>
+    <button class="owner-btn" onclick="exportData()">📦 Exportar</button>
+    <button class="owner-btn" onclick="showLogs()">📋 Historial</button>
   </div>
 
-  <div id="sessions"><p class="empty">Cargando sesiones...</p></div>
+  <div id="sessions"><p class="empty">⏳ Cargando sesiones...</p></div>
 </div>
 
 <div id="toast"></div>
@@ -1089,21 +1133,21 @@ header {
     <p id="m-desc"></p>
     <input id="m-input" type="text" maxlength="30">
     <div class="mbtns">
-      <button onclick="closeModal()">Cancelar</button>
-      <button class="ok" onclick="confirmModal()">Guardar</button>
+      <button onclick="closeModal()">❌ Cancelar</button>
+      <button class="ok" onclick="confirmModal()">💾 Guardar</button>
     </div>
   </div>
 </div>
 
 <div class="ov" id="f-ov">
   <div class="modal">
-    <h3>Foto del menú</h3>
+    <h3>📸 Foto del menú</h3>
     <p>Selecciona una imagen</p>
     <input type="file" id="f-input" accept="image/*" onchange="prevFoto(event)">
     <img id="f-prev" style="width:80px;height:80px;object-fit:cover;border-radius:12px;border:1.5px solid var(--border);display:none;margin-top:12px;">
     <div class="mbtns" style="margin-top:16px;">
-      <button onclick="closeFoto()">Cancelar</button>
-      <button class="ok" onclick="confirmarFoto()">Guardar</button>
+      <button onclick="closeFoto()">❌ Cancelar</button>
+      <button class="ok" onclick="confirmarFoto()">💾 Guardar</button>
     </div>
   </div>
 </div>
@@ -1158,28 +1202,25 @@ header {
       El LID siempre termina con @lid
     </p>
     <div class="mbtns">
-      <button onclick="closeLidModal()">Cancelar</button>
-      <button class="ok" onclick="confirmLid()">Guardar LID</button>
+      <button onclick="closeLidModal()">❌ Cancelar</button>
+      <button class="ok" onclick="confirmLid()">💾 Guardar LID</button>
     </div>
   </div>
 </div>
 
 <div class="ov" id="confirm-ov">
   <div class="modal">
-    <h3 id="confirm-title">Confirmar</h3>
+    <h3 id="confirm-title">⚠️ Confirmar</h3>
     <p id="confirm-message">¿Estás seguro?</p>
     <div class="mbtns">
-      <button onclick="closeConfirmModal()">Cancelar</button>
-      <button class="ok" id="confirm-ok">Aceptar</button>
+      <button onclick="closeConfirmModal()">❌ Cancelar</button>
+      <button class="ok" id="confirm-ok">✅ Aceptar</button>
     </div>
   </div>
 </div>
 
 <script>
-// ==================== CONFIGURACIÓN PARA VERCEL ====================
 let API = '';
-// ==================================================================
-
 let currentUser = null;
 let currentSession = null;
 let isOwner = false;
@@ -1195,7 +1236,16 @@ const MAX_SESSIONS = 15;
 function initTheme() {
   const savedTheme = localStorage.getItem('friki_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeIcon(savedTheme);
+  updateThemeUI(savedTheme);
+}
+
+function updateThemeUI(theme) {
+  const knob = document.getElementById('theme-knob');
+  if (theme === 'light') {
+    knob.textContent = '☀️';
+  } else {
+    knob.textContent = '🌙';
+  }
 }
 
 function toggleTheme() {
@@ -1203,13 +1253,10 @@ function toggleTheme() {
   const newTheme = currentTheme === 'light' ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem('friki_theme', newTheme);
-  updateThemeIcon(newTheme);
+  updateThemeUI(newTheme);
 }
 
-function updateThemeIcon(theme) {
-  const btn = document.querySelector('.theme-toggle span:first-child');
-  if (btn) btn.textContent = theme === 'light' ? '◐' : '◑';
-}
+document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
 
 function toggleHelp() {
   const help = document.getElementById('help-content');
@@ -1230,10 +1277,10 @@ function toggleOwnerUI(owner) {
     el.style.display = owner ? (el.classList.contains('dashboard') ? 'grid' : 'flex') : 'none';
   });
   
-  document.getElementById('owner-badge-header').textContent = owner ? 'OWNER' : '';
+  document.getElementById('owner-badge-header').textContent = owner ? '👑 OWNER' : '';
   document.getElementById('user-info').textContent = owner 
-    ? `${currentUser} — Owner` 
-    : (currentSession ? `${currentUser} — Sesión ${currentSession}` : `${currentUser}`);
+    ? `${currentUser} 👑 Owner` 
+    : (currentSession ? `${currentUser} 📱 Sesión ${currentSession}` : `${currentUser}`);
 }
 
 function showConfirm(title, message, onConfirm) {
@@ -1275,7 +1322,7 @@ function exportData() {
   a.download = `frikibot-backup-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  toast('Datos exportados', 'ok');
+  toast('📦 Datos exportados', 'ok');
 }
 
 function showRegister() {
@@ -1306,7 +1353,7 @@ async function register() {
     });
     const data = await res.json();
     if (data.ok) {
-      toast('[OK] Cuenta creada. Ahora inicia sesión.', 'ok');
+      toast('✅ Cuenta creada. Ahora inicia sesión.', 'ok');
       showLogin();
       document.getElementById('login-user').value = username;
       document.getElementById('login-pass').value = '';
@@ -1382,7 +1429,7 @@ async function apiFetch(url, opts = {}) {
 
 function setConn(ok) {
   document.getElementById('conn-dot').className = `conn-dot ${ok ? 'ok' : 'err'}`;
-  document.getElementById('conn-lbl').textContent = ok ? 'Conectado' : 'Offline';
+  document.getElementById('conn-lbl').textContent = ok ? '🟢 Conectado' : '🔴 Offline';
 }
 
 async function loadStats() {
@@ -1416,7 +1463,7 @@ async function loadSessions() {
     renderSessions();
   } catch {
     setConn(false);
-    document.getElementById('sessions').innerHTML = '<p class="empty">Sin conexión</p>';
+    document.getElementById('sessions').innerHTML = '<p class="empty">❌ Sin conexión</p>';
   }
 }
 
@@ -1424,11 +1471,11 @@ function actualizarSelect() {
   if (!isOwner) return;
   const usados = sessions.filter(s => s.owner && s.owner !== 'web_pending@lid' && s.owner !== 'web@lid').map(s => s.n);
   const sel = document.getElementById('new-n');
-  sel.innerHTML = '<option value="">[+] Nueva sesión...</option>';
+  sel.innerHTML = '<option value="">➕ Nueva sesión...</option>';
   for (let i = 1; i <= MAX_SESSIONS; i++) {
     if (!usados.includes(i)) {
       const o = document.createElement('option');
-      o.value = i; o.textContent = `Sesión ${i}`; sel.appendChild(o);
+      o.value = i; o.textContent = `📱 Sesión ${i}`; sel.appendChild(o);
     }
   }
 }
@@ -1452,7 +1499,7 @@ async function elegirSesion() {
     const data = await res.json();
     if (data.ok) {
       currentSession = newSession;
-      toast(`[OK] Sesión ${newSession} asignada. ¡Es tuya!`, 'ok');
+      toast(`✅ Sesión ${newSession} asignada. ¡Es tuya!`, 'ok');
       await loadSessions();
       toggleOwnerUI(isOwner);
     } else {
@@ -1487,7 +1534,7 @@ async function confirmLid() {
   if (!sessionNum) { toast('Error: Sesión no definida', 'err'); return; }
   
   closeLidModal();
-  toast('Actualizando LID...');
+  toast('⏳ Actualizando LID...');
   
   try {
     const r = await apiFetch(`/api/set-lid/${sessionNum}`, {
@@ -1497,7 +1544,7 @@ async function confirmLid() {
     });
     const d = await r.json();
     if (d.ok) {
-      toast(`[OK] LID actualizado correctamente`, 'ok');
+      toast(`✅ LID actualizado correctamente`, 'ok');
       await loadSessions();
       if (isOwner) addLog('success', `Sesión ${sessionNum}: LID actualizado manualmente`);
     } else {
@@ -1532,7 +1579,7 @@ function renderSessions() {
         <p>Selecciona una sesión para empezar. Será tuya y nadie más podrá usarla.</p>
         <select id="session-select">
           <option value="">-- Seleccionar sesión --</option>
-          ${libres.map(i => `<option value="${i}">Sesión ${i}</option>`).join('')}
+          ${libres.map(i => `<option value="${i}">📱 Sesión ${i}</option>`).join('')}
         </select>
         <br>
         <button onclick="elegirSesion()">✨ Asignar esta sesión</button>
@@ -1542,7 +1589,7 @@ function renderSessions() {
   }
   
   if (!sessions.length) { 
-    c.innerHTML = '<p class="empty">No hay sesiones disponibles</p>'; 
+    c.innerHTML = '<p class="empty">📭 No hay sesiones disponibles</p>'; 
     return; 
   }
   
@@ -1567,25 +1614,25 @@ function renderSessions() {
     
     if (isOwner) {
       actionButtons = `
-        ${!s.hasCreds && !s.pausada ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">[>] Iniciar</button>` : ''}
-        ${s.hasCreds ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">[🔑] Ingresar LID</button>` : ''}
-        ${!s.pausada && s.hasCreds ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">[||] Pausar</button>` : ''}
-        ${s.pausada ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">[>] Reanudar</button>` : ''}
-        <button class="btn danger" data-action="eliminar" data-session="${sessionNum}">[x] Eliminar</button>
-        <button class="btn" data-action="nombre" data-session="${sessionNum}">[...] Nombre</button>
-        <button class="btn" data-action="moneda" data-session="${sessionNum}">[$] Moneda</button>
-        <button class="btn full" data-action="foto" data-session="${sessionNum}">[::] Foto</button>
+        ${!s.hasCreds && !s.pausada ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar</button>` : ''}
+        ${s.hasCreds ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 Ingresar LID</button>` : ''}
+        ${!s.pausada && s.hasCreds ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">⏸️ Pausar</button>` : ''}
+        ${s.pausada ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">▶️ Reanudar</button>` : ''}
+        <button class="btn danger" data-action="eliminar" data-session="${sessionNum}">🗑️ Eliminar</button>
+        <button class="btn" data-action="nombre" data-session="${sessionNum}">✏️ Nombre</button>
+        <button class="btn" data-action="moneda" data-session="${sessionNum}">💰 Moneda</button>
+        <button class="btn full" data-action="foto" data-session="${sessionNum}">📸 Foto</button>
       `;
     } else {
       actionButtons = `
-        ${!s.hasCreds && !s.pausada && puedeModificar ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">[>] Iniciar sesión</button>` : ''}
-        ${s.hasCreds && puedeModificar ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">[🔑] Ingresar LID</button>` : ''}
-        ${!s.pausada && s.hasCreds && puedeModificar ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">[||] Pausar</button>` : ''}
-        ${s.pausada && puedeModificar ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">[>] Reanudar</button>` : ''}
-        ${puedeModificar ? `<button class="btn" data-action="nombre" data-session="${sessionNum}">[...] Nombre</button>` : ''}
-        ${puedeModificar ? `<button class="btn" data-action="moneda" data-session="${sessionNum}">[$] Moneda</button>` : ''}
-        ${puedeModificar ? `<button class="btn full" data-action="foto" data-session="${sessionNum}">[::] Foto de menú</button>` : ''}
-        ${puedeModificar ? `<button class="btn danger full" data-action="eliminar" data-session="${sessionNum}" style="margin-top:4px;">[x] Eliminar sesión</button>` : ''}
+        ${!s.hasCreds && !s.pausada && puedeModificar ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar sesión</button>` : ''}
+        ${s.hasCreds && puedeModificar ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 Ingresar LID</button>` : ''}
+        ${!s.pausada && s.hasCreds && puedeModificar ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">⏸️ Pausar</button>` : ''}
+        ${s.pausada && puedeModificar ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">▶️ Reanudar</button>` : ''}
+        ${puedeModificar ? `<button class="btn" data-action="nombre" data-session="${sessionNum}">✏️ Nombre</button>` : ''}
+        ${puedeModificar ? `<button class="btn" data-action="moneda" data-session="${sessionNum}">💰 Moneda</button>` : ''}
+        ${puedeModificar ? `<button class="btn full" data-action="foto" data-session="${sessionNum}">📸 Foto de menú</button>` : ''}
+        ${puedeModificar ? `<button class="btn danger full" data-action="eliminar" data-session="${sessionNum}" style="margin-top:4px;">🗑️ Eliminar sesión</button>` : ''}
       `;
     }
     
@@ -1596,20 +1643,20 @@ function renderSessions() {
     div.innerHTML = `
       <div class="card-hdr">
         <span class="card-num">#${sessionNum}</span>
-        <span class="card-name">${escapeHtml(s.nombre)}${esMiSesion ? '<span class="owner-badge">Tu sesión</span>' : ''}</span>
+        <span class="card-name">${escapeHtml(s.nombre)}${esMiSesion ? '<span class="owner-badge">📱 Tu sesión</span>' : ''}</span>
         <span class="dot ${dotClass}" title="${dotTitle}"></span>
       </div>
       <div class="card-body">
         <div class="meta">
-          <span><b>${escapeHtml(s.moneda)}</b></span>
-          <span><b>${s.foto ? 'Personalizada' : 'Predeterminada'}</b></span>
-          <span><b>${dotTitle}</b></span>
-          ${s.numero ? `<span><b>+${s.numero}</b></span>` : ''}
+          <span>💰 <b>${escapeHtml(s.moneda)}</b></span>
+          <span>🖼️ <b>${s.foto ? 'Personalizada' : 'Predeterminada'}</b></span>
+          <span>📡 <b>${dotTitle}</b></span>
+          ${s.numero ? `<span>📞 <b>+${s.numero}</b></span>` : ''}
         </div>
         ${pausedWarning}
         <div class="qr-area">
           <img class="qr-img" id="qi-${sessionNum}" alt="QR">
-          <p class="qr-wait" id="qw-${sessionNum}">Generando código QR...</p>
+          <p class="qr-wait" id="qw-${sessionNum}">⏳ Generando código QR...</p>
           <p class="qr-lbl" id="ql-${sessionNum}"></p>
           <p class="qr-timeout" id="qt-${sessionNum}"></p>
         </div>
@@ -1677,8 +1724,8 @@ function mostrarQR(n) {
   img.style.display = 'block';
   img.onerror = () => { img.style.display = 'none'; if (wai) wai.style.display = 'block'; };
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = 'Escanea con WhatsApp → Dispositivos vinculados';
-  if (timeoutLbl) { timeoutLbl.textContent = 'Código válido por 2 minutos'; timeoutLbl.style.display = 'block'; }
+  if (lbl) lbl.textContent = '📱 Escanea con WhatsApp → Dispositivos vinculados';
+  if (timeoutLbl) { timeoutLbl.textContent = '⏰ Código válido por 2 minutos'; timeoutLbl.style.display = 'block'; }
 }
 
 function ocultarQR(n) {
@@ -1699,7 +1746,7 @@ function conectado(n) {
   const timeoutLbl = document.getElementById(`qt-${n}`);
   if (img) img.style.display = 'none';
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '[OK] Sesión conectada y activa';
+  if (lbl) lbl.textContent = '✅ Sesión conectada y activa';
   if (timeoutLbl) timeoutLbl.style.display = 'none';
 }
 
@@ -1710,7 +1757,7 @@ function pausado(n) {
   const timeoutLbl = document.getElementById(`qt-${n}`);
   if (img) img.style.display = 'none';
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '[||] Sesión pausada';
+  if (lbl) lbl.textContent = '⏸️ Sesión pausada';
   if (timeoutLbl) timeoutLbl.style.display = 'none';
 }
 
@@ -1725,11 +1772,11 @@ async function iniciarNueva() {
 
 async function iniciar(n) {
   const sessionNum = Number(n);
-  toast(`Iniciando sesión ${sessionNum}...`);
+  toast(`⏳ Iniciando sesión ${sessionNum}...`);
   try {
     const r = await apiFetch(`/api/iniciar/${sessionNum}`, { method: 'POST' });
     const d = await r.json();
-    if (d.ok) { toast(`[OK] Sesión ${sessionNum} iniciada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} iniciada`); }
+    if (d.ok) { toast(`✅ Sesión ${sessionNum} iniciada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} iniciada`); }
     else toast(d.error || 'Error', 'err');
   } catch { toast('Error de conexión', 'err'); }
 }
@@ -1739,14 +1786,14 @@ async function pausar(n) {
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
   showConfirm(
-    'Pausar sesión',
+    '⏸️ Pausar sesión',
     `¿Pausar sesión ${sessionNum}?\n\n⚠️ Si permanece pausada por 2 HORAS, la sesión será ELIMINADA permanentemente.`,
     async () => {
       try {
         const r = await apiFetch(`/api/pausar/${sessionNum}`, { method: 'POST' });
         const d = await r.json();
         if (d.ok) { 
-          toast(`[OK] Sesión ${sessionNum} pausada`, 'warning'); 
+          toast(`⏸️ Sesión ${sessionNum} pausada`, 'warning'); 
           await loadSessions();
           if (isOwner) addLog('info', `Sesión ${sessionNum} pausada`); 
         }
@@ -1760,12 +1807,12 @@ async function reanudar(n) {
   const sessionNum = Number(n);
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
-  toast(`Reanudando sesión ${sessionNum}...`);
+  toast(`⏳ Reanudando sesión ${sessionNum}...`);
   try {
     const r = await apiFetch(`/api/reanudar/${sessionNum}`, { method: 'POST' });
     const d = await r.json();
     if (d.ok) { 
-      toast(`[OK] Sesión ${sessionNum} reanudada`, 'ok'); 
+      toast(`✅ Sesión ${sessionNum} reanudada`, 'ok'); 
       await loadSessions();
       if (isOwner) addLog('success', `Sesión ${sessionNum} reanudada`); 
     }
@@ -1778,14 +1825,14 @@ async function eliminar(n) {
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
   showConfirm(
-    'Eliminar sesión',
+    '🗑️ Eliminar sesión',
     `¿Eliminar sesión ${sessionNum} permanentemente? Esta acción no se puede deshacer.`,
     async () => {
       try {
         const r = await apiFetch(`/api/eliminar/${sessionNum}`, { method: 'DELETE' });
         const d = await r.json();
         if (d.ok) { 
-          toast(`[OK] Sesión ${sessionNum} eliminada`, 'ok'); 
+          toast(`✅ Sesión ${sessionNum} eliminada`, 'ok'); 
           stopPoller(sessionNum); 
           await loadSessions();
           if (sessionNum === currentSession) {
@@ -1805,7 +1852,7 @@ function openModal(n, tipo) {
   if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
-  document.getElementById('m-title').textContent = tipo === 'nombre' ? 'Nombre del bot' : 'Moneda';
+  document.getElementById('m-title').textContent = tipo === 'nombre' ? '✏️ Nombre del bot' : '💰 Moneda';
   document.getElementById('m-desc').textContent = tipo === 'nombre' ? 'Nombre en mensajes' : 'Símbolo de moneda';
   const inp = document.getElementById('m-input');
   inp.maxLength = tipo === 'nombre' ? 30 : 20;
@@ -1819,7 +1866,7 @@ function openModal(n, tipo) {
       body: JSON.stringify({ [tipo]: val })
     });
     const d = await r.json();
-    if (d.ok) { toast(`[OK] ${tipo} actualizado`, 'ok'); loadSessions(); }
+    if (d.ok) { toast(`✅ ${tipo} actualizado`, 'ok'); loadSessions(); }
     else toast(d.error || 'Error', 'err');
   };
   document.getElementById('m-ov').classList.add('open');
@@ -1866,7 +1913,7 @@ async function confirmarFoto() {
   const r2 = new FileReader();
   r2.onload = async ev => {
     closeFoto();
-    toast('Subiendo...');
+    toast('⏳ Subiendo...');
     try {
       const r = await apiFetch(`/api/foto/${sessionNum}`, {
         method: 'POST',
@@ -1874,7 +1921,7 @@ async function confirmarFoto() {
         body: JSON.stringify({ foto: ev.target.result })
       });
       const d = await r.json();
-      if (d.ok) { toast('[OK] Foto actualizada', 'ok'); loadSessions(); }
+      if (d.ok) { toast('✅ Foto actualizada', 'ok'); loadSessions(); }
       else toast(d.error || 'Error', 'err');
     } catch { toast('Error de conexión', 'err'); }
   };
@@ -1883,8 +1930,7 @@ async function confirmarFoto() {
 
 document.addEventListener('keydown', (e) => {
   if (!currentUser) return;
-  if (e.key === 'r' || e.key === 'R') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); loadSessions(); toast('Sesiones recargadas', 'ok'); } }
-  if (e.key === 't' || e.key === 'T') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); toggleTheme(); } }
+  if (e.key === 'r' || e.key === 'R') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); loadSessions(); toast('🔄 Sesiones recargadas', 'ok'); } }
   if (e.key === 'Escape') { closeModal(); closeFoto(); closeLidModal(); closeConfirmModal(); }
 });
 
