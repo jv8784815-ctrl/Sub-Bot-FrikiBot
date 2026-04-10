@@ -4,88 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FrikiBot — Panel</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f5f7fa;
-  --surface: rgba(255, 255, 255, 0.75);
-  --border: rgba(0, 0, 0, 0.06);
-  --border-light: rgba(0, 0, 0, 0.04);
-  --text: #1a1a2e;
-  --text-secondary: #52527a;
-  --text-muted: #8a8aa3;
-  --accent: #16213e;
-  --accent-light: #0f3460;
-  --success: #0f3460;
-  --warning: #e94560;
-  --danger: #e94560;
+  --bg: transparent;
+  --surface: transparent;
+  --border: #000000;
+  --border-light: rgba(0, 0, 0, 0.3);
+  --text: #000000;
+  --text-secondary: #333333;
+  --text-muted: #555555;
+  --accent: #000000;
+  --accent-light: #333333;
+  --success: #000000;
+  --warning: #000000;
+  --danger: #000000;
   --font: 'Inter', -apple-system, sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
-  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.08);
-  --modal-overlay: rgba(0, 0, 0, 0.4);
-  --toast-bg: rgba(255, 255, 255, 0.95);
-  --toast-border: rgba(0, 0, 0, 0.08);
-  --btn-invert-bg: rgba(255, 255, 255, 0.5);
-  --toggle-bg: rgba(0, 0, 0, 0.1);
-  --toggle-knob: #ffffff;
+  --shadow: none;
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --modal-overlay: rgba(255, 255, 255, 0.5);
+  --toast-bg: #ffffff;
+  --toast-border: #000000;
+  --btn-invert-bg: transparent;
+  --toggle-bg: #cccccc;
+  --toggle-knob: #000000;
   --wallpaper-brightness: 1;
   --wallpaper-contrast: 1;
-  --wallpaper-opacity: 0.15;
-  --glass-blur: 20px;
-  --glass-opacity: 0.75;
+  --wallpaper-opacity: 1;
 }
 
 [data-theme="dark"] {
-  --bg: #0f0f1a;
-  --surface: rgba(20, 20, 40, 0.75);
-  --border: rgba(255, 255, 255, 0.06);
-  --border-light: rgba(255, 255, 255, 0.04);
+  --bg: transparent;
+  --surface: transparent;
+  --border: #ffffff;
+  --border-light: rgba(255, 255, 255, 0.3);
   --text: #ffffff;
-  --text-secondary: #a0a0c0;
-  --text-muted: #606080;
-  --accent: #e94560;
-  --accent-light: #ff6b6b;
-  --success: #00cc66;
-  --warning: #ffcc00;
-  --danger: #ff4466;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.3);
-  --modal-overlay: rgba(0, 0, 0, 0.6);
-  --toast-bg: rgba(20, 20, 40, 0.95);
-  --toast-border: rgba(255, 255, 255, 0.08);
-  --btn-invert-bg: rgba(20, 20, 40, 0.5);
-  --toggle-bg: rgba(255, 255, 255, 0.1);
-  --toggle-knob: #e94560;
-  --wallpaper-brightness: 0.4;
-  --wallpaper-contrast: 1.2;
-  --wallpaper-opacity: 0.2;
-  --glass-blur: 20px;
-  --glass-opacity: 0.75;
-}
-
-[data-glass="true"] {
-  --surface: rgba(255, 255, 255, 0.15);
-  --glass-blur: 30px;
-  --glass-opacity: 0.15;
-}
-
-[data-theme="dark"][data-glass="true"] {
-  --surface: rgba(10, 10, 20, 0.15);
+  --text-secondary: #cccccc;
+  --text-muted: #999999;
+  --accent: #ffffff;
+  --accent-light: #cccccc;
+  --success: #ffffff;
+  --warning: #ffffff;
+  --danger: #ffffff;
+  --shadow: none;
+  --shadow-hover: 0 4px 12px rgba(255, 255, 255, 0.08);
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+  --toast-bg: #000000;
+  --toast-border: #ffffff;
+  --btn-invert-bg: transparent;
+  --toggle-bg: #333333;
+  --toggle-knob: #ffffff;
+  --wallpaper-brightness: 0.3;
+  --wallpaper-contrast: 1.3;
+  --wallpaper-opacity: 1;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
   font-family: var(--font);
   min-height: 100vh;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  transition: background 0.4s ease, color 0.4s ease;
   position: relative;
 }
 
@@ -98,78 +81,48 @@ body::before {
   bottom: 0;
   background-image: url('wallpaper.jpg');
   background-size: cover;
-  background-position: center 30%;
+  background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   opacity: var(--wallpaper-opacity);
-  filter: brightness(var(--wallpaper-brightness)) contrast(var(--wallpaper-contrast)) saturate(1.2);
+  filter: brightness(var(--wallpaper-brightness)) contrast(var(--wallpaper-contrast));
   pointer-events: none;
-  z-index: 0;
-  transition: filter 0.4s ease, opacity 0.4s ease;
-}
-
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(233, 69, 96, 0.03) 0%, rgba(15, 52, 96, 0.06) 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-header, .app-container, .auth-container, .ov {
-  position: relative;
-  z-index: 1;
+  z-index: -1;
+  transition: filter 0.3s ease;
 }
 
 header {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 20px 40px;
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border-bottom: 1px solid var(--border);
+  padding: 20px 30px;
+  background: transparent;
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
 }
 
 .logo {
-  font-family: var(--font-display);
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   color: var(--text);
-  background: linear-gradient(135deg, var(--text) 0%, var(--text-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  text-shadow: 0 0 20px rgba(255,255,255,0.5);
 }
 
 .logo span {
   font-weight: 300;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  opacity: 0.7;
 }
 
 .owner-badge-header {
-  font-size: 11px;
+  font-size: 10px;
   margin-left: 8px;
   padding: 2px 8px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-  color: white;
+  border: 1.5px solid var(--border);
   border-radius: 20px;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  -webkit-text-fill-color: white;
+  text-transform: uppercase;
 }
 
 .header-controls {
@@ -181,14 +134,14 @@ header {
 
 .theme-toggle {
   background: var(--toggle-bg);
-  border: 1px solid var(--border);
-  width: 52px;
-  height: 28px;
+  width: 50px;
+  height: 26px;
   border-radius: 100px;
-  padding: 3px;
+  padding: 2px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s ease;
   position: relative;
+  border: 1.5px solid var(--border);
 }
 
 .theme-toggle-knob {
@@ -200,71 +153,58 @@ header {
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s ease;
   position: absolute;
-  left: 3px;
+  left: 2px;
   top: 50%;
   transform: translateY(-50%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] .theme-toggle-knob {
-  left: calc(100% - 23px);
+  left: calc(100% - 22px);
 }
 
 .control-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: 1.5px solid var(--border);
   color: var(--text);
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 16px;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
+  transition: all 0.15s ease;
 }
 
 .control-btn:hover {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-  transform: scale(1.05);
-}
-
-.control-btn.active {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
+  background: var(--text);
+  color: var(--bg);
 }
 
 .user-info {
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-secondary);
-  padding: 8px 16px;
-  background: var(--surface);
+  color: var(--text);
+  padding: 6px 14px;
+  border: 1.5px solid var(--border);
   border-radius: 40px;
-  border: 1px solid var(--border);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
+  background: transparent;
 }
 
 .logout-btn {
   background: transparent;
-  border: 1px solid var(--danger);
+  border: 1.5px solid var(--danger);
   color: var(--danger);
-  padding: 8px 18px;
+  padding: 6px 16px;
   border-radius: 40px;
   font-family: var(--font);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .logout-btn:hover {
@@ -276,14 +216,12 @@ header {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--text-muted);
+  border: 1.5px solid var(--border);
   transition: all 0.2s ease;
-  margin-left: 4px;
 }
 
 .conn-dot.ok {
   background: var(--success);
-  box-shadow: 0 0 12px var(--success);
 }
 
 .conn-dot.err {
@@ -291,9 +229,11 @@ header {
 }
 
 .conn-lbl {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 11px;
+  color: var(--text);
   font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .auth-container {
@@ -305,121 +245,116 @@ header {
 }
 
 .auth-card {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
-  border-radius: 32px;
-  padding: 48px 40px;
+  background: transparent;
+  border: 2px solid var(--border);
+  padding: 45px 40px;
   width: 100%;
-  max-width: 420px;
-  box-shadow: var(--shadow);
+  max-width: 400px;
 }
 
 .auth-card h2 {
-  font-family: var(--font-display);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: -0.03em;
   margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--text) 0%, var(--text-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
 }
 
 .auth-card p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
-  margin-bottom: 32px;
+  margin-bottom: 35px;
   font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .auth-card .input-group {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .auth-card .input-label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
+  letter-spacing: 1px;
+  color: var(--text);
   margin-bottom: 8px;
 }
 
 .auth-card input {
   width: 100%;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border);
   color: var(--text);
   font-family: var(--font);
-  font-size: 15px;
-  padding: 14px 18px;
-  border-radius: 16px;
+  font-size: 16px;
+  padding: 12px 0;
   outline: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.15s ease;
 }
 
 .auth-card input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.1);
+  border-bottom-color: var(--text);
+}
+
+.auth-card input::placeholder {
+  color: var(--text-muted);
+  font-weight: 300;
 }
 
 .auth-card button {
   width: 100%;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-  color: white;
-  border: none;
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--border);
   font-family: var(--font);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 16px;
-  border-radius: 16px;
+  padding: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
-  margin-top: 16px;
-  transition: all 0.2s ease;
+  margin-top: 20px;
+  transition: all 0.15s ease;
 }
 
 .auth-card button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(233, 69, 96, 0.2);
+  background: var(--text);
+  color: var(--bg);
 }
 
 .auth-card .secondary-btn {
-  background: transparent;
-  border: 1.5px solid var(--border);
-  color: var(--text);
   margin-top: 12px;
-}
-
-.auth-card .secondary-btn:hover {
-  background: var(--surface);
-  box-shadow: none;
-  transform: translateY(-1px);
+  opacity: 0.7;
 }
 
 .auth-card .switch-link {
   text-align: center;
-  margin-top: 24px;
-  font-size: 13px;
+  margin-top: 28px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   color: var(--text-secondary);
 }
 
 .auth-card .switch-link a {
-  color: var(--accent);
+  color: var(--text);
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
-  margin-left: 4px;
+  margin-left: 6px;
+  border-bottom: 1.5px solid var(--border);
+  padding-bottom: 2px;
 }
 
 .app-container {
   display: none;
-  max-width: 900px;
+  max-width: 850px;
   margin: 0 auto;
-  padding: 0 24px 80px;
+  padding: 0 24px 60px;
 }
 
 .owner-only {
@@ -433,37 +368,29 @@ header {
 .dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 32px 0 24px;
+  gap: 2px;
+  padding: 30px 0 20px;
+  background: transparent;
 }
 
 .stat-card {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 24px 20px;
-  transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
+  background: transparent;
+  border: 2px solid var(--border);
+  padding: 24px 16px;
+  text-align: center;
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  color: var(--text);
   margin-bottom: 8px;
 }
 
 .stat-value {
-  font-family: var(--font-display);
-  font-size: 42px;
+  font-size: 38px;
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text);
@@ -473,212 +400,195 @@ header {
 .controls-bar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 0 0 24px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 24px;
+  gap: 2px;
+  padding: 20px 0;
+  margin-bottom: 20px;
 }
 
 .new-area {
   display: flex;
-  gap: 12px;
+  gap: 2px;
   align-items: center;
   flex: 1;
 }
 
 .new-area select {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
+  background: transparent;
+  border: 2px solid var(--border);
   color: var(--text);
   font-family: var(--font);
-  font-size: 14px;
-  padding: 12px 40px 12px 18px;
-  border-radius: 14px;
+  font-size: 13px;
+  padding: 12px 40px 12px 16px;
   outline: none;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a8aa3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 16px center;
-  background-size: 14px;
+}
+
+[data-theme="dark"] .new-area select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 }
 
 .new-area button {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-  color: white;
-  border: none;
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--border);
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 14px;
+  padding: 12px 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .new-area button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(233, 69, 96, 0.2);
+  background: var(--text);
+  color: var(--bg);
 }
 
 .owner-btn {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
+  background: transparent;
+  border: 2px solid var(--border);
   color: var(--text);
-  padding: 12px 20px;
-  border-radius: 14px;
+  padding: 12px 18px;
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .owner-btn:hover {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
+  background: var(--text);
+  color: var(--bg);
 }
 
 #sessions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 2px;
 }
 
 .empty {
-  color: var(--text-muted);
-  font-size: 14px;
-  padding: 60px 0;
+  color: var(--text);
+  font-size: 13px;
+  padding: 50px 0;
   text-align: center;
   font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid var(--border);
 }
 
 .session-selector {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 40px;
-  margin-bottom: 16px;
+  background: transparent;
+  border: 2px solid var(--border);
+  padding: 45px;
   text-align: center;
 }
 
 .session-selector h3 {
-  font-family: var(--font-display);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   margin-bottom: 12px;
+  text-transform: uppercase;
 }
 
 .session-selector p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
-  margin-bottom: 28px;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .session-selector select {
   width: 100%;
-  max-width: 300px;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
+  max-width: 280px;
+  background: transparent;
+  border: 2px solid var(--border);
   color: var(--text);
   font-family: var(--font);
-  font-size: 16px;
-  padding: 16px 24px;
-  border-radius: 16px;
-  margin-bottom: 24px;
+  font-size: 15px;
+  padding: 14px 20px;
+  margin-bottom: 25px;
   outline: none;
   cursor: pointer;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .session-selector button {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-  color: white;
-  border: none;
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--border);
   font-family: var(--font);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 16px 36px;
-  border-radius: 16px;
+  padding: 14px 32px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .session-selector button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(233, 69, 96, 0.2);
+  background: var(--text);
+  color: var(--bg);
 }
 
 .card {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--accent-light);
+  background: transparent;
+  border: 2px solid var(--border);
 }
 
 .card-hdr {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 24px 28px;
-  cursor: default;
-  user-select: none;
-  border-bottom: 1px solid var(--border);
+  padding: 22px 28px;
+  border-bottom: 2px solid var(--border);
 }
 
 .card-num {
-  font-family: var(--font-display);
   font-size: 13px;
   font-weight: 700;
-  color: var(--accent);
-  letter-spacing: -0.02em;
-  min-width: 32px;
+  color: var(--text);
+  text-transform: uppercase;
 }
 
 .card-name {
   flex: 1;
   font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--text-muted);
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--border);
   flex-shrink: 0;
-  transition: all 0.2s ease;
 }
 
 .dot.on {
   background: var(--success);
-  box-shadow: 0 0 12px var(--success);
 }
 
 .dot.qr {
@@ -691,8 +601,8 @@ header {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--warning); }
-  50% { opacity: 0.5; box-shadow: 0 0 2px var(--warning); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 .card-body {
@@ -702,102 +612,101 @@ header {
 
 .qr-area {
   text-align: center;
-  padding: 0 0 16px;
+  padding: 0 0 20px;
 }
 
 .qr-img {
   width: 220px;
   height: 220px;
   border: 2px solid var(--border);
-  border-radius: 20px;
   display: none;
-  background: var(--bg);
+  background: transparent;
   margin: 0 auto;
-  image-rendering: crisp-edges;
 }
 
 .qr-wait {
-  font-size: 13px;
-  color: var(--text-secondary);
-  padding: 24px;
+  font-size: 12px;
+  color: var(--text);
+  padding: 25px;
   display: none;
   font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .qr-lbl {
-  font-size: 12px;
-  color: var(--text-secondary);
+  font-size: 11px;
+  color: var(--text);
   margin-top: 16px;
   font-weight: 400;
+  text-transform: uppercase;
 }
 
 .qr-timeout {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
   margin-top: 6px;
   display: none;
-  font-weight: 400;
+  text-transform: uppercase;
 }
 
 .paused-warning {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--danger);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   padding: 12px 16px;
-  background: rgba(233, 69, 96, 0.08);
-  border-radius: 14px;
-  border-left: 4px solid var(--danger);
+  border: 2px solid var(--danger);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .meta {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-bottom: 20px;
+  font-size: 12px;
+  color: var(--text);
+  margin-bottom: 24px;
   display: flex;
-  gap: 24px;
+  gap: 28px;
   flex-wrap: wrap;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  border-bottom: 2px solid var(--border);
+  text-transform: uppercase;
 }
 
 .meta b {
-  color: var(--text);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 2px;
 }
 
 .btn {
   padding: 14px 16px;
-  border: 1px solid var(--border);
-  background: var(--bg);
+  border: 2px solid var(--border);
+  background: transparent;
   color: var(--text);
   font-family: var(--font);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 14px;
-  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .btn:hover:not(:disabled) {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-  transform: scale(1.02);
+  background: var(--text);
+  color: var(--bg);
 }
 
 .btn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -826,32 +735,25 @@ header {
 }
 
 .btn.success {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.btn.success:hover:not(:disabled) {
-  background: var(--accent);
-  color: white;
+  border-color: var(--text);
+  color: var(--text);
 }
 
 .owner-badge {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-  color: white;
-  font-size: 10px;
+  border: 2px solid var(--border);
+  color: var(--text);
+  font-size: 9px;
   font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 40px;
-  letter-spacing: 0.5px;
+  padding: 4px 10px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .ov {
   position: fixed;
   inset: 0;
   background: var(--modal-overlay);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
   z-index: 200;
   display: none;
   align-items: center;
@@ -864,111 +766,100 @@ header {
 }
 
 .modal {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
-  border-radius: 32px;
-  padding: 36px;
+  background: transparent;
+  border: 2px solid var(--border);
+  padding: 40px;
   width: 100%;
   max-width: 440px;
-  animation: slideUp 0.3s ease;
-  box-shadow: var(--shadow-hover);
+  animation: slideUp 0.2s ease;
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
+  from { transform: translateY(15px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
 .modal h3 {
-  font-family: var(--font-display);
   font-size: 22px;
   font-weight: 700;
-  letter-spacing: -0.02em;
   margin-bottom: 8px;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 .modal p {
-  font-size: 14px;
+  font-size: 12px;
   color: var(--text-secondary);
-  margin-bottom: 28px;
+  margin-bottom: 30px;
   font-weight: 400;
+  text-transform: uppercase;
 }
 
 .modal input {
   width: 100%;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border);
   color: var(--text);
   font-family: var(--font);
-  font-size: 14px;
-  padding: 16px 18px;
-  border-radius: 16px;
+  font-size: 15px;
+  padding: 14px 0;
   outline: none;
-  margin-bottom: 20px;
-  transition: all 0.2s ease;
+  margin-bottom: 25px;
 }
 
 .modal input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.1);
+  border-bottom-color: var(--text);
 }
 
 .modal input[type="range"] {
   padding: 0;
-  margin: 20px 0 28px;
-  accent-color: var(--accent);
-  height: 6px;
+  margin: 25px 0;
+  accent-color: var(--text);
+  height: 2px;
 }
 
 .range-value {
   text-align: center;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
-  color: var(--accent);
-  margin-bottom: 20px;
+  color: var(--text);
+  margin-bottom: 25px;
 }
 
 .glass-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
-  background: var(--bg);
-  border-radius: 16px;
-  margin-bottom: 24px;
+  padding: 18px 0;
+  margin-bottom: 20px;
 }
 
 .glass-toggle span {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
+  text-transform: uppercase;
 }
 
 .glass-switch {
-  width: 48px;
-  height: 24px;
-  background: var(--toggle-bg);
+  width: 50px;
+  height: 26px;
+  border: 2px solid var(--border);
   border-radius: 100px;
   padding: 2px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   position: relative;
 }
 
 .glass-switch-knob {
-  width: 20px;
-  height: 20px;
-  background: white;
+  width: 18px;
+  height: 18px;
+  background: var(--text);
   border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.glass-switch.active {
-  background: var(--accent);
+  transition: all 0.15s ease;
 }
 
 .glass-switch.active .glass-switch-knob {
@@ -976,26 +867,23 @@ header {
 }
 
 .help-box {
-  background: var(--bg);
-  border: 1px solid var(--warning);
-  border-radius: 18px;
-  padding: 20px;
-  margin-bottom: 24px;
+  border: 2px solid var(--border);
+  padding: 22px;
+  margin-bottom: 28px;
 }
 
 .help-box .step {
   display: flex;
   gap: 14px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   align-items: flex-start;
 }
 
 .help-box .step-number {
-  background: var(--accent);
-  color: white;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+  border: 2px solid var(--border);
+  color: var(--text);
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1006,96 +894,78 @@ header {
 
 .help-box .step-text {
   flex: 1;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text);
+  text-transform: uppercase;
 }
 
 .help-box .phone-number {
   font-size: 18px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--text);
   text-align: center;
-  padding: 12px;
-  background: var(--surface);
-  border-radius: 14px;
-  margin: 14px 0;
+  padding: 14px;
+  border: 2px solid var(--border);
+  margin: 16px 0;
   cursor: pointer;
-  transition: all 0.15s ease;
 }
 
 .help-box .phone-number:hover {
-  background: var(--accent);
-  color: white;
+  background: var(--text);
+  color: var(--bg);
 }
 
 .help-box .code-block {
-  background: var(--surface);
-  border-radius: 12px;
-  padding: 14px 18px;
-  font-family: 'SF Mono', 'Monaco', monospace;
+  border: 2px solid var(--border);
+  padding: 16px;
+  font-family: 'SF Mono', monospace;
   font-size: 14px;
-  margin: 10px 0;
+  margin: 12px 0;
   text-align: center;
-}
-
-.help-box .lid-example {
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 14px;
-  word-break: break-all;
 }
 
 .help-btn {
   background: transparent;
-  border: none;
-  color: var(--text-muted);
+  border: 2px solid var(--border);
+  color: var(--text);
   cursor: pointer;
-  font-size: 20px;
-  padding: 4px 10px;
-  border-radius: 10px;
-  transition: all 0.15s ease;
+  font-size: 18px;
+  padding: 4px 12px;
   margin-left: auto;
 }
 
 .help-btn:hover {
-  background: var(--bg);
-  color: var(--warning);
+  background: var(--text);
+  color: var(--bg);
 }
 
 .mbtns {
   display: flex;
-  gap: 12px;
+  gap: 2px;
   justify-content: flex-end;
 }
 
 .mbtns button {
   padding: 14px 28px;
-  border-radius: 14px;
   font-family: var(--font);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
   cursor: pointer;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--text);
   transition: all 0.15s ease;
 }
 
 .mbtns button:hover {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--text);
+  color: var(--bg);
 }
 
 .mbtns .ok {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-  color: white;
-  border-color: var(--accent);
-  font-weight: 600;
-}
-
-.mbtns .ok:hover {
-  background: var(--accent-light);
-  transform: translateY(-1px);
+  background: transparent;
+  color: var(--text);
 }
 
 #toast {
@@ -1103,38 +973,22 @@ header {
   bottom: 30px;
   right: 30px;
   background: var(--toast-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--toast-border);
+  border: 2px solid var(--toast-border);
   color: var(--text);
   padding: 16px 24px;
-  border-radius: 18px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
   z-index: 300;
   opacity: 0;
   transform: translateY(10px);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   pointer-events: none;
-  max-width: 320px;
-  box-shadow: var(--shadow-hover);
 }
 
 #toast.show {
   opacity: 1;
   transform: translateY(0);
-}
-
-#toast.ok {
-  border-left: 4px solid var(--success);
-}
-
-#toast.err {
-  border-left: 4px solid var(--danger);
-}
-
-#toast.warning {
-  border-left: 4px solid var(--warning);
 }
 
 @media (max-width: 700px) {
@@ -1144,7 +998,7 @@ header {
   }
   
   .logo {
-    font-size: 24px;
+    font-size: 20px;
   }
   
   .user-info {
@@ -1157,11 +1011,11 @@ header {
   
   .controls-bar {
     flex-direction: column;
-    align-items: stretch;
   }
   
   .new-area {
     flex-direction: column;
+    width: 100%;
   }
   
   .new-area select {
@@ -1169,7 +1023,7 @@ header {
   }
   
   .auth-card {
-    padding: 36px 24px;
+    padding: 35px 25px;
   }
   
   .card-hdr {
@@ -1192,11 +1046,6 @@ header {
     width: 180px;
     height: 180px;
   }
-  
-  .modal {
-    max-width: 95%;
-    padding: 28px;
-  }
 }
 
 @keyframes fadeIn {
@@ -1205,7 +1054,7 @@ header {
 }
 
 .app-container {
-  animation: fadeIn 0.4s ease;
+  animation: fadeIn 0.3s ease;
 }
 </style>
 </head>
@@ -1213,8 +1062,8 @@ header {
 
 <div id="auth-container" class="auth-container">
   <div id="login-panel" class="auth-card">
-    <h2>Bienvenido</h2>
-    <p>Accede a tu panel de control</p>
+    <h2>Acceder</h2>
+    <p>Panel de control</p>
     <div class="input-group">
       <label class="input-label">Usuario</label>
       <input type="text" id="login-user" placeholder="Tu usuario" autocomplete="off">
@@ -1223,19 +1072,19 @@ header {
       <label class="input-label">Contraseña</label>
       <input type="password" id="login-pass" placeholder="••••••••">
     </div>
-    <button onclick="login()">Iniciar sesión</button>
-    <button class="secondary-btn" onclick="showRegister()">Crear cuenta nueva</button>
+    <button onclick="login()">Entrar</button>
+    <button class="secondary-btn" onclick="showRegister()">Crear cuenta</button>
     <div class="switch-link">
-      ¿Primera vez?<a onclick="showRegister()">Regístrate →</a>
+      ¿Nuevo?<a onclick="showRegister()">Registrarse</a>
     </div>
   </div>
 
   <div id="register-panel" class="auth-card" style="display:none;">
-    <h2>Crear cuenta</h2>
-    <p>Únete a FrikiBot</p>
+    <h2>Registro</h2>
+    <p>Crear nueva cuenta</p>
     <div class="input-group">
       <label class="input-label">Usuario</label>
-      <input type="text" id="register-user" placeholder="Elige un usuario" autocomplete="off">
+      <input type="text" id="register-user" placeholder="Elige un usuario">
     </div>
     <div class="input-group">
       <label class="input-label">Contraseña</label>
@@ -1245,10 +1094,10 @@ header {
       <label class="input-label">Confirmar</label>
       <input type="password" id="register-pass2" placeholder="Repite la contraseña">
     </div>
-    <button onclick="register()">Registrarse</button>
-    <button class="secondary-btn" onclick="showLogin()">← Volver al inicio</button>
+    <button onclick="register()">Crear</button>
+    <button class="secondary-btn" onclick="showLogin()">← Volver</button>
     <div class="switch-link">
-      <a onclick="showLogin()">← Ya tengo cuenta</a>
+      <a onclick="showLogin()">← Iniciar sesión</a>
     </div>
   </div>
 </div>
@@ -1259,13 +1108,13 @@ header {
     
     <div class="header-controls">
       <div class="theme-toggle" id="theme-toggle-btn">
-        <div class="theme-toggle-knob" id="theme-knob">☀️</div>
+        <div class="theme-toggle-knob" id="theme-knob">◐</div>
       </div>
-      <button class="control-btn" onclick="openWallpaperModal()" title="Ajustar apariencia">🎨</button>
+      <button class="control-btn" onclick="openWallpaperModal()" title="Ajustar">◐</button>
     </div>
     
     <span class="user-info" id="user-info"></span>
-    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    <button class="logout-btn" onclick="logout()">Salir</button>
     <span class="conn-lbl" id="conn-lbl"></span>
     <span class="conn-dot" id="conn-dot"></span>
   </header>
@@ -1276,7 +1125,7 @@ header {
       <div class="stat-value" id="stat-active">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">QR Pendientes</div>
+      <div class="stat-label">QR</div>
       <div class="stat-value" id="stat-qr">0</div>
     </div>
     <div class="stat-card">
@@ -1284,43 +1133,35 @@ header {
       <div class="stat-value" id="stat-paused">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Usuarios</div>
+      <div class="stat-label">Users</div>
       <div class="stat-value" id="stat-users">0</div>
     </div>
   </div>
 
   <div class="controls-bar owner-only" id="owner-controls">
     <div class="new-area">
-      <select id="new-n"><option value="">Nueva sesión...</option></select>
-      <button onclick="iniciarNueva()">➕ Crear sesión</button>
+      <select id="new-n"><option value="">Nueva sesión</option></select>
+      <button onclick="iniciarNueva()">+ Crear</button>
     </div>
-    <button class="owner-btn" onclick="exportData()">📦 Exportar</button>
-    <button class="owner-btn" onclick="showLogs()">📋 Historial</button>
+    <button class="owner-btn" onclick="exportData()">Exportar</button>
+    <button class="owner-btn" onclick="showLogs()">Historial</button>
   </div>
 
-  <div id="sessions"><p class="empty">Cargando sesiones...</p></div>
+  <div id="sessions"><p class="empty">Cargando...</p></div>
 </div>
 
 <div id="toast"></div>
 
 <div class="ov" id="wallpaper-ov">
   <div class="modal">
-    <h3>🎨 Personalizar apariencia</h3>
-    <p>Ajusta la opacidad del fondo y el efecto vidrio</p>
+    <h3>Ajustes</h3>
+    <p>Personalizar visualización</p>
     
-    <div class="glass-toggle">
-      <span>🔮 Modo vidrio (transparente)</span>
-      <div class="glass-switch" id="glass-switch" onclick="toggleGlassMode()">
-        <div class="glass-switch-knob"></div>
-      </div>
-    </div>
-    
-    <label style="font-size: 13px; color: var(--text-secondary);">Opacidad del wallpaper</label>
-    <input type="range" id="wallpaper-slider" min="0" max="100" value="15" step="1">
-    <div class="range-value" id="range-value">15%</div>
+    <input type="range" id="wallpaper-slider" min="0" max="100" value="100" step="1">
+    <div class="range-value" id="range-value">100%</div>
     
     <div class="mbtns">
-      <button class="ok" onclick="saveWallpaperSetting()">Guardar cambios</button>
+      <button class="ok" onclick="saveWallpaperSetting()">Guardar</button>
     </div>
   </div>
 </div>
@@ -1339,11 +1180,11 @@ header {
 
 <div class="ov" id="f-ov">
   <div class="modal">
-    <h3>📸 Foto del menú</h3>
-    <p>Selecciona una imagen para personalizar</p>
+    <h3>Foto menú</h3>
+    <p>Seleccionar imagen</p>
     <input type="file" id="f-input" accept="image/*" onchange="prevFoto(event)">
-    <img id="f-prev" style="width:80px;height:80px;object-fit:cover;border-radius:16px;border:1px solid var(--border);display:none;margin-top:16px;">
-    <div class="mbtns" style="margin-top:20px;">
+    <img id="f-prev" style="width:80px;height:80px;object-fit:cover;border:2px solid var(--border);display:none;margin-top:20px;">
+    <div class="mbtns" style="margin-top:25px;">
       <button onclick="closeFoto()">Cancelar</button>
       <button class="ok" onclick="confirmarFoto()">Guardar</button>
     </div>
@@ -1353,49 +1194,42 @@ header {
 <div class="ov" id="lid-ov">
   <div class="modal">
     <h3>
-      🔑 Ingresar LID
-      <button class="help-btn" onclick="toggleHelp()" title="¿Cómo obtener mi LID?">❓</button>
+      LID
+      <button class="help-btn" onclick="toggleHelp()" title="Ayuda">?</button>
     </h3>
-    <p>Pega tu LID para vincular esta sesión a tu cuenta</p>
+    <p>Ingresa tu LID</p>
     
     <div id="help-content" style="display: none;">
       <div class="help-box">
-        <p style="font-weight: 600; margin-bottom: 16px;">📱 ¿Cómo obtener tu LID?</p>
+        <p style="font-weight: 600; margin-bottom: 18px;">Obtener LID</p>
         
         <div class="step">
           <div class="step-number">1</div>
-          <div class="step-text">Escribe al número principal del bot:</div>
+          <div class="step-text">Escribe al bot:</div>
         </div>
-        <div class="phone-number" onclick="copyPhoneNumber()">📞 +593 99 194 4530</div>
+        <div class="phone-number" onclick="copyPhoneNumber()">+593 99 194 4530</div>
         
         <div class="step">
           <div class="step-number">2</div>
-          <div class="step-text">Envía el comando:</div>
+          <div class="step-text">Envía:</div>
         </div>
         <div class="code-block">.id</div>
         
         <div class="step">
           <div class="step-number">3</div>
-          <div class="step-text">El bot responderá con tu LID:</div>
+          <div class="step-text">Copia el LID</div>
         </div>
-        <div class="code-block">
-          <span class="lid-example">97788486537432@lid</span>
-        </div>
-        
-        <div class="step">
-          <div class="step-number">4</div>
-          <div class="step-text">Copia y pega el LID aquí</div>
-        </div>
+        <div class="code-block">97788486537432@lid</div>
       </div>
     </div>
     
-    <input id="lid-input" type="text" placeholder="Ej: 97788486537432@lid" autocomplete="off">
-    <p style="font-size: 11px; color: var(--text-muted); margin-top: -12px; margin-bottom: 20px;">
-      El LID siempre termina con @lid
+    <input id="lid-input" type="text" placeholder="...@lid" autocomplete="off">
+    <p style="font-size: 10px; color: var(--text-muted); margin-top: -18px; margin-bottom: 25px;">
+      Termina con @lid
     </p>
     <div class="mbtns">
       <button onclick="closeLidModal()">Cancelar</button>
-      <button class="ok" onclick="confirmLid()">Guardar LID</button>
+      <button class="ok" onclick="confirmLid()">Guardar</button>
     </div>
   </div>
 </div>
@@ -1406,7 +1240,7 @@ header {
     <p id="confirm-message">¿Estás seguro?</p>
     <div class="mbtns">
       <button onclick="closeConfirmModal()">Cancelar</button>
-      <button class="ok" id="confirm-ok">Aceptar</button>
+      <button class="ok" id="confirm-ok">Sí</button>
     </div>
   </div>
 </div>
@@ -1425,20 +1259,18 @@ let activityLogs = [];
 let confirmCb = null;
 const MAX_SESSIONS = 15;
 
-let wallpaperOpacity = 0.15;
-let glassMode = false;
+let wallpaperOpacity = 1;
 
 function initTheme() {
   const savedTheme = localStorage.getItem('friki_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeUI(savedTheme);
   loadWallpaperSetting();
-  loadGlassMode();
 }
 
 function updateThemeUI(theme) {
   const knob = document.getElementById('theme-knob');
-  knob.textContent = theme === 'light' ? '☀️' : '🌙';
+  knob.textContent = '◐';
 }
 
 function toggleTheme() {
@@ -1457,31 +1289,6 @@ function loadWallpaperSetting() {
   }
 }
 
-function loadGlassMode() {
-  const saved = localStorage.getItem('friki_glass_mode');
-  if (saved !== null) {
-    glassMode = saved === 'true';
-    document.documentElement.setAttribute('data-glass', glassMode);
-    updateGlassUI();
-  }
-}
-
-function updateGlassUI() {
-  const sw = document.getElementById('glass-switch');
-  if (glassMode) {
-    sw.classList.add('active');
-  } else {
-    sw.classList.remove('active');
-  }
-}
-
-function toggleGlassMode() {
-  glassMode = !glassMode;
-  document.documentElement.setAttribute('data-glass', glassMode);
-  localStorage.setItem('friki_glass_mode', glassMode);
-  updateGlassUI();
-}
-
 function openWallpaperModal() {
   const slider = document.getElementById('wallpaper-slider');
   const rangeValue = document.getElementById('range-value');
@@ -1492,7 +1299,6 @@ function openWallpaperModal() {
     rangeValue.textContent = slider.value + '%';
   };
   
-  updateGlassUI();
   document.getElementById('wallpaper-ov').classList.add('open');
 }
 
@@ -1502,7 +1308,7 @@ function saveWallpaperSetting() {
   document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
   localStorage.setItem('friki_wallpaper_opacity', wallpaperOpacity);
   document.getElementById('wallpaper-ov').classList.remove('open');
-  toast('Apariencia guardada', 'ok');
+  toast('Guardado', 'ok');
 }
 
 function closeWallpaperModal() {
@@ -1521,9 +1327,9 @@ function toggleHelp() {
 
 function copyPhoneNumber() {
   navigator.clipboard?.writeText('+593991944530').then(() => {
-    toast('📋 Número copiado', 'ok');
+    toast('Copiado', 'ok');
   }).catch(() => {
-    toast('No se pudo copiar', 'err');
+    toast('Error', 'err');
   });
 }
 
@@ -1535,8 +1341,8 @@ function toggleOwnerUI(owner) {
   
   document.getElementById('owner-badge-header').textContent = owner ? 'OWNER' : '';
   document.getElementById('user-info').textContent = owner 
-    ? `${currentUser} · Owner` 
-    : (currentSession ? `${currentUser} · Sesión ${currentSession}` : `${currentUser}`);
+    ? `${currentUser} / OWNER` 
+    : (currentSession ? `${currentUser} / S${currentSession}` : `${currentUser}`);
 }
 
 function showConfirm(title, message, onConfirm) {
@@ -1558,8 +1364,7 @@ document.getElementById('confirm-ok').addEventListener('click', () => {
 
 function addLog(type, message) {
   if (!isOwner) return;
-  const log = { time: new Date().toLocaleTimeString(), type, message };
-  activityLogs.unshift(log);
+  activityLogs.unshift({ time: new Date().toLocaleTimeString(), type, message });
   if (activityLogs.length > 50) activityLogs.pop();
 }
 
@@ -1578,7 +1383,7 @@ function exportData() {
   a.download = `frikibot-backup-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  toast('📦 Datos exportados', 'ok');
+  toast('Exportado', 'ok');
 }
 
 function showRegister() {
@@ -1596,10 +1401,10 @@ async function register() {
   const password = document.getElementById('register-pass').value;
   const password2 = document.getElementById('register-pass2').value;
   
-  if (!username || !password) { toast('Completa todos los campos', 'err'); return; }
-  if (username.length < 3) { toast('Usuario: mínimo 3 caracteres', 'err'); return; }
-  if (password.length < 4) { toast('Contraseña: mínimo 4 caracteres', 'err'); return; }
-  if (password !== password2) { toast('Las contraseñas no coinciden', 'err'); return; }
+  if (!username || !password) { toast('Completa los campos', 'err'); return; }
+  if (username.length < 3) { toast('Usuario: mínimo 3', 'err'); return; }
+  if (password.length < 4) { toast('Contraseña: mínimo 4', 'err'); return; }
+  if (password !== password2) { toast('No coinciden', 'err'); return; }
   
   try {
     const res = await fetch(`${API}/api/register`, {
@@ -1609,7 +1414,7 @@ async function register() {
     });
     const data = await res.json();
     if (data.ok) {
-      toast('✅ Cuenta creada', 'ok');
+      toast('Cuenta creada', 'ok');
       showLogin();
       document.getElementById('login-user').value = username;
       document.getElementById('login-pass').value = '';
@@ -1621,7 +1426,7 @@ async function login() {
   const username = document.getElementById('login-user').value.trim();
   const password = document.getElementById('login-pass').value;
   
-  if (!username || !password) { toast('Ingresa usuario y contraseña', 'err'); return; }
+  if (!username || !password) { toast('Ingresa datos', 'err'); return; }
   
   try {
     const res = await fetch(`${API}/api/login`, {
@@ -1643,7 +1448,7 @@ async function login() {
       document.getElementById('app-container').style.display = 'block';
       
       toggleOwnerUI(isOwner);
-      if (isOwner) addLog('success', `Inicio de sesión: ${currentUser}`);
+      if (isOwner) addLog('success', `Login: ${currentUser}`);
       
       await loadSessions();
       setInterval(loadSessions, 10000);
@@ -1654,7 +1459,7 @@ async function login() {
 
 function logout() {
   fetch(`${API}/api/logout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: currentUser }) }).catch(() => {});
-  if (isOwner) addLog('info', `Cierre de sesión: ${currentUser}`);
+  if (isOwner) addLog('info', `Logout: ${currentUser}`);
   localStorage.removeItem('friki_token');
   localStorage.removeItem('friki_user');
   currentUser = null; currentSession = null;
@@ -1673,7 +1478,7 @@ function checkAutoLogin() {
 function toast(msg, tipo = 'ok') {
   const t = document.getElementById('toast');
   t.textContent = msg; t.className = `show ${tipo}`;
-  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 3000);
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 async function apiFetch(url, opts = {}) {
@@ -1685,7 +1490,7 @@ async function apiFetch(url, opts = {}) {
 
 function setConn(ok) {
   document.getElementById('conn-dot').className = `conn-dot ${ok ? 'ok' : 'err'}`;
-  document.getElementById('conn-lbl').textContent = ok ? 'Conectado' : 'Offline';
+  document.getElementById('conn-lbl').textContent = ok ? 'ON' : 'OFF';
 }
 
 async function loadStats() {
@@ -1727,7 +1532,7 @@ function actualizarSelect() {
   if (!isOwner) return;
   const usados = sessions.filter(s => s.owner && s.owner !== 'web_pending@lid' && s.owner !== 'web@lid').map(s => s.n);
   const sel = document.getElementById('new-n');
-  sel.innerHTML = '<option value="">Nueva sesión...</option>';
+  sel.innerHTML = '<option value="">Nueva sesión</option>';
   for (let i = 1; i <= MAX_SESSIONS; i++) {
     if (!usados.includes(i)) {
       const o = document.createElement('option');
@@ -1744,7 +1549,7 @@ function puedeModificarSesion(sessionNum) {
 async function elegirSesion() {
   const sel = document.getElementById('session-select');
   const newSession = parseInt(sel.value, 10);
-  if (!newSession) return toast('Selecciona una sesión', 'err');
+  if (!newSession) return toast('Selecciona', 'err');
   
   try {
     const res = await apiFetch('/api/elegir-sesion', {
@@ -1755,19 +1560,17 @@ async function elegirSesion() {
     const data = await res.json();
     if (data.ok) {
       currentSession = newSession;
-      toast(`✨ Sesión ${newSession} asignada`, 'ok');
+      toast(`Sesión ${newSession}`, 'ok');
       await loadSessions();
       toggleOwnerUI(isOwner);
-    } else {
-      toast(data.error || 'Error', 'err');
-    }
-  } catch { toast('Error de conexión', 'err'); }
+    } else toast(data.error || 'Error', 'err');
+  } catch { toast('Error', 'err'); }
 }
 
 function openLidModal(n) {
   const sessionNum = Number(n);
-  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
+  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Inválido', 'err'); return; }
+  if (!puedeModificarSesion(sessionNum)) { toast('Sin permiso', 'err'); return; }
   
   lidSessionN = sessionNum;
   document.getElementById('lid-input').value = '';
@@ -1783,14 +1586,14 @@ function closeLidModal() {
 
 async function confirmLid() {
   const lid = document.getElementById('lid-input').value.trim();
-  if (!lid) return toast('Ingresa tu LID', 'err');
-  if (!lid.includes('@lid')) return toast('El LID debe terminar con @lid', 'err');
+  if (!lid) return toast('Ingresa LID', 'err');
+  if (!lid.includes('@lid')) return toast('Debe tener @lid', 'err');
   
   const sessionNum = lidSessionN;
-  if (!sessionNum) { toast('Error: Sesión no definida', 'err'); return; }
+  if (!sessionNum) { toast('Error', 'err'); return; }
   
   closeLidModal();
-  toast('Actualizando LID...');
+  toast('Actualizando...');
   
   try {
     const r = await apiFetch(`/api/set-lid/${sessionNum}`, {
@@ -1800,13 +1603,11 @@ async function confirmLid() {
     });
     const d = await r.json();
     if (d.ok) {
-      toast(`✅ LID actualizado`, 'ok');
+      toast('LID actualizado', 'ok');
       await loadSessions();
-      if (isOwner) addLog('success', `Sesión ${sessionNum}: LID actualizado`);
-    } else {
-      toast(d.error || 'Error', 'err');
-    }
-  } catch { toast('Error de conexión', 'err'); }
+      if (isOwner) addLog('success', `Sesión ${sessionNum}: LID`);
+    } else toast(d.error || 'Error', 'err');
+  } catch { toast('Error', 'err'); }
 }
 
 function renderSessions() {
@@ -1820,42 +1621,37 @@ function renderSessions() {
     }
     
     if (libres.length === 0) {
-      c.innerHTML = `
-        <div class="session-selector">
-          <h3>😕 No hay sesiones</h3>
-          <p>Todas las sesiones están ocupadas.</p>
-        </div>
-      `;
+      c.innerHTML = '<div class="session-selector"><h3>Sin sesiones</h3><p>Todas ocupadas</p></div>';
       return;
     }
     
     c.innerHTML = `
       <div class="session-selector">
-        <h3>🎯 Elige tu sesión</h3>
-        <p>Selecciona una sesión para empezar</p>
+        <h3>Elige sesión</h3>
+        <p>Selecciona una</p>
         <select id="session-select">
-          <option value="">-- Seleccionar --</option>
+          <option value="">--</option>
           ${libres.map(i => `<option value="${i}">Sesión ${i}</option>`).join('')}
         </select>
         <br>
-        <button onclick="elegirSesion()">✨ Asignar esta sesión</button>
+        <button onclick="elegirSesion()">Asignar</button>
       </div>
     `;
     return;
   }
   
   if (!sessions.length) { 
-    c.innerHTML = '<p class="empty">No hay sesiones disponibles</p>'; 
+    c.innerHTML = '<p class="empty">Sin sesiones</p>'; 
     return; 
   }
   
   c.innerHTML = '';
   for (const s of sessions) {
     let dotClass = '', dotTitle = '';
-    if (s.hasCreds) { dotClass = 'on'; dotTitle = 'Conectado'; }
-    else if (s.pausada) { dotClass = 'paused'; dotTitle = 'Pausado'; }
-    else if (s.pendingQR || s.hasQR) { dotClass = 'qr'; dotTitle = 'Esperando QR'; }
-    else { dotClass = ''; dotTitle = 'Inactivo'; }
+    if (s.hasCreds) { dotClass = 'on'; dotTitle = 'ON'; }
+    else if (s.pausada) { dotClass = 'paused'; dotTitle = 'PAUSE'; }
+    else if (s.pendingQR || s.hasQR) { dotClass = 'qr'; dotTitle = 'QR'; }
+    else { dotClass = ''; dotTitle = 'OFF'; }
     
     const puedeModificar = puedeModificarSesion(s.n);
     const esMiSesion = currentSession === s.n;
@@ -1865,30 +1661,30 @@ function renderSessions() {
     let pausedWarning = '';
     
     if (s.pausada) {
-      pausedWarning = '<div class="paused-warning">⚠️ Pausada · Se eliminará en 2 horas</div>';
+      pausedWarning = '<div class="paused-warning">PAUSADA · 2h para eliminar</div>';
     }
     
     if (isOwner) {
       actionButtons = `
-        ${!s.hasCreds && !s.pausada ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar</button>` : ''}
-        ${s.hasCreds ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 LID</button>` : ''}
-        ${!s.pausada && s.hasCreds ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">⏸️ Pausar</button>` : ''}
-        ${s.pausada ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">▶️ Reanudar</button>` : ''}
-        <button class="btn danger" data-action="eliminar" data-session="${sessionNum}">🗑️ Eliminar</button>
-        <button class="btn" data-action="nombre" data-session="${sessionNum}">✏️ Nombre</button>
-        <button class="btn" data-action="moneda" data-session="${sessionNum}">💰 Moneda</button>
-        <button class="btn full" data-action="foto" data-session="${sessionNum}">📸 Foto</button>
+        ${!s.hasCreds && !s.pausada ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">Iniciar</button>` : ''}
+        ${s.hasCreds ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">LID</button>` : ''}
+        ${!s.pausada && s.hasCreds ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">Pausar</button>` : ''}
+        ${s.pausada ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">Reanudar</button>` : ''}
+        <button class="btn danger" data-action="eliminar" data-session="${sessionNum}">Eliminar</button>
+        <button class="btn" data-action="nombre" data-session="${sessionNum}">Nombre</button>
+        <button class="btn" data-action="moneda" data-session="${sessionNum}">Moneda</button>
+        <button class="btn full" data-action="foto" data-session="${sessionNum}">Foto</button>
       `;
     } else {
       actionButtons = `
-        ${!s.hasCreds && !s.pausada && puedeModificar ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar</button>` : ''}
-        ${s.hasCreds && puedeModificar ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 LID</button>` : ''}
-        ${!s.pausada && s.hasCreds && puedeModificar ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">⏸️ Pausar</button>` : ''}
-        ${s.pausada && puedeModificar ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">▶️ Reanudar</button>` : ''}
-        ${puedeModificar ? `<button class="btn" data-action="nombre" data-session="${sessionNum}">✏️ Nombre</button>` : ''}
-        ${puedeModificar ? `<button class="btn" data-action="moneda" data-session="${sessionNum}">💰 Moneda</button>` : ''}
-        ${puedeModificar ? `<button class="btn full" data-action="foto" data-session="${sessionNum}">📸 Foto</button>` : ''}
-        ${puedeModificar ? `<button class="btn danger full" data-action="eliminar" data-session="${sessionNum}" style="margin-top:4px;">🗑️ Eliminar</button>` : ''}
+        ${!s.hasCreds && !s.pausada && puedeModificar ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">Iniciar</button>` : ''}
+        ${s.hasCreds && puedeModificar ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">LID</button>` : ''}
+        ${!s.pausada && s.hasCreds && puedeModificar ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">Pausar</button>` : ''}
+        ${s.pausada && puedeModificar ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">Reanudar</button>` : ''}
+        ${puedeModificar ? `<button class="btn" data-action="nombre" data-session="${sessionNum}">Nombre</button>` : ''}
+        ${puedeModificar ? `<button class="btn" data-action="moneda" data-session="${sessionNum}">Moneda</button>` : ''}
+        ${puedeModificar ? `<button class="btn full" data-action="foto" data-session="${sessionNum}">Foto</button>` : ''}
+        ${puedeModificar ? `<button class="btn danger full" data-action="eliminar" data-session="${sessionNum}" style="margin-top:2px;">Eliminar</button>` : ''}
       `;
     }
     
@@ -1899,15 +1695,15 @@ function renderSessions() {
     div.innerHTML = `
       <div class="card-hdr">
         <span class="card-num">#${sessionNum}</span>
-        <span class="card-name">${escapeHtml(s.nombre)}${esMiSesion ? '<span class="owner-badge">Tu sesión</span>' : ''}</span>
+        <span class="card-name">${escapeHtml(s.nombre)}${esMiSesion ? '<span class="owner-badge">TUYO</span>' : ''}</span>
         <span class="dot ${dotClass}" title="${dotTitle}"></span>
       </div>
       <div class="card-body">
         <div class="meta">
-          <span>💰 <b>${escapeHtml(s.moneda)}</b></span>
-          <span>🖼️ <b>${s.foto ? 'Personalizada' : 'Default'}</b></span>
-          <span>📡 <b>${dotTitle}</b></span>
-          ${s.numero ? `<span>📞 <b>+${s.numero}</b></span>` : ''}
+          <span>${escapeHtml(s.moneda)}</span>
+          <span>${s.foto ? 'IMG' : 'NO IMG'}</span>
+          <span>${dotTitle}</span>
+          ${s.numero ? `<span>+${s.numero}</span>` : ''}
         </div>
         ${pausedWarning}
         <div class="qr-area">
@@ -1980,8 +1776,8 @@ function mostrarQR(n) {
   img.style.display = 'block';
   img.onerror = () => { img.style.display = 'none'; if (wai) wai.style.display = 'block'; };
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '📱 Escanea con WhatsApp';
-  if (timeoutLbl) { timeoutLbl.textContent = '⏰ Válido por 2 minutos'; timeoutLbl.style.display = 'block'; }
+  if (lbl) lbl.textContent = 'Escanea con WhatsApp';
+  if (timeoutLbl) { timeoutLbl.textContent = '2 minutos'; timeoutLbl.style.display = 'block'; }
 }
 
 function ocultarQR(n) {
@@ -2002,7 +1798,7 @@ function conectado(n) {
   const timeoutLbl = document.getElementById(`qt-${n}`);
   if (img) img.style.display = 'none';
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '✅ Conectado';
+  if (lbl) lbl.textContent = 'Conectado';
   if (timeoutLbl) timeoutLbl.style.display = 'none';
 }
 
@@ -2013,106 +1809,86 @@ function pausado(n) {
   const timeoutLbl = document.getElementById(`qt-${n}`);
   if (img) img.style.display = 'none';
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '⏸️ Pausado';
+  if (lbl) lbl.textContent = 'Pausado';
   if (timeoutLbl) timeoutLbl.style.display = 'none';
 }
 
 async function iniciarNueva() {
   if (!isOwner) return;
   const n = parseInt(document.getElementById('new-n').value, 10);
-  if (!n) return toast('Selecciona un número', 'err');
+  if (!n) return toast('Selecciona', 'err');
   await iniciar(n);
   loadSessions();
-  addLog('success', `Sesión ${n} creada`);
+  addLog('success', `Sesión ${n}`);
 }
 
 async function iniciar(n) {
   const sessionNum = Number(n);
-  toast(`Iniciando sesión ${sessionNum}...`);
+  toast(`Iniciando ${sessionNum}...`);
   try {
     const r = await apiFetch(`/api/iniciar/${sessionNum}`, { method: 'POST' });
     const d = await r.json();
-    if (d.ok) { toast(`✅ Sesión ${sessionNum} iniciada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} iniciada`); }
+    if (d.ok) { toast(`Sesión ${sessionNum}`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum}`); }
     else toast(d.error || 'Error', 'err');
-  } catch { toast('Error de conexión', 'err'); }
+  } catch { toast('Error', 'err'); }
 }
 
 async function pausar(n) {
   const sessionNum = Number(n);
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
+  if (!puedeModificarSesion(sessionNum)) { toast('Sin permiso', 'err'); return; }
   
-  showConfirm(
-    '⏸️ Pausar sesión',
-    `¿Pausar sesión ${sessionNum}?\n\n⚠️ Se eliminará en 2 horas.`,
-    async () => {
-      try {
-        const r = await apiFetch(`/api/pausar/${sessionNum}`, { method: 'POST' });
-        const d = await r.json();
-        if (d.ok) { 
-          toast(`⏸️ Sesión ${sessionNum} pausada`, 'warning'); 
-          await loadSessions();
-          if (isOwner) addLog('info', `Sesión ${sessionNum} pausada`); 
-        }
-        else toast(d.error || 'Error', 'err');
-      } catch { toast('Error de conexión', 'err'); }
-    }
-  );
+  showConfirm('Pausar', `¿Pausar ${sessionNum}?`, async () => {
+    try {
+      const r = await apiFetch(`/api/pausar/${sessionNum}`, { method: 'POST' });
+      const d = await r.json();
+      if (d.ok) { toast(`Pausada`, 'warning'); await loadSessions(); if (isOwner) addLog('info', `Pausada ${sessionNum}`); }
+      else toast(d.error || 'Error', 'err');
+    } catch { toast('Error', 'err'); }
+  });
 }
 
 async function reanudar(n) {
   const sessionNum = Number(n);
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
+  if (!puedeModificarSesion(sessionNum)) { toast('Sin permiso', 'err'); return; }
   
-  toast(`Reanudando sesión ${sessionNum}...`);
+  toast(`Reanudando ${sessionNum}...`);
   try {
     const r = await apiFetch(`/api/reanudar/${sessionNum}`, { method: 'POST' });
     const d = await r.json();
-    if (d.ok) { 
-      toast(`✅ Sesión ${sessionNum} reanudada`, 'ok'); 
-      await loadSessions();
-      if (isOwner) addLog('success', `Sesión ${sessionNum} reanudada`); 
-    }
+    if (d.ok) { toast(`Reanudada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Reanudada ${sessionNum}`); }
     else toast(d.error || 'Error', 'err');
-  } catch { toast('Error de conexión', 'err'); }
+  } catch { toast('Error', 'err'); }
 }
 
 async function eliminar(n) {
   const sessionNum = Number(n);
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
+  if (!puedeModificarSesion(sessionNum)) { toast('Sin permiso', 'err'); return; }
   
-  showConfirm(
-    '🗑️ Eliminar sesión',
-    `¿Eliminar sesión ${sessionNum}?`,
-    async () => {
-      try {
-        const r = await apiFetch(`/api/eliminar/${sessionNum}`, { method: 'DELETE' });
-        const d = await r.json();
-        if (d.ok) { 
-          toast(`✅ Sesión ${sessionNum} eliminada`, 'ok'); 
-          stopPoller(sessionNum); 
-          await loadSessions();
-          if (sessionNum === currentSession) {
-            currentSession = null;
-            toggleOwnerUI(isOwner);
-          }
-          if (isOwner) addLog('error', `Sesión ${sessionNum} eliminada`); 
-        }
-        else toast(d.error || 'Error', 'err');
-      } catch { toast('Error de conexión', 'err'); }
-    }
-  );
+  showConfirm('Eliminar', `¿Eliminar ${sessionNum}?`, async () => {
+    try {
+      const r = await apiFetch(`/api/eliminar/${sessionNum}`, { method: 'DELETE' });
+      const d = await r.json();
+      if (d.ok) { 
+        toast(`Eliminada`, 'ok'); 
+        stopPoller(sessionNum); 
+        await loadSessions();
+        if (sessionNum === currentSession) { currentSession = null; toggleOwnerUI(isOwner); }
+        if (isOwner) addLog('error', `Eliminada ${sessionNum}`); 
+      } else toast(d.error || 'Error', 'err');
+    } catch { toast('Error', 'err'); }
+  });
 }
 
 function openModal(n, tipo) {
   const sessionNum = Number(n);
-  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
+  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Inválido', 'err'); return; }
+  if (!puedeModificarSesion(sessionNum)) { toast('Sin permiso', 'err'); return; }
   
-  document.getElementById('m-title').textContent = tipo === 'nombre' ? '✏️ Nombre del bot' : '💰 Moneda';
-  document.getElementById('m-desc').textContent = tipo === 'nombre' ? 'Nombre en mensajes' : 'Símbolo de moneda';
+  document.getElementById('m-title').textContent = tipo === 'nombre' ? 'Nombre' : 'Moneda';
+  document.getElementById('m-desc').textContent = tipo === 'nombre' ? 'Nombre del bot' : 'Símbolo';
   const inp = document.getElementById('m-input');
   inp.maxLength = tipo === 'nombre' ? 30 : 20;
-  inp.placeholder = tipo === 'nombre' ? 'ej: NeoBot' : 'ej: COINS';
+  inp.placeholder = tipo === 'nombre' ? 'NeoBot' : 'COINS';
   inp.value = '';
   
   modalCb = async (val) => {
@@ -2122,7 +1898,7 @@ function openModal(n, tipo) {
       body: JSON.stringify({ [tipo]: val })
     });
     const d = await r.json();
-    if (d.ok) { toast(`✅ ${tipo} actualizado`, 'ok'); loadSessions(); }
+    if (d.ok) { toast('Actualizado', 'ok'); loadSessions(); }
     else toast(d.error || 'Error', 'err');
   };
   document.getElementById('m-ov').classList.add('open');
@@ -2133,15 +1909,15 @@ function closeModal() { document.getElementById('m-ov').classList.remove('open')
 
 async function confirmModal() {
   const val = document.getElementById('m-input').value.trim();
-  if (!val) return toast('Campo requerido', 'err');
+  if (!val) return toast('Requerido', 'err');
   closeModal();
   if (modalCb) await modalCb(val);
 }
 
 function openFoto(n) {
   const sessionNum = Number(n);
-  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
+  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Inválido', 'err'); return; }
+  if (!puedeModificarSesion(sessionNum)) { toast('Sin permiso', 'err'); return; }
   
   fotoN = sessionNum;
   document.getElementById('f-input').value = '';
@@ -2161,10 +1937,10 @@ function prevFoto(e) {
 
 async function confirmarFoto() {
   const file = document.getElementById('f-input').files[0];
-  if (!file) return toast('Selecciona una imagen', 'err');
+  if (!file) return toast('Selecciona', 'err');
   
   const sessionNum = Number(fotoN);
-  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Error: Sesión no definida', 'err'); return; }
+  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Error', 'err'); return; }
   
   const r2 = new FileReader();
   r2.onload = async ev => {
@@ -2177,16 +1953,16 @@ async function confirmarFoto() {
         body: JSON.stringify({ foto: ev.target.result })
       });
       const d = await r.json();
-      if (d.ok) { toast('✅ Foto actualizada', 'ok'); loadSessions(); }
+      if (d.ok) { toast('Actualizado', 'ok'); loadSessions(); }
       else toast(d.error || 'Error', 'err');
-    } catch { toast('Error de conexión', 'err'); }
+    } catch { toast('Error', 'err'); }
   };
   r2.readAsDataURL(file);
 }
 
 document.addEventListener('keydown', (e) => {
   if (!currentUser) return;
-  if (e.key === 'r' || e.key === 'R') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); loadSessions(); toast('🔄 Sesiones recargadas', 'ok'); } }
+  if (e.key === 'r' || e.key === 'R') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); loadSessions(); toast('Recargado', 'ok'); } }
   if (e.key === 'Escape') { closeModal(); closeFoto(); closeLidModal(); closeWallpaperModal(); closeConfirmModal(); }
 });
 
