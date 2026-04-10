@@ -8,7 +8,7 @@
 <style>
 :root {
   --bg: #ffffff;
-  --surface: #fafafa;
+  --surface: rgba(250, 250, 250, 0.85);
   --border: #e5e5e5;
   --border-light: #f0f0f0;
   --text: #0a0a0a;
@@ -28,11 +28,14 @@
   --btn-invert-bg: #f5f5f5;
   --toggle-bg: #e5e5e5;
   --toggle-knob: #ffffff;
+  --wallpaper-brightness: 1;
+  --wallpaper-contrast: 1;
+  --wallpaper-opacity: 0.05;
 }
 
 [data-theme="dark"] {
   --bg: #0a0a0a;
-  --surface: #141414;
+  --surface: rgba(20, 20, 20, 0.85);
   --border: #2a2a2a;
   --border-light: #1f1f1f;
   --text: #ffffff;
@@ -51,6 +54,9 @@
   --btn-invert-bg: #2a2a2a;
   --toggle-bg: #2a2a2a;
   --toggle-knob: #ffffff;
+  --wallpaper-brightness: 0.4;
+  --wallpaper-contrast: 1.2;
+  --wallpaper-opacity: 0.08;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -64,6 +70,31 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   transition: background 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('wallpaper.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  opacity: var(--wallpaper-opacity);
+  filter: brightness(var(--wallpaper-brightness)) contrast(var(--wallpaper-contrast));
+  pointer-events: none;
+  z-index: 0;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+header, .app-container, .auth-container, .ov {
+  position: relative;
+  z-index: 1;
 }
 
 header {
@@ -72,10 +103,11 @@ header {
   gap: 16px;
   padding: 24px 32px;
   border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--surface);
   position: sticky;
   top: 0;
   z-index: 50;
+  backdrop-filter: blur(12px);
 }
 
 .logo {
@@ -96,7 +128,6 @@ header {
   opacity: 0.5;
 }
 
-/* INTERRUPTOR ANIMADO */
 .theme-toggle-wrapper {
   display: flex;
   align-items: center;
@@ -137,16 +168,25 @@ header {
   left: calc(100% - 25px);
 }
 
-.theme-icon {
-  font-size: 14px;
-  transition: opacity 0.2s ease;
+.wallpaper-control-btn {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  margin-left: 8px;
 }
 
-.theme-toggle-wrapper span:last-child {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  min-width: 45px;
+.wallpaper-control-btn:hover {
+  background: var(--surface);
+  border-color: var(--accent);
 }
 
 .user-info {
@@ -208,7 +248,6 @@ header {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: var(--bg);
 }
 
 .auth-card {
@@ -219,6 +258,7 @@ header {
   width: 100%;
   max-width: 400px;
   box-shadow: 0 4px 6px -2px var(--shadow), 0 10px 15px -3px var(--shadow);
+  backdrop-filter: blur(12px);
 }
 
 .auth-card h2 {
@@ -339,6 +379,7 @@ header {
   border-radius: 18px;
   padding: 20px;
   transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
 }
 
 .stat-card:hover {
@@ -460,6 +501,7 @@ header {
   padding: 32px;
   margin-bottom: 16px;
   text-align: center;
+  backdrop-filter: blur(8px);
 }
 
 .session-selector h3 {
@@ -512,11 +554,12 @@ header {
 }
 
 .card {
-  background: var(--bg);
+  background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 18px;
   overflow: hidden;
   transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
 }
 
 .card:hover {
@@ -583,7 +626,6 @@ header {
 .card-body {
   display: block;
   padding: 24px;
-  background: var(--surface);
 }
 
 .qr-area {
@@ -750,14 +792,15 @@ header {
 }
 
 .modal {
-  background: var(--bg);
+  background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 24px;
   padding: 32px;
   width: 100%;
-  max-width: 480px;
+  max-width: 420px;
   animation: slideUp 0.2s ease;
   box-shadow: 0 20px 40px -8px var(--shadow);
+  backdrop-filter: blur(12px);
 }
 
 @keyframes slideUp {
@@ -784,7 +827,7 @@ header {
 
 .modal input {
   width: 100%;
-  background: var(--surface);
+  background: var(--bg);
   border: 1.5px solid var(--border);
   color: var(--text);
   font-family: var(--font);
@@ -805,8 +848,23 @@ header {
   color: var(--text-secondary);
 }
 
+.modal input[type="range"] {
+  padding: 0;
+  margin: 16px 0 24px;
+  accent-color: var(--accent);
+  height: 6px;
+}
+
+.range-value {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
 .help-box {
-  background: var(--surface);
+  background: var(--bg);
   border: 1.5px solid var(--warning);
   border-radius: 14px;
   padding: 18px;
@@ -895,7 +953,7 @@ header {
 }
 
 .help-btn:hover {
-  background: var(--surface);
+  background: var(--bg);
   color: var(--warning);
 }
 
@@ -919,7 +977,7 @@ header {
 }
 
 .mbtns button:hover {
-  background: var(--surface);
+  background: var(--bg);
   color: var(--text);
 }
 
@@ -985,10 +1043,6 @@ header {
     display: none;
   }
   
-  .theme-toggle-wrapper span:last-child {
-    display: none;
-  }
-  
   .dashboard {
     grid-template-columns: 1fr;
   }
@@ -1051,25 +1105,25 @@ header {
 
 <div id="auth-container" class="auth-container">
   <div id="login-panel" class="auth-card">
-    <h2>👋 Bienvenido</h2>
+    <h2>Bienvenido</h2>
     <p>Accede a tu panel de control</p>
     <input type="text" id="login-user" placeholder="Usuario" autocomplete="off">
     <input type="password" id="login-pass" placeholder="Contraseña">
-    <button onclick="login()">🚪 Iniciar sesión</button>
-    <button class="secondary-btn" onclick="showRegister()">📝 Crear cuenta</button>
+    <button onclick="login()">Iniciar sesión</button>
+    <button class="secondary-btn" onclick="showRegister()">Crear cuenta</button>
     <div class="switch-link">
       <a onclick="showRegister()">¿Primera vez? Regístrate →</a>
     </div>
   </div>
 
   <div id="register-panel" class="auth-card" style="display:none;">
-    <h2>📝 Crear cuenta</h2>
+    <h2>Crear cuenta</h2>
     <p>Únete a FrikiBot</p>
     <input type="text" id="register-user" placeholder="Usuario" autocomplete="off">
     <input type="password" id="register-pass" placeholder="Contraseña">
     <input type="password" id="register-pass2" placeholder="Confirmar contraseña">
-    <button onclick="register()">✅ Registrarse</button>
-    <button class="secondary-btn" onclick="showLogin()">← Volver</button>
+    <button onclick="register()">Registrarse</button>
+    <button class="secondary-btn" onclick="showLogin()">Volver</button>
     <div class="switch-link">
       <a onclick="showLogin()">← Ya tengo cuenta</a>
     </div>
@@ -1078,54 +1132,65 @@ header {
 
 <div id="app-container" class="app-container">
   <header>
-    <div class="logo">🤖 Friki<span>Bot</span><span class="owner-badge-header" id="owner-badge-header"></span></div>
+    <div class="logo">Friki<span>Bot</span><span class="owner-badge-header" id="owner-badge-header"></span></div>
     
     <div class="theme-toggle-wrapper">
-      <span>🌙</span>
       <div class="theme-toggle" id="theme-toggle-btn">
-        <div class="theme-toggle-knob" id="theme-knob">🌙</div>
+        <div class="theme-toggle-knob" id="theme-knob">☀️</div>
       </div>
-      <span>☀️</span>
+      <button class="wallpaper-control-btn" onclick="openWallpaperModal()" title="Ajustar wallpaper">🎨</button>
     </div>
     
     <span class="user-info" id="user-info"></span>
-    <button class="logout-btn" onclick="logout()">🚪 Cerrar sesión</button>
+    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
     <span class="conn-lbl" id="conn-lbl">Conectando...</span>
     <span class="conn-dot" id="conn-dot"></span>
   </header>
 
   <div class="dashboard owner-only" id="owner-dashboard">
     <div class="stat-card">
-      <div class="stat-label">🟢 Sesiones Activas</div>
+      <div class="stat-label">Sesiones Activas</div>
       <div class="stat-value" id="stat-active">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">📷 QR Pendientes</div>
+      <div class="stat-label">QR Pendientes</div>
       <div class="stat-value" id="stat-qr">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">⏸️ Sesiones Pausadas</div>
+      <div class="stat-label">Sesiones Pausadas</div>
       <div class="stat-value" id="stat-paused">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">👥 Total Usuarios</div>
+      <div class="stat-label">Total Usuarios</div>
       <div class="stat-value" id="stat-users">0</div>
     </div>
   </div>
 
   <div class="controls-bar owner-only" id="owner-controls">
     <div class="new-area">
-      <select id="new-n"><option value="">➕ Nueva sesión...</option></select>
-      <button onclick="iniciarNueva()">✨ Crear sesión</button>
+      <select id="new-n"><option value="">Nueva sesión...</option></select>
+      <button onclick="iniciarNueva()">➕ Nueva sesión</button>
     </div>
     <button class="owner-btn" onclick="exportData()">📦 Exportar</button>
     <button class="owner-btn" onclick="showLogs()">📋 Historial</button>
   </div>
 
-  <div id="sessions"><p class="empty">⏳ Cargando sesiones...</p></div>
+  <div id="sessions"><p class="empty">Cargando sesiones...</p></div>
 </div>
 
 <div id="toast"></div>
+
+<div class="ov" id="wallpaper-ov">
+  <div class="modal">
+    <h3>🎨 Ajustar wallpaper</h3>
+    <p>Desliza para ajustar la opacidad del fondo</p>
+    <input type="range" id="wallpaper-slider" min="0" max="100" value="5" step="1">
+    <div class="range-value" id="range-value">5%</div>
+    <div class="mbtns">
+      <button class="ok" onclick="saveWallpaperSetting()">Guardar</button>
+    </div>
+  </div>
+</div>
 
 <div class="ov" id="m-ov">
   <div class="modal">
@@ -1133,21 +1198,21 @@ header {
     <p id="m-desc"></p>
     <input id="m-input" type="text" maxlength="30">
     <div class="mbtns">
-      <button onclick="closeModal()">❌ Cancelar</button>
-      <button class="ok" onclick="confirmModal()">💾 Guardar</button>
+      <button onclick="closeModal()">Cancelar</button>
+      <button class="ok" onclick="confirmModal()">Guardar</button>
     </div>
   </div>
 </div>
 
 <div class="ov" id="f-ov">
   <div class="modal">
-    <h3>📸 Foto del menú</h3>
+    <h3>Foto del menú</h3>
     <p>Selecciona una imagen</p>
     <input type="file" id="f-input" accept="image/*" onchange="prevFoto(event)">
     <img id="f-prev" style="width:80px;height:80px;object-fit:cover;border-radius:12px;border:1.5px solid var(--border);display:none;margin-top:12px;">
     <div class="mbtns" style="margin-top:16px;">
-      <button onclick="closeFoto()">❌ Cancelar</button>
-      <button class="ok" onclick="confirmarFoto()">💾 Guardar</button>
+      <button onclick="closeFoto()">Cancelar</button>
+      <button class="ok" onclick="confirmarFoto()">Guardar</button>
     </div>
   </div>
 </div>
@@ -1155,20 +1220,20 @@ header {
 <div class="ov" id="lid-ov">
   <div class="modal">
     <h3>
-      🔑 Ingresar LID
+      Ingresar LID
       <button class="help-btn" onclick="toggleHelp()" title="¿Cómo obtener mi LID?">❓</button>
     </h3>
     <p>Pega tu LID para vincular esta sesión a tu cuenta</p>
     
     <div id="help-content" style="display: none;">
       <div class="help-box">
-        <p style="font-weight: 600; margin-bottom: 16px;">📱 ¿Cómo obtener tu LID?</p>
+        <p style="font-weight: 600; margin-bottom: 16px;">¿Cómo obtener tu LID?</p>
         
         <div class="step">
           <div class="step-number">1</div>
           <div class="step-text">Abre WhatsApp y escribe al número principal del bot:</div>
         </div>
-        <div class="phone-number" onclick="copyPhoneNumber()">📞 +593 99 194 4530</div>
+        <div class="phone-number" onclick="copyPhoneNumber()">+593 99 194 4530</div>
         
         <div class="step">
           <div class="step-number">2</div>
@@ -1181,18 +1246,18 @@ header {
           <div class="step-text">El bot responderá con tu LID, por ejemplo:</div>
         </div>
         <div class="code-block" style="font-size: 13px;">
-          🆔 *ID de tú:*<br>
+          ID de tú:<br>
           <span class="lid-example">97788486537432@lid</span>
         </div>
         
         <div class="step">
           <div class="step-number">4</div>
-          <div class="step-text">Copia <strong>solo el LID</strong> (ej: <code style="background: var(--bg); padding: 2px 6px; border-radius: 4px;">97788486537432@lid</code>)</div>
+          <div class="step-text">Copia solo el LID (ej: 97788486537432@lid)</div>
         </div>
         
         <div class="step">
           <div class="step-number">5</div>
-          <div class="step-text">Pégalo en el campo de abajo y haz clic en "Guardar LID"</div>
+          <div class="step-text">Pégalo en el campo y haz clic en Guardar</div>
         </div>
       </div>
     </div>
@@ -1202,19 +1267,19 @@ header {
       El LID siempre termina con @lid
     </p>
     <div class="mbtns">
-      <button onclick="closeLidModal()">❌ Cancelar</button>
-      <button class="ok" onclick="confirmLid()">💾 Guardar LID</button>
+      <button onclick="closeLidModal()">Cancelar</button>
+      <button class="ok" onclick="confirmLid()">Guardar LID</button>
     </div>
   </div>
 </div>
 
 <div class="ov" id="confirm-ov">
   <div class="modal">
-    <h3 id="confirm-title">⚠️ Confirmar</h3>
+    <h3 id="confirm-title">Confirmar</h3>
     <p id="confirm-message">¿Estás seguro?</p>
     <div class="mbtns">
-      <button onclick="closeConfirmModal()">❌ Cancelar</button>
-      <button class="ok" id="confirm-ok">✅ Aceptar</button>
+      <button onclick="closeConfirmModal()">Cancelar</button>
+      <button class="ok" id="confirm-ok">Aceptar</button>
     </div>
   </div>
 </div>
@@ -1233,19 +1298,18 @@ let activityLogs = [];
 let confirmCb = null;
 const MAX_SESSIONS = 15;
 
+let wallpaperOpacity = 0.05;
+
 function initTheme() {
   const savedTheme = localStorage.getItem('friki_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeUI(savedTheme);
+  loadWallpaperSetting();
 }
 
 function updateThemeUI(theme) {
   const knob = document.getElementById('theme-knob');
-  if (theme === 'light') {
-    knob.textContent = '☀️';
-  } else {
-    knob.textContent = '🌙';
-  }
+  knob.textContent = theme === 'light' ? '☀️' : '🌙';
 }
 
 function toggleTheme() {
@@ -1256,7 +1320,44 @@ function toggleTheme() {
   updateThemeUI(newTheme);
 }
 
+function loadWallpaperSetting() {
+  const saved = localStorage.getItem('friki_wallpaper_opacity');
+  if (saved !== null) {
+    wallpaperOpacity = parseFloat(saved);
+    document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
+  }
+}
+
+function openWallpaperModal() {
+  const slider = document.getElementById('wallpaper-slider');
+  const rangeValue = document.getElementById('range-value');
+  slider.value = Math.round(wallpaperOpacity * 100);
+  rangeValue.textContent = slider.value + '%';
+  
+  slider.oninput = () => {
+    rangeValue.textContent = slider.value + '%';
+  };
+  
+  document.getElementById('wallpaper-ov').classList.add('open');
+}
+
+function saveWallpaperSetting() {
+  const slider = document.getElementById('wallpaper-slider');
+  wallpaperOpacity = slider.value / 100;
+  document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
+  localStorage.setItem('friki_wallpaper_opacity', wallpaperOpacity);
+  document.getElementById('wallpaper-ov').classList.remove('open');
+  toast('Opacidad guardada', 'ok');
+}
+
+function closeWallpaperModal() {
+  document.getElementById('wallpaper-ov').classList.remove('open');
+}
+
 document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+document.getElementById('wallpaper-ov').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeWallpaperModal();
+});
 
 function toggleHelp() {
   const help = document.getElementById('help-content');
@@ -1265,7 +1366,7 @@ function toggleHelp() {
 
 function copyPhoneNumber() {
   navigator.clipboard?.writeText('+593991944530').then(() => {
-    toast('📋 Número copiado al portapapeles', 'ok');
+    toast('Número copiado al portapapeles', 'ok');
   }).catch(() => {
     toast('No se pudo copiar', 'err');
   });
@@ -1277,10 +1378,10 @@ function toggleOwnerUI(owner) {
     el.style.display = owner ? (el.classList.contains('dashboard') ? 'grid' : 'flex') : 'none';
   });
   
-  document.getElementById('owner-badge-header').textContent = owner ? '👑 OWNER' : '';
+  document.getElementById('owner-badge-header').textContent = owner ? 'OWNER' : '';
   document.getElementById('user-info').textContent = owner 
-    ? `${currentUser} 👑 Owner` 
-    : (currentSession ? `${currentUser} 📱 Sesión ${currentSession}` : `${currentUser}`);
+    ? `${currentUser} — Owner` 
+    : (currentSession ? `${currentUser} — Sesión ${currentSession}` : `${currentUser}`);
 }
 
 function showConfirm(title, message, onConfirm) {
@@ -1322,7 +1423,7 @@ function exportData() {
   a.download = `frikibot-backup-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  toast('📦 Datos exportados', 'ok');
+  toast('Datos exportados', 'ok');
 }
 
 function showRegister() {
@@ -1353,7 +1454,7 @@ async function register() {
     });
     const data = await res.json();
     if (data.ok) {
-      toast('✅ Cuenta creada. Ahora inicia sesión.', 'ok');
+      toast('Cuenta creada. Ahora inicia sesión.', 'ok');
       showLogin();
       document.getElementById('login-user').value = username;
       document.getElementById('login-pass').value = '';
@@ -1429,7 +1530,7 @@ async function apiFetch(url, opts = {}) {
 
 function setConn(ok) {
   document.getElementById('conn-dot').className = `conn-dot ${ok ? 'ok' : 'err'}`;
-  document.getElementById('conn-lbl').textContent = ok ? '🟢 Conectado' : '🔴 Offline';
+  document.getElementById('conn-lbl').textContent = ok ? 'Conectado' : 'Offline';
 }
 
 async function loadStats() {
@@ -1463,7 +1564,7 @@ async function loadSessions() {
     renderSessions();
   } catch {
     setConn(false);
-    document.getElementById('sessions').innerHTML = '<p class="empty">❌ Sin conexión</p>';
+    document.getElementById('sessions').innerHTML = '<p class="empty">Sin conexión</p>';
   }
 }
 
@@ -1471,11 +1572,11 @@ function actualizarSelect() {
   if (!isOwner) return;
   const usados = sessions.filter(s => s.owner && s.owner !== 'web_pending@lid' && s.owner !== 'web@lid').map(s => s.n);
   const sel = document.getElementById('new-n');
-  sel.innerHTML = '<option value="">➕ Nueva sesión...</option>';
+  sel.innerHTML = '<option value="">Nueva sesión...</option>';
   for (let i = 1; i <= MAX_SESSIONS; i++) {
     if (!usados.includes(i)) {
       const o = document.createElement('option');
-      o.value = i; o.textContent = `📱 Sesión ${i}`; sel.appendChild(o);
+      o.value = i; o.textContent = `Sesión ${i}`; sel.appendChild(o);
     }
   }
 }
@@ -1499,7 +1600,7 @@ async function elegirSesion() {
     const data = await res.json();
     if (data.ok) {
       currentSession = newSession;
-      toast(`✅ Sesión ${newSession} asignada. ¡Es tuya!`, 'ok');
+      toast(`Sesión ${newSession} asignada. ¡Es tuya!`, 'ok');
       await loadSessions();
       toggleOwnerUI(isOwner);
     } else {
@@ -1534,7 +1635,7 @@ async function confirmLid() {
   if (!sessionNum) { toast('Error: Sesión no definida', 'err'); return; }
   
   closeLidModal();
-  toast('⏳ Actualizando LID...');
+  toast('Actualizando LID...');
   
   try {
     const r = await apiFetch(`/api/set-lid/${sessionNum}`, {
@@ -1544,7 +1645,7 @@ async function confirmLid() {
     });
     const d = await r.json();
     if (d.ok) {
-      toast(`✅ LID actualizado correctamente`, 'ok');
+      toast(`LID actualizado correctamente`, 'ok');
       await loadSessions();
       if (isOwner) addLog('success', `Sesión ${sessionNum}: LID actualizado manualmente`);
     } else {
@@ -1566,7 +1667,7 @@ function renderSessions() {
     if (libres.length === 0) {
       c.innerHTML = `
         <div class="session-selector">
-          <h3>😕 No hay sesiones disponibles</h3>
+          <h3>No hay sesiones disponibles</h3>
           <p>Todas las sesiones están ocupadas. Intenta más tarde o contacta a un owner.</p>
         </div>
       `;
@@ -1575,11 +1676,11 @@ function renderSessions() {
     
     c.innerHTML = `
       <div class="session-selector">
-        <h3>🎯 Elige tu sesión</h3>
+        <h3>Elige tu sesión</h3>
         <p>Selecciona una sesión para empezar. Será tuya y nadie más podrá usarla.</p>
         <select id="session-select">
           <option value="">-- Seleccionar sesión --</option>
-          ${libres.map(i => `<option value="${i}">📱 Sesión ${i}</option>`).join('')}
+          ${libres.map(i => `<option value="${i}">Sesión ${i}</option>`).join('')}
         </select>
         <br>
         <button onclick="elegirSesion()">✨ Asignar esta sesión</button>
@@ -1589,7 +1690,7 @@ function renderSessions() {
   }
   
   if (!sessions.length) { 
-    c.innerHTML = '<p class="empty">📭 No hay sesiones disponibles</p>'; 
+    c.innerHTML = '<p class="empty">No hay sesiones disponibles</p>'; 
     return; 
   }
   
@@ -1643,20 +1744,20 @@ function renderSessions() {
     div.innerHTML = `
       <div class="card-hdr">
         <span class="card-num">#${sessionNum}</span>
-        <span class="card-name">${escapeHtml(s.nombre)}${esMiSesion ? '<span class="owner-badge">📱 Tu sesión</span>' : ''}</span>
+        <span class="card-name">${escapeHtml(s.nombre)}${esMiSesion ? '<span class="owner-badge">Tu sesión</span>' : ''}</span>
         <span class="dot ${dotClass}" title="${dotTitle}"></span>
       </div>
       <div class="card-body">
         <div class="meta">
-          <span>💰 <b>${escapeHtml(s.moneda)}</b></span>
-          <span>🖼️ <b>${s.foto ? 'Personalizada' : 'Predeterminada'}</b></span>
-          <span>📡 <b>${dotTitle}</b></span>
-          ${s.numero ? `<span>📞 <b>+${s.numero}</b></span>` : ''}
+          <span><b>${escapeHtml(s.moneda)}</b></span>
+          <span><b>${s.foto ? 'Personalizada' : 'Predeterminada'}</b></span>
+          <span><b>${dotTitle}</b></span>
+          ${s.numero ? `<span><b>+${s.numero}</b></span>` : ''}
         </div>
         ${pausedWarning}
         <div class="qr-area">
           <img class="qr-img" id="qi-${sessionNum}" alt="QR">
-          <p class="qr-wait" id="qw-${sessionNum}">⏳ Generando código QR...</p>
+          <p class="qr-wait" id="qw-${sessionNum}">Generando código QR...</p>
           <p class="qr-lbl" id="ql-${sessionNum}"></p>
           <p class="qr-timeout" id="qt-${sessionNum}"></p>
         </div>
@@ -1724,8 +1825,8 @@ function mostrarQR(n) {
   img.style.display = 'block';
   img.onerror = () => { img.style.display = 'none'; if (wai) wai.style.display = 'block'; };
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '📱 Escanea con WhatsApp → Dispositivos vinculados';
-  if (timeoutLbl) { timeoutLbl.textContent = '⏰ Código válido por 2 minutos'; timeoutLbl.style.display = 'block'; }
+  if (lbl) lbl.textContent = 'Escanea con WhatsApp → Dispositivos vinculados';
+  if (timeoutLbl) { timeoutLbl.textContent = 'Código válido por 2 minutos'; timeoutLbl.style.display = 'block'; }
 }
 
 function ocultarQR(n) {
@@ -1746,7 +1847,7 @@ function conectado(n) {
   const timeoutLbl = document.getElementById(`qt-${n}`);
   if (img) img.style.display = 'none';
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '✅ Sesión conectada y activa';
+  if (lbl) lbl.textContent = 'Sesión conectada y activa';
   if (timeoutLbl) timeoutLbl.style.display = 'none';
 }
 
@@ -1757,7 +1858,7 @@ function pausado(n) {
   const timeoutLbl = document.getElementById(`qt-${n}`);
   if (img) img.style.display = 'none';
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '⏸️ Sesión pausada';
+  if (lbl) lbl.textContent = 'Sesión pausada';
   if (timeoutLbl) timeoutLbl.style.display = 'none';
 }
 
@@ -1772,11 +1873,11 @@ async function iniciarNueva() {
 
 async function iniciar(n) {
   const sessionNum = Number(n);
-  toast(`⏳ Iniciando sesión ${sessionNum}...`);
+  toast(`Iniciando sesión ${sessionNum}...`);
   try {
     const r = await apiFetch(`/api/iniciar/${sessionNum}`, { method: 'POST' });
     const d = await r.json();
-    if (d.ok) { toast(`✅ Sesión ${sessionNum} iniciada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} iniciada`); }
+    if (d.ok) { toast(`Sesión ${sessionNum} iniciada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} iniciada`); }
     else toast(d.error || 'Error', 'err');
   } catch { toast('Error de conexión', 'err'); }
 }
@@ -1786,14 +1887,14 @@ async function pausar(n) {
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
   showConfirm(
-    '⏸️ Pausar sesión',
+    'Pausar sesión',
     `¿Pausar sesión ${sessionNum}?\n\n⚠️ Si permanece pausada por 2 HORAS, la sesión será ELIMINADA permanentemente.`,
     async () => {
       try {
         const r = await apiFetch(`/api/pausar/${sessionNum}`, { method: 'POST' });
         const d = await r.json();
         if (d.ok) { 
-          toast(`⏸️ Sesión ${sessionNum} pausada`, 'warning'); 
+          toast(`Sesión ${sessionNum} pausada`, 'warning'); 
           await loadSessions();
           if (isOwner) addLog('info', `Sesión ${sessionNum} pausada`); 
         }
@@ -1807,12 +1908,12 @@ async function reanudar(n) {
   const sessionNum = Number(n);
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
-  toast(`⏳ Reanudando sesión ${sessionNum}...`);
+  toast(`Reanudando sesión ${sessionNum}...`);
   try {
     const r = await apiFetch(`/api/reanudar/${sessionNum}`, { method: 'POST' });
     const d = await r.json();
     if (d.ok) { 
-      toast(`✅ Sesión ${sessionNum} reanudada`, 'ok'); 
+      toast(`Sesión ${sessionNum} reanudada`, 'ok'); 
       await loadSessions();
       if (isOwner) addLog('success', `Sesión ${sessionNum} reanudada`); 
     }
@@ -1825,14 +1926,14 @@ async function eliminar(n) {
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
   showConfirm(
-    '🗑️ Eliminar sesión',
+    'Eliminar sesión',
     `¿Eliminar sesión ${sessionNum} permanentemente? Esta acción no se puede deshacer.`,
     async () => {
       try {
         const r = await apiFetch(`/api/eliminar/${sessionNum}`, { method: 'DELETE' });
         const d = await r.json();
         if (d.ok) { 
-          toast(`✅ Sesión ${sessionNum} eliminada`, 'ok'); 
+          toast(`Sesión ${sessionNum} eliminada`, 'ok'); 
           stopPoller(sessionNum); 
           await loadSessions();
           if (sessionNum === currentSession) {
@@ -1852,7 +1953,7 @@ function openModal(n, tipo) {
   if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
-  document.getElementById('m-title').textContent = tipo === 'nombre' ? '✏️ Nombre del bot' : '💰 Moneda';
+  document.getElementById('m-title').textContent = tipo === 'nombre' ? 'Nombre del bot' : 'Moneda';
   document.getElementById('m-desc').textContent = tipo === 'nombre' ? 'Nombre en mensajes' : 'Símbolo de moneda';
   const inp = document.getElementById('m-input');
   inp.maxLength = tipo === 'nombre' ? 30 : 20;
@@ -1866,7 +1967,7 @@ function openModal(n, tipo) {
       body: JSON.stringify({ [tipo]: val })
     });
     const d = await r.json();
-    if (d.ok) { toast(`✅ ${tipo} actualizado`, 'ok'); loadSessions(); }
+    if (d.ok) { toast(`${tipo} actualizado`, 'ok'); loadSessions(); }
     else toast(d.error || 'Error', 'err');
   };
   document.getElementById('m-ov').classList.add('open');
@@ -1913,7 +2014,7 @@ async function confirmarFoto() {
   const r2 = new FileReader();
   r2.onload = async ev => {
     closeFoto();
-    toast('⏳ Subiendo...');
+    toast('Subiendo...');
     try {
       const r = await apiFetch(`/api/foto/${sessionNum}`, {
         method: 'POST',
@@ -1921,7 +2022,7 @@ async function confirmarFoto() {
         body: JSON.stringify({ foto: ev.target.result })
       });
       const d = await r.json();
-      if (d.ok) { toast('✅ Foto actualizada', 'ok'); loadSessions(); }
+      if (d.ok) { toast('Foto actualizada', 'ok'); loadSessions(); }
       else toast(d.error || 'Error', 'err');
     } catch { toast('Error de conexión', 'err'); }
   };
@@ -1930,8 +2031,8 @@ async function confirmarFoto() {
 
 document.addEventListener('keydown', (e) => {
   if (!currentUser) return;
-  if (e.key === 'r' || e.key === 'R') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); loadSessions(); toast('🔄 Sesiones recargadas', 'ok'); } }
-  if (e.key === 'Escape') { closeModal(); closeFoto(); closeLidModal(); closeConfirmModal(); }
+  if (e.key === 'r' || e.key === 'R') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); loadSessions(); toast('Sesiones recargadas', 'ok'); } }
+  if (e.key === 'Escape') { closeModal(); closeFoto(); closeLidModal(); closeWallpaperModal(); closeConfirmModal(); }
 });
 
 document.getElementById('m-input').addEventListener('keydown', e => { if (e.key === 'Enter') confirmModal(); if (e.key === 'Escape') closeModal(); });
