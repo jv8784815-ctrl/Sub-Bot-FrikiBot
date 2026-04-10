@@ -4,59 +4,75 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FrikiBot — Panel</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #ffffff;
-  --surface: rgba(250, 250, 250, 0.85);
-  --border: #e5e5e5;
-  --border-light: #f0f0f0;
-  --text: #0a0a0a;
-  --text-secondary: #666666;
-  --text-muted: #999999;
-  --accent: #0a0a0a;
-  --accent-light: #333333;
-  --success: #0a0a0a;
-  --warning: #e6a700;
-  --danger: #cc0000;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --shadow: rgba(0, 0, 0, 0.02);
-  --shadow-hover: rgba(0, 0, 0, 0.04);
-  --modal-overlay: rgba(0, 0, 0, 0.6);
-  --toast-bg: #ffffff;
-  --toast-border: #e5e5e5;
-  --btn-invert-bg: #f5f5f5;
-  --toggle-bg: #e5e5e5;
+  --bg: #f5f7fa;
+  --surface: rgba(255, 255, 255, 0.75);
+  --border: rgba(0, 0, 0, 0.06);
+  --border-light: rgba(0, 0, 0, 0.04);
+  --text: #1a1a2e;
+  --text-secondary: #52527a;
+  --text-muted: #8a8aa3;
+  --accent: #16213e;
+  --accent-light: #0f3460;
+  --success: #0f3460;
+  --warning: #e94560;
+  --danger: #e94560;
+  --font: 'Inter', -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --modal-overlay: rgba(0, 0, 0, 0.4);
+  --toast-bg: rgba(255, 255, 255, 0.95);
+  --toast-border: rgba(0, 0, 0, 0.08);
+  --btn-invert-bg: rgba(255, 255, 255, 0.5);
+  --toggle-bg: rgba(0, 0, 0, 0.1);
   --toggle-knob: #ffffff;
   --wallpaper-brightness: 1;
   --wallpaper-contrast: 1;
-  --wallpaper-opacity: 0.05;
+  --wallpaper-opacity: 0.15;
+  --glass-blur: 20px;
+  --glass-opacity: 0.75;
 }
 
 [data-theme="dark"] {
-  --bg: #0a0a0a;
-  --surface: rgba(20, 20, 20, 0.85);
-  --border: #2a2a2a;
-  --border-light: #1f1f1f;
+  --bg: #0f0f1a;
+  --surface: rgba(20, 20, 40, 0.75);
+  --border: rgba(255, 255, 255, 0.06);
+  --border-light: rgba(255, 255, 255, 0.04);
   --text: #ffffff;
-  --text-secondary: #a0a0a0;
-  --text-muted: #666666;
-  --accent: #ffffff;
-  --accent-light: #cccccc;
+  --text-secondary: #a0a0c0;
+  --text-muted: #606080;
+  --accent: #e94560;
+  --accent-light: #ff6b6b;
   --success: #00cc66;
   --warning: #ffcc00;
   --danger: #ff4466;
-  --shadow: rgba(255, 255, 255, 0.02);
-  --shadow-hover: rgba(255, 255, 255, 0.04);
-  --modal-overlay: rgba(0, 0, 0, 0.8);
-  --toast-bg: #141414;
-  --toast-border: #2a2a2a;
-  --btn-invert-bg: #2a2a2a;
-  --toggle-bg: #2a2a2a;
-  --toggle-knob: #ffffff;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.3);
+  --modal-overlay: rgba(0, 0, 0, 0.6);
+  --toast-bg: rgba(20, 20, 40, 0.95);
+  --toast-border: rgba(255, 255, 255, 0.08);
+  --btn-invert-bg: rgba(20, 20, 40, 0.5);
+  --toggle-bg: rgba(255, 255, 255, 0.1);
+  --toggle-knob: #e94560;
   --wallpaper-brightness: 0.4;
   --wallpaper-contrast: 1.2;
-  --wallpaper-opacity: 0.08;
+  --wallpaper-opacity: 0.2;
+  --glass-blur: 20px;
+  --glass-opacity: 0.75;
+}
+
+[data-glass="true"] {
+  --surface: rgba(255, 255, 255, 0.15);
+  --glass-blur: 30px;
+  --glass-opacity: 0.15;
+}
+
+[data-theme="dark"][data-glass="true"] {
+  --surface: rgba(10, 10, 20, 0.15);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -67,9 +83,9 @@ body {
   font-family: var(--font);
   min-height: 100vh;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.4s ease, color 0.4s ease;
   position: relative;
 }
 
@@ -82,14 +98,26 @@ body::before {
   bottom: 0;
   background-image: url('wallpaper.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center 30%;
   background-repeat: no-repeat;
   background-attachment: fixed;
   opacity: var(--wallpaper-opacity);
-  filter: brightness(var(--wallpaper-brightness)) contrast(var(--wallpaper-contrast));
+  filter: brightness(var(--wallpaper-brightness)) contrast(var(--wallpaper-contrast)) saturate(1.2);
   pointer-events: none;
   z-index: 0;
-  transition: filter 0.3s ease, opacity 0.3s ease;
+  transition: filter 0.4s ease, opacity 0.4s ease;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(233, 69, 96, 0.03) 0%, rgba(15, 52, 96, 0.06) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 header, .app-container, .auth-container, .ov {
@@ -100,92 +128,117 @@ header, .app-container, .auth-container, .ov {
 header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 24px 32px;
-  border-bottom: 1px solid var(--border);
+  gap: 20px;
+  padding: 20px 40px;
   background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 50;
-  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
 }
 
 .logo {
-  font-size: 24px;
+  font-family: var(--font-display);
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   color: var(--text);
+  background: linear-gradient(135deg, var(--text) 0%, var(--text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .logo span {
   font-weight: 300;
-  color: var(--text-secondary);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .owner-badge-header {
-  font-size: 10px;
+  font-size: 11px;
   margin-left: 8px;
-  opacity: 0.5;
+  padding: 2px 8px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  -webkit-text-fill-color: white;
 }
 
-.theme-toggle-wrapper {
+.header-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   margin-right: auto;
 }
 
 .theme-toggle {
   background: var(--toggle-bg);
-  border: 1.5px solid var(--border);
-  width: 56px;
-  height: 30px;
+  border: 1px solid var(--border);
+  width: 52px;
+  height: 28px;
   border-radius: 100px;
   padding: 3px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
 }
 
 .theme-toggle-knob {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   background: var(--toggle-knob);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: absolute;
   left: 3px;
   top: 50%;
   transform: translateY(-50%);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] .theme-toggle-knob {
-  left: calc(100% - 25px);
+  left: calc(100% - 23px);
 }
 
-.wallpaper-control-btn {
-  background: transparent;
-  border: 1.5px solid var(--border);
+.control-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
   color: var(--text);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 16px;
   transition: all 0.2s ease;
-  margin-left: 8px;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
-.wallpaper-control-btn:hover {
-  background: var(--surface);
+.control-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+
+.control-btn.active {
+  background: var(--accent);
+  color: white;
   border-color: var(--accent);
 }
 
@@ -193,18 +246,20 @@ header {
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
-  padding: 6px 12px;
+  padding: 8px 16px;
   background: var(--surface);
-  border-radius: 100px;
-  border: 1px solid var(--border-light);
+  border-radius: 40px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
 .logout-btn {
   background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  padding: 8px 16px;
-  border-radius: 100px;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 8px 18px;
+  border-radius: 40px;
   font-family: var(--font);
   font-size: 13px;
   font-weight: 500;
@@ -213,9 +268,8 @@ header {
 }
 
 .logout-btn:hover {
-  background: var(--text);
-  color: var(--bg);
-  border-color: var(--text);
+  background: var(--danger);
+  color: white;
 }
 
 .conn-dot {
@@ -229,6 +283,7 @@ header {
 
 .conn-dot.ok {
   background: var(--success);
+  box-shadow: 0 0 12px var(--success);
 }
 
 .conn-dot.err {
@@ -239,7 +294,6 @@ header {
   font-size: 12px;
   color: var(--text-muted);
   font-weight: 400;
-  letter-spacing: 0.01em;
 }
 
 .auth-container {
@@ -252,27 +306,47 @@ header {
 
 .auth-card {
   background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 40px;
+  border-radius: 32px;
+  padding: 48px 40px;
   width: 100%;
-  max-width: 400px;
-  box-shadow: 0 4px 6px -2px var(--shadow), 0 10px 15px -3px var(--shadow);
-  backdrop-filter: blur(12px);
+  max-width: 420px;
+  box-shadow: var(--shadow);
 }
 
 .auth-card h2 {
-  font-size: 28px;
+  font-family: var(--font-display);
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 6px;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .auth-card p {
   font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 28px;
+  margin-bottom: 32px;
   font-weight: 400;
+}
+
+.auth-card .input-group {
+  margin-bottom: 20px;
+}
+
+.auth-card .input-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
 }
 
 .auth-card input {
@@ -282,58 +356,53 @@ header {
   color: var(--text);
   font-family: var(--font);
   font-size: 15px;
-  font-weight: 400;
-  padding: 14px 16px;
-  border-radius: 14px;
+  padding: 14px 18px;
+  border-radius: 16px;
   outline: none;
-  margin-bottom: 16px;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .auth-card input:focus {
   border-color: var(--accent);
-}
-
-.auth-card input::placeholder {
-  color: var(--text-muted);
-  font-weight: 300;
+  box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.1);
 }
 
 .auth-card button {
   width: 100%;
-  background: var(--accent);
-  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
   border: none;
   font-family: var(--font);
   font-size: 15px;
   font-weight: 600;
-  padding: 14px;
-  border-radius: 14px;
+  padding: 16px;
+  border-radius: 16px;
   cursor: pointer;
-  margin-bottom: 12px;
+  margin-top: 16px;
   transition: all 0.2s ease;
 }
 
 .auth-card button:hover {
-  background: var(--accent-light);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(233, 69, 96, 0.2);
 }
 
 .auth-card .secondary-btn {
   background: transparent;
   border: 1.5px solid var(--border);
   color: var(--text);
+  margin-top: 12px;
 }
 
 .auth-card .secondary-btn:hover {
   background: var(--surface);
-  border-color: var(--accent);
+  box-shadow: none;
   transform: translateY(-1px);
 }
 
 .auth-card .switch-link {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 24px;
   font-size: 13px;
   color: var(--text-secondary);
 }
@@ -343,17 +412,12 @@ header {
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
-  border-bottom: 1.5px solid var(--border);
-  padding-bottom: 2px;
-}
-
-.auth-card .switch-link a:hover {
-  border-bottom-color: var(--accent);
+  margin-left: 4px;
 }
 
 .app-container {
   display: none;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 24px 80px;
 }
@@ -375,31 +439,35 @@ header {
 
 .stat-card {
   background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 18px;
-  padding: 20px;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px 20px;
+  transition: all 0.3s ease;
 }
 
 .stat-card:hover {
-  border-color: var(--text-secondary);
-  box-shadow: 0 4px 12px -2px var(--shadow-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
 }
 
 .stat-label {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
   margin-bottom: 8px;
 }
 
 .stat-value {
-  font-size: 36px;
+  font-family: var(--font-display);
+  font-size: 42px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   color: var(--text);
+  line-height: 1;
 }
 
 .controls-bar {
@@ -407,7 +475,7 @@ header {
   align-items: center;
   gap: 12px;
   padding: 0 0 24px;
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border);
   margin-bottom: 24px;
 }
 
@@ -419,101 +487,105 @@ header {
 }
 
 .new-area select {
-  background: var(--bg);
-  border: 1.5px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border);
   color: var(--text);
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 400;
-  padding: 10px 40px 10px 16px;
-  border-radius: 12px;
+  padding: 12px 40px 12px 18px;
+  border-radius: 14px;
   outline: none;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a8aa3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
+  background-position: right 16px center;
   background-size: 14px;
 }
 
 .new-area button {
-  background: var(--accent);
-  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
   border: none;
   font-family: var(--font);
   font-size: 13px;
   font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 12px 24px;
+  border-radius: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-  white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .new-area button:hover {
-  background: var(--accent-light);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(233, 69, 96, 0.2);
 }
 
 .owner-btn {
-  background: transparent;
-  border: 1.5px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border);
   color: var(--text);
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 12px 20px;
+  border-radius: 14px;
   font-family: var(--font);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .owner-btn:hover {
-  background: var(--surface);
+  background: var(--accent);
+  color: white;
   border-color: var(--accent);
 }
 
 #sessions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .empty {
   color: var(--text-muted);
   font-size: 14px;
-  padding: 48px 0;
+  padding: 60px 0;
   text-align: center;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .session-selector {
   background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 18px;
-  padding: 32px;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 40px;
   margin-bottom: 16px;
   text-align: center;
-  backdrop-filter: blur(8px);
 }
 
 .session-selector h3 {
-  font-size: 20px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
   margin-bottom: 12px;
 }
 
 .session-selector p {
   font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .session-selector select {
@@ -524,81 +596,80 @@ header {
   color: var(--text);
   font-family: var(--font);
   font-size: 16px;
-  padding: 14px 20px;
-  border-radius: 14px;
-  margin-bottom: 20px;
+  padding: 16px 24px;
+  border-radius: 16px;
+  margin-bottom: 24px;
   outline: none;
   cursor: pointer;
   text-align: center;
 }
 
 .session-selector button {
-  background: var(--accent);
-  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
   border: none;
   font-family: var(--font);
   font-size: 15px;
   font-weight: 600;
-  padding: 14px 32px;
-  border-radius: 14px;
+  padding: 16px 36px;
+  border-radius: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .session-selector button:hover {
-  background: var(--accent-light);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(233, 69, 96, 0.2);
 }
 
 .card {
   background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 18px;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border);
+  border-radius: 24px;
   overflow: hidden;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
 }
 
 .card:hover {
-  border-color: var(--text-secondary);
-  box-shadow: 0 4px 12px -2px var(--shadow-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-light);
 }
 
 .card-hdr {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 20px 24px;
+  gap: 16px;
+  padding: 24px 28px;
   cursor: default;
   user-select: none;
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border);
 }
 
 .card-num {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  min-width: 28px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  min-width: 32px;
 }
 
 .card-name {
   flex: 1;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--text-muted);
   flex-shrink: 0;
@@ -607,6 +678,7 @@ header {
 
 .dot.on {
   background: var(--success);
+  box-shadow: 0 0 12px var(--success);
 }
 
 .dot.qr {
@@ -619,25 +691,25 @@ header {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--warning); }
+  50% { opacity: 0.5; box-shadow: 0 0 2px var(--warning); }
 }
 
 .card-body {
   display: block;
-  padding: 24px;
+  padding: 28px;
 }
 
 .qr-area {
   text-align: center;
-  padding: 0 0 12px;
+  padding: 0 0 16px;
 }
 
 .qr-img {
   width: 220px;
   height: 220px;
-  border: 2px solid var(--accent);
-  border-radius: 16px;
+  border: 2px solid var(--border);
+  border-radius: 20px;
   display: none;
   background: var(--bg);
   margin: 0 auto;
@@ -647,7 +719,7 @@ header {
 .qr-wait {
   font-size: 13px;
   color: var(--text-secondary);
-  padding: 20px;
+  padding: 24px;
   display: none;
   font-weight: 400;
 }
@@ -655,9 +727,8 @@ header {
 .qr-lbl {
   font-size: 12px;
   color: var(--text-secondary);
-  margin-top: 12px;
+  margin-top: 16px;
   font-weight: 400;
-  letter-spacing: 0.01em;
 }
 
 .qr-timeout {
@@ -665,27 +736,28 @@ header {
   color: var(--text-muted);
   margin-top: 6px;
   display: none;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .paused-warning {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--danger);
-  margin-top: 8px;
-  padding: 8px 12px;
-  background: rgba(204, 0, 0, 0.05);
-  border-radius: 8px;
-  border-left: 3px solid var(--danger);
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: rgba(233, 69, 96, 0.08);
+  border-radius: 14px;
+  border-left: 4px solid var(--danger);
 }
 
 .meta {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   display: flex;
-  gap: 20px;
+  gap: 24px;
   flex-wrap: wrap;
-  padding: 8px 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
 }
 
 .meta b {
@@ -696,38 +768,37 @@ header {
 .actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 18px;
+  gap: 10px;
+  margin-top: 8px;
 }
 
 .btn {
-  padding: 12px 16px;
-  border: 1.5px solid var(--border);
+  padding: 14px 16px;
+  border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 12px;
-  transition: all 0.15s ease;
+  border-radius: 14px;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .btn:hover:not(:disabled) {
   background: var(--accent);
-  color: var(--bg);
+  color: white;
   border-color: var(--accent);
-  transform: translateY(-1px);
+  transform: scale(1.02);
 }
 
 .btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  background: var(--surface);
 }
 
 .btn.full {
@@ -741,7 +812,7 @@ header {
 
 .btn.warning:hover:not(:disabled) {
   background: var(--warning);
-  color: var(--bg);
+  color: white;
 }
 
 .btn.danger {
@@ -751,27 +822,27 @@ header {
 
 .btn.danger:hover:not(:disabled) {
   background: var(--danger);
-  color: var(--bg);
+  color: white;
 }
 
 .btn.success {
-  border-color: var(--success);
-  color: var(--success);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .btn.success:hover:not(:disabled) {
-  background: var(--success);
-  color: var(--bg);
+  background: var(--accent);
+  color: white;
 }
 
 .owner-badge {
-  background: var(--accent);
-  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
   font-size: 10px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 100px;
-  letter-spacing: 0.3px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 40px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
@@ -779,7 +850,8 @@ header {
   position: fixed;
   inset: 0;
   background: var(--modal-overlay);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 200;
   display: none;
   align-items: center;
@@ -793,35 +865,37 @@ header {
 
 .modal {
   background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 24px;
-  padding: 32px;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border);
+  border-radius: 32px;
+  padding: 36px;
   width: 100%;
-  max-width: 420px;
-  animation: slideUp 0.2s ease;
-  box-shadow: 0 20px 40px -8px var(--shadow);
-  backdrop-filter: blur(12px);
+  max-width: 440px;
+  animation: slideUp 0.3s ease;
+  box-shadow: var(--shadow-hover);
 }
 
 @keyframes slideUp {
-  from { transform: translateY(8px); opacity: 0; }
+  from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
 .modal h3 {
-  font-size: 20px;
+  font-family: var(--font-display);
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .modal p {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 22px;
+  margin-bottom: 28px;
   font-weight: 400;
 }
 
@@ -832,67 +906,100 @@ header {
   color: var(--text);
   font-family: var(--font);
   font-size: 14px;
-  padding: 14px 16px;
-  border-radius: 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
   outline: none;
   margin-bottom: 20px;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .modal input:focus {
   border-color: var(--accent);
-}
-
-.modal input[type="file"] {
-  padding: 12px;
-  color: var(--text-secondary);
+  box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.1);
 }
 
 .modal input[type="range"] {
   padding: 0;
-  margin: 16px 0 24px;
+  margin: 20px 0 28px;
   accent-color: var(--accent);
   height: 6px;
 }
 
 .range-value {
   text-align: center;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--accent);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.glass-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--bg);
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.glass-toggle span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.glass-switch {
+  width: 48px;
+  height: 24px;
+  background: var(--toggle-bg);
+  border-radius: 100px;
+  padding: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.glass-switch-knob {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.glass-switch.active {
+  background: var(--accent);
+}
+
+.glass-switch.active .glass-switch-knob {
+  transform: translateX(24px);
 }
 
 .help-box {
   background: var(--bg);
-  border: 1.5px solid var(--warning);
-  border-radius: 14px;
-  padding: 18px;
-  margin-bottom: 20px;
-}
-
-.help-box p {
-  margin-bottom: 10px;
-  font-size: 13px;
+  border: 1px solid var(--warning);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 24px;
 }
 
 .help-box .step {
   display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 14px;
+  margin-bottom: 14px;
   align-items: flex-start;
 }
 
 .help-box .step-number {
   background: var(--accent);
-  color: var(--bg);
-  width: 24px;
-  height: 24px;
+  color: white;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -908,33 +1015,31 @@ header {
   font-weight: 700;
   color: var(--accent);
   text-align: center;
-  padding: 10px;
-  background: var(--bg);
-  border-radius: 10px;
-  margin: 12px 0;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 14px;
+  margin: 14px 0;
   cursor: pointer;
   transition: all 0.15s ease;
-  border: 1px solid var(--border);
 }
 
 .help-box .phone-number:hover {
   background: var(--accent);
-  color: var(--bg);
+  color: white;
 }
 
 .help-box .code-block {
-  background: var(--bg);
-  border-radius: 10px;
-  padding: 12px 16px;
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', monospace;
-  font-size: 15px;
-  margin: 8px 0;
-  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: 'SF Mono', 'Monaco', monospace;
+  font-size: 14px;
+  margin: 10px 0;
   text-align: center;
 }
 
 .help-box .lid-example {
-  color: var(--success);
+  color: var(--accent);
   font-weight: 600;
   font-size: 14px;
   word-break: break-all;
@@ -946,8 +1051,8 @@ header {
   color: var(--text-muted);
   cursor: pointer;
   font-size: 20px;
-  padding: 4px 8px;
-  border-radius: 8px;
+  padding: 4px 10px;
+  border-radius: 10px;
   transition: all 0.15s ease;
   margin-left: auto;
 }
@@ -959,18 +1064,18 @@ header {
 
 .mbtns {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: flex-end;
 }
 
 .mbtns button {
-  padding: 12px 24px;
-  border-radius: 12px;
+  padding: 14px 28px;
+  border-radius: 14px;
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   background: transparent;
   color: var(--text-secondary);
   transition: all 0.15s ease;
@@ -982,34 +1087,37 @@ header {
 }
 
 .mbtns .ok {
-  background: var(--accent);
-  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
   border-color: var(--accent);
   font-weight: 600;
 }
 
 .mbtns .ok:hover {
   background: var(--accent-light);
+  transform: translateY(-1px);
 }
 
 #toast {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 30px;
+  right: 30px;
   background: var(--toast-bg);
-  border: 1.5px solid var(--toast-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--toast-border);
   color: var(--text);
-  padding: 14px 20px;
-  border-radius: 16px;
-  font-size: 13px;
+  padding: 16px 24px;
+  border-radius: 18px;
+  font-size: 14px;
   font-weight: 500;
   z-index: 300;
   opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.2s ease;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
   pointer-events: none;
-  max-width: 300px;
-  box-shadow: 0 8px 20px -4px var(--shadow);
+  max-width: 320px;
+  box-shadow: var(--shadow-hover);
 }
 
 #toast.show {
@@ -1029,14 +1137,14 @@ header {
   border-left: 4px solid var(--warning);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   header {
-    padding: 20px 16px;
+    padding: 16px 20px;
     flex-wrap: wrap;
   }
   
   .logo {
-    font-size: 20px;
+    font-size: 24px;
   }
   
   .user-info {
@@ -1044,7 +1152,7 @@ header {
   }
   
   .dashboard {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .controls-bar {
@@ -1061,15 +1169,15 @@ header {
   }
   
   .auth-card {
-    padding: 28px 20px;
+    padding: 36px 24px;
   }
   
   .card-hdr {
-    padding: 16px 18px;
+    padding: 18px 20px;
   }
   
   .card-body {
-    padding: 18px;
+    padding: 20px;
   }
   
   .actions {
@@ -1087,7 +1195,7 @@ header {
   
   .modal {
     max-width: 95%;
-    padding: 24px;
+    padding: 28px;
   }
 }
 
@@ -1097,7 +1205,7 @@ header {
 }
 
 .app-container {
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.4s ease;
 }
 </style>
 </head>
@@ -1107,23 +1215,38 @@ header {
   <div id="login-panel" class="auth-card">
     <h2>Bienvenido</h2>
     <p>Accede a tu panel de control</p>
-    <input type="text" id="login-user" placeholder="Usuario" autocomplete="off">
-    <input type="password" id="login-pass" placeholder="Contraseña">
+    <div class="input-group">
+      <label class="input-label">Usuario</label>
+      <input type="text" id="login-user" placeholder="Tu usuario" autocomplete="off">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Contraseña</label>
+      <input type="password" id="login-pass" placeholder="••••••••">
+    </div>
     <button onclick="login()">Iniciar sesión</button>
-    <button class="secondary-btn" onclick="showRegister()">Crear cuenta</button>
+    <button class="secondary-btn" onclick="showRegister()">Crear cuenta nueva</button>
     <div class="switch-link">
-      <a onclick="showRegister()">¿Primera vez? Regístrate →</a>
+      ¿Primera vez?<a onclick="showRegister()">Regístrate →</a>
     </div>
   </div>
 
   <div id="register-panel" class="auth-card" style="display:none;">
     <h2>Crear cuenta</h2>
     <p>Únete a FrikiBot</p>
-    <input type="text" id="register-user" placeholder="Usuario" autocomplete="off">
-    <input type="password" id="register-pass" placeholder="Contraseña">
-    <input type="password" id="register-pass2" placeholder="Confirmar contraseña">
+    <div class="input-group">
+      <label class="input-label">Usuario</label>
+      <input type="text" id="register-user" placeholder="Elige un usuario" autocomplete="off">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Contraseña</label>
+      <input type="password" id="register-pass" placeholder="Mínimo 4 caracteres">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Confirmar</label>
+      <input type="password" id="register-pass2" placeholder="Repite la contraseña">
+    </div>
     <button onclick="register()">Registrarse</button>
-    <button class="secondary-btn" onclick="showLogin()">Volver</button>
+    <button class="secondary-btn" onclick="showLogin()">← Volver al inicio</button>
     <div class="switch-link">
       <a onclick="showLogin()">← Ya tengo cuenta</a>
     </div>
@@ -1134,22 +1257,22 @@ header {
   <header>
     <div class="logo">Friki<span>Bot</span><span class="owner-badge-header" id="owner-badge-header"></span></div>
     
-    <div class="theme-toggle-wrapper">
+    <div class="header-controls">
       <div class="theme-toggle" id="theme-toggle-btn">
         <div class="theme-toggle-knob" id="theme-knob">☀️</div>
       </div>
-      <button class="wallpaper-control-btn" onclick="openWallpaperModal()" title="Ajustar wallpaper">🎨</button>
+      <button class="control-btn" onclick="openWallpaperModal()" title="Ajustar apariencia">🎨</button>
     </div>
     
     <span class="user-info" id="user-info"></span>
     <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
-    <span class="conn-lbl" id="conn-lbl">Conectando...</span>
+    <span class="conn-lbl" id="conn-lbl"></span>
     <span class="conn-dot" id="conn-dot"></span>
   </header>
 
   <div class="dashboard owner-only" id="owner-dashboard">
     <div class="stat-card">
-      <div class="stat-label">Sesiones Activas</div>
+      <div class="stat-label">Activas</div>
       <div class="stat-value" id="stat-active">0</div>
     </div>
     <div class="stat-card">
@@ -1157,11 +1280,11 @@ header {
       <div class="stat-value" id="stat-qr">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Sesiones Pausadas</div>
+      <div class="stat-label">Pausadas</div>
       <div class="stat-value" id="stat-paused">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Total Usuarios</div>
+      <div class="stat-label">Usuarios</div>
       <div class="stat-value" id="stat-users">0</div>
     </div>
   </div>
@@ -1169,7 +1292,7 @@ header {
   <div class="controls-bar owner-only" id="owner-controls">
     <div class="new-area">
       <select id="new-n"><option value="">Nueva sesión...</option></select>
-      <button onclick="iniciarNueva()">➕ Nueva sesión</button>
+      <button onclick="iniciarNueva()">➕ Crear sesión</button>
     </div>
     <button class="owner-btn" onclick="exportData()">📦 Exportar</button>
     <button class="owner-btn" onclick="showLogs()">📋 Historial</button>
@@ -1182,12 +1305,22 @@ header {
 
 <div class="ov" id="wallpaper-ov">
   <div class="modal">
-    <h3>🎨 Ajustar wallpaper</h3>
-    <p>Desliza para ajustar la opacidad del fondo</p>
-    <input type="range" id="wallpaper-slider" min="0" max="100" value="5" step="1">
-    <div class="range-value" id="range-value">5%</div>
+    <h3>🎨 Personalizar apariencia</h3>
+    <p>Ajusta la opacidad del fondo y el efecto vidrio</p>
+    
+    <div class="glass-toggle">
+      <span>🔮 Modo vidrio (transparente)</span>
+      <div class="glass-switch" id="glass-switch" onclick="toggleGlassMode()">
+        <div class="glass-switch-knob"></div>
+      </div>
+    </div>
+    
+    <label style="font-size: 13px; color: var(--text-secondary);">Opacidad del wallpaper</label>
+    <input type="range" id="wallpaper-slider" min="0" max="100" value="15" step="1">
+    <div class="range-value" id="range-value">15%</div>
+    
     <div class="mbtns">
-      <button class="ok" onclick="saveWallpaperSetting()">Guardar</button>
+      <button class="ok" onclick="saveWallpaperSetting()">Guardar cambios</button>
     </div>
   </div>
 </div>
@@ -1206,11 +1339,11 @@ header {
 
 <div class="ov" id="f-ov">
   <div class="modal">
-    <h3>Foto del menú</h3>
-    <p>Selecciona una imagen</p>
+    <h3>📸 Foto del menú</h3>
+    <p>Selecciona una imagen para personalizar</p>
     <input type="file" id="f-input" accept="image/*" onchange="prevFoto(event)">
-    <img id="f-prev" style="width:80px;height:80px;object-fit:cover;border-radius:12px;border:1.5px solid var(--border);display:none;margin-top:12px;">
-    <div class="mbtns" style="margin-top:16px;">
+    <img id="f-prev" style="width:80px;height:80px;object-fit:cover;border-radius:16px;border:1px solid var(--border);display:none;margin-top:16px;">
+    <div class="mbtns" style="margin-top:20px;">
       <button onclick="closeFoto()">Cancelar</button>
       <button class="ok" onclick="confirmarFoto()">Guardar</button>
     </div>
@@ -1220,50 +1353,44 @@ header {
 <div class="ov" id="lid-ov">
   <div class="modal">
     <h3>
-      Ingresar LID
+      🔑 Ingresar LID
       <button class="help-btn" onclick="toggleHelp()" title="¿Cómo obtener mi LID?">❓</button>
     </h3>
     <p>Pega tu LID para vincular esta sesión a tu cuenta</p>
     
     <div id="help-content" style="display: none;">
       <div class="help-box">
-        <p style="font-weight: 600; margin-bottom: 16px;">¿Cómo obtener tu LID?</p>
+        <p style="font-weight: 600; margin-bottom: 16px;">📱 ¿Cómo obtener tu LID?</p>
         
         <div class="step">
           <div class="step-number">1</div>
-          <div class="step-text">Abre WhatsApp y escribe al número principal del bot:</div>
+          <div class="step-text">Escribe al número principal del bot:</div>
         </div>
-        <div class="phone-number" onclick="copyPhoneNumber()">+593 99 194 4530</div>
+        <div class="phone-number" onclick="copyPhoneNumber()">📞 +593 99 194 4530</div>
         
         <div class="step">
           <div class="step-number">2</div>
-          <div class="step-text">Envía el siguiente comando:</div>
+          <div class="step-text">Envía el comando:</div>
         </div>
         <div class="code-block">.id</div>
         
         <div class="step">
           <div class="step-number">3</div>
-          <div class="step-text">El bot responderá con tu LID, por ejemplo:</div>
+          <div class="step-text">El bot responderá con tu LID:</div>
         </div>
-        <div class="code-block" style="font-size: 13px;">
-          ID de tú:<br>
+        <div class="code-block">
           <span class="lid-example">97788486537432@lid</span>
         </div>
         
         <div class="step">
           <div class="step-number">4</div>
-          <div class="step-text">Copia solo el LID (ej: 97788486537432@lid)</div>
-        </div>
-        
-        <div class="step">
-          <div class="step-number">5</div>
-          <div class="step-text">Pégalo en el campo y haz clic en Guardar</div>
+          <div class="step-text">Copia y pega el LID aquí</div>
         </div>
       </div>
     </div>
     
     <input id="lid-input" type="text" placeholder="Ej: 97788486537432@lid" autocomplete="off">
-    <p style="font-size: 11px; color: var(--text-muted); margin-top: -12px; margin-bottom: 16px;">
+    <p style="font-size: 11px; color: var(--text-muted); margin-top: -12px; margin-bottom: 20px;">
       El LID siempre termina con @lid
     </p>
     <div class="mbtns">
@@ -1298,13 +1425,15 @@ let activityLogs = [];
 let confirmCb = null;
 const MAX_SESSIONS = 15;
 
-let wallpaperOpacity = 0.05;
+let wallpaperOpacity = 0.15;
+let glassMode = false;
 
 function initTheme() {
   const savedTheme = localStorage.getItem('friki_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeUI(savedTheme);
   loadWallpaperSetting();
+  loadGlassMode();
 }
 
 function updateThemeUI(theme) {
@@ -1328,6 +1457,31 @@ function loadWallpaperSetting() {
   }
 }
 
+function loadGlassMode() {
+  const saved = localStorage.getItem('friki_glass_mode');
+  if (saved !== null) {
+    glassMode = saved === 'true';
+    document.documentElement.setAttribute('data-glass', glassMode);
+    updateGlassUI();
+  }
+}
+
+function updateGlassUI() {
+  const sw = document.getElementById('glass-switch');
+  if (glassMode) {
+    sw.classList.add('active');
+  } else {
+    sw.classList.remove('active');
+  }
+}
+
+function toggleGlassMode() {
+  glassMode = !glassMode;
+  document.documentElement.setAttribute('data-glass', glassMode);
+  localStorage.setItem('friki_glass_mode', glassMode);
+  updateGlassUI();
+}
+
 function openWallpaperModal() {
   const slider = document.getElementById('wallpaper-slider');
   const rangeValue = document.getElementById('range-value');
@@ -1338,6 +1492,7 @@ function openWallpaperModal() {
     rangeValue.textContent = slider.value + '%';
   };
   
+  updateGlassUI();
   document.getElementById('wallpaper-ov').classList.add('open');
 }
 
@@ -1347,7 +1502,7 @@ function saveWallpaperSetting() {
   document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
   localStorage.setItem('friki_wallpaper_opacity', wallpaperOpacity);
   document.getElementById('wallpaper-ov').classList.remove('open');
-  toast('Opacidad guardada', 'ok');
+  toast('Apariencia guardada', 'ok');
 }
 
 function closeWallpaperModal() {
@@ -1366,7 +1521,7 @@ function toggleHelp() {
 
 function copyPhoneNumber() {
   navigator.clipboard?.writeText('+593991944530').then(() => {
-    toast('Número copiado al portapapeles', 'ok');
+    toast('📋 Número copiado', 'ok');
   }).catch(() => {
     toast('No se pudo copiar', 'err');
   });
@@ -1380,8 +1535,8 @@ function toggleOwnerUI(owner) {
   
   document.getElementById('owner-badge-header').textContent = owner ? 'OWNER' : '';
   document.getElementById('user-info').textContent = owner 
-    ? `${currentUser} — Owner` 
-    : (currentSession ? `${currentUser} — Sesión ${currentSession}` : `${currentUser}`);
+    ? `${currentUser} · Owner` 
+    : (currentSession ? `${currentUser} · Sesión ${currentSession}` : `${currentUser}`);
 }
 
 function showConfirm(title, message, onConfirm) {
@@ -1423,7 +1578,7 @@ function exportData() {
   a.download = `frikibot-backup-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  toast('Datos exportados', 'ok');
+  toast('📦 Datos exportados', 'ok');
 }
 
 function showRegister() {
@@ -1454,7 +1609,7 @@ async function register() {
     });
     const data = await res.json();
     if (data.ok) {
-      toast('Cuenta creada. Ahora inicia sesión.', 'ok');
+      toast('✅ Cuenta creada', 'ok');
       showLogin();
       document.getElementById('login-user').value = username;
       document.getElementById('login-pass').value = '';
@@ -1600,11 +1755,11 @@ async function elegirSesion() {
     const data = await res.json();
     if (data.ok) {
       currentSession = newSession;
-      toast(`Sesión ${newSession} asignada. ¡Es tuya!`, 'ok');
+      toast(`✨ Sesión ${newSession} asignada`, 'ok');
       await loadSessions();
       toggleOwnerUI(isOwner);
     } else {
-      toast(data.error || 'Error al elegir sesión', 'err');
+      toast(data.error || 'Error', 'err');
     }
   } catch { toast('Error de conexión', 'err'); }
 }
@@ -1645,11 +1800,11 @@ async function confirmLid() {
     });
     const d = await r.json();
     if (d.ok) {
-      toast(`LID actualizado correctamente`, 'ok');
+      toast(`✅ LID actualizado`, 'ok');
       await loadSessions();
-      if (isOwner) addLog('success', `Sesión ${sessionNum}: LID actualizado manualmente`);
+      if (isOwner) addLog('success', `Sesión ${sessionNum}: LID actualizado`);
     } else {
-      toast(d.error || 'Error al actualizar LID', 'err');
+      toast(d.error || 'Error', 'err');
     }
   } catch { toast('Error de conexión', 'err'); }
 }
@@ -1667,8 +1822,8 @@ function renderSessions() {
     if (libres.length === 0) {
       c.innerHTML = `
         <div class="session-selector">
-          <h3>No hay sesiones disponibles</h3>
-          <p>Todas las sesiones están ocupadas. Intenta más tarde o contacta a un owner.</p>
+          <h3>😕 No hay sesiones</h3>
+          <p>Todas las sesiones están ocupadas.</p>
         </div>
       `;
       return;
@@ -1676,10 +1831,10 @@ function renderSessions() {
     
     c.innerHTML = `
       <div class="session-selector">
-        <h3>Elige tu sesión</h3>
-        <p>Selecciona una sesión para empezar. Será tuya y nadie más podrá usarla.</p>
+        <h3>🎯 Elige tu sesión</h3>
+        <p>Selecciona una sesión para empezar</p>
         <select id="session-select">
-          <option value="">-- Seleccionar sesión --</option>
+          <option value="">-- Seleccionar --</option>
           ${libres.map(i => `<option value="${i}">Sesión ${i}</option>`).join('')}
         </select>
         <br>
@@ -1710,13 +1865,13 @@ function renderSessions() {
     let pausedWarning = '';
     
     if (s.pausada) {
-      pausedWarning = '<div class="paused-warning">⚠️ Esta sesión está pausada. Si permanece pausada por 2 horas, será eliminada permanentemente.</div>';
+      pausedWarning = '<div class="paused-warning">⚠️ Pausada · Se eliminará en 2 horas</div>';
     }
     
     if (isOwner) {
       actionButtons = `
         ${!s.hasCreds && !s.pausada ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar</button>` : ''}
-        ${s.hasCreds ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 Ingresar LID</button>` : ''}
+        ${s.hasCreds ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 LID</button>` : ''}
         ${!s.pausada && s.hasCreds ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">⏸️ Pausar</button>` : ''}
         ${s.pausada ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">▶️ Reanudar</button>` : ''}
         <button class="btn danger" data-action="eliminar" data-session="${sessionNum}">🗑️ Eliminar</button>
@@ -1726,14 +1881,14 @@ function renderSessions() {
       `;
     } else {
       actionButtons = `
-        ${!s.hasCreds && !s.pausada && puedeModificar ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar sesión</button>` : ''}
-        ${s.hasCreds && puedeModificar ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 Ingresar LID</button>` : ''}
+        ${!s.hasCreds && !s.pausada && puedeModificar ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar</button>` : ''}
+        ${s.hasCreds && puedeModificar ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 LID</button>` : ''}
         ${!s.pausada && s.hasCreds && puedeModificar ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">⏸️ Pausar</button>` : ''}
         ${s.pausada && puedeModificar ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">▶️ Reanudar</button>` : ''}
         ${puedeModificar ? `<button class="btn" data-action="nombre" data-session="${sessionNum}">✏️ Nombre</button>` : ''}
         ${puedeModificar ? `<button class="btn" data-action="moneda" data-session="${sessionNum}">💰 Moneda</button>` : ''}
-        ${puedeModificar ? `<button class="btn full" data-action="foto" data-session="${sessionNum}">📸 Foto de menú</button>` : ''}
-        ${puedeModificar ? `<button class="btn danger full" data-action="eliminar" data-session="${sessionNum}" style="margin-top:4px;">🗑️ Eliminar sesión</button>` : ''}
+        ${puedeModificar ? `<button class="btn full" data-action="foto" data-session="${sessionNum}">📸 Foto</button>` : ''}
+        ${puedeModificar ? `<button class="btn danger full" data-action="eliminar" data-session="${sessionNum}" style="margin-top:4px;">🗑️ Eliminar</button>` : ''}
       `;
     }
     
@@ -1749,15 +1904,15 @@ function renderSessions() {
       </div>
       <div class="card-body">
         <div class="meta">
-          <span><b>${escapeHtml(s.moneda)}</b></span>
-          <span><b>${s.foto ? 'Personalizada' : 'Predeterminada'}</b></span>
-          <span><b>${dotTitle}</b></span>
-          ${s.numero ? `<span><b>+${s.numero}</b></span>` : ''}
+          <span>💰 <b>${escapeHtml(s.moneda)}</b></span>
+          <span>🖼️ <b>${s.foto ? 'Personalizada' : 'Default'}</b></span>
+          <span>📡 <b>${dotTitle}</b></span>
+          ${s.numero ? `<span>📞 <b>+${s.numero}</b></span>` : ''}
         </div>
         ${pausedWarning}
         <div class="qr-area">
           <img class="qr-img" id="qi-${sessionNum}" alt="QR">
-          <p class="qr-wait" id="qw-${sessionNum}">Generando código QR...</p>
+          <p class="qr-wait" id="qw-${sessionNum}">Generando QR...</p>
           <p class="qr-lbl" id="ql-${sessionNum}"></p>
           <p class="qr-timeout" id="qt-${sessionNum}"></p>
         </div>
@@ -1825,8 +1980,8 @@ function mostrarQR(n) {
   img.style.display = 'block';
   img.onerror = () => { img.style.display = 'none'; if (wai) wai.style.display = 'block'; };
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = 'Escanea con WhatsApp → Dispositivos vinculados';
-  if (timeoutLbl) { timeoutLbl.textContent = 'Código válido por 2 minutos'; timeoutLbl.style.display = 'block'; }
+  if (lbl) lbl.textContent = '📱 Escanea con WhatsApp';
+  if (timeoutLbl) { timeoutLbl.textContent = '⏰ Válido por 2 minutos'; timeoutLbl.style.display = 'block'; }
 }
 
 function ocultarQR(n) {
@@ -1847,7 +2002,7 @@ function conectado(n) {
   const timeoutLbl = document.getElementById(`qt-${n}`);
   if (img) img.style.display = 'none';
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = 'Sesión conectada y activa';
+  if (lbl) lbl.textContent = '✅ Conectado';
   if (timeoutLbl) timeoutLbl.style.display = 'none';
 }
 
@@ -1858,7 +2013,7 @@ function pausado(n) {
   const timeoutLbl = document.getElementById(`qt-${n}`);
   if (img) img.style.display = 'none';
   if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = 'Sesión pausada';
+  if (lbl) lbl.textContent = '⏸️ Pausado';
   if (timeoutLbl) timeoutLbl.style.display = 'none';
 }
 
@@ -1877,7 +2032,7 @@ async function iniciar(n) {
   try {
     const r = await apiFetch(`/api/iniciar/${sessionNum}`, { method: 'POST' });
     const d = await r.json();
-    if (d.ok) { toast(`Sesión ${sessionNum} iniciada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} iniciada`); }
+    if (d.ok) { toast(`✅ Sesión ${sessionNum} iniciada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} iniciada`); }
     else toast(d.error || 'Error', 'err');
   } catch { toast('Error de conexión', 'err'); }
 }
@@ -1887,14 +2042,14 @@ async function pausar(n) {
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
   showConfirm(
-    'Pausar sesión',
-    `¿Pausar sesión ${sessionNum}?\n\n⚠️ Si permanece pausada por 2 HORAS, la sesión será ELIMINADA permanentemente.`,
+    '⏸️ Pausar sesión',
+    `¿Pausar sesión ${sessionNum}?\n\n⚠️ Se eliminará en 2 horas.`,
     async () => {
       try {
         const r = await apiFetch(`/api/pausar/${sessionNum}`, { method: 'POST' });
         const d = await r.json();
         if (d.ok) { 
-          toast(`Sesión ${sessionNum} pausada`, 'warning'); 
+          toast(`⏸️ Sesión ${sessionNum} pausada`, 'warning'); 
           await loadSessions();
           if (isOwner) addLog('info', `Sesión ${sessionNum} pausada`); 
         }
@@ -1913,7 +2068,7 @@ async function reanudar(n) {
     const r = await apiFetch(`/api/reanudar/${sessionNum}`, { method: 'POST' });
     const d = await r.json();
     if (d.ok) { 
-      toast(`Sesión ${sessionNum} reanudada`, 'ok'); 
+      toast(`✅ Sesión ${sessionNum} reanudada`, 'ok'); 
       await loadSessions();
       if (isOwner) addLog('success', `Sesión ${sessionNum} reanudada`); 
     }
@@ -1926,14 +2081,14 @@ async function eliminar(n) {
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
   showConfirm(
-    'Eliminar sesión',
-    `¿Eliminar sesión ${sessionNum} permanentemente? Esta acción no se puede deshacer.`,
+    '🗑️ Eliminar sesión',
+    `¿Eliminar sesión ${sessionNum}?`,
     async () => {
       try {
         const r = await apiFetch(`/api/eliminar/${sessionNum}`, { method: 'DELETE' });
         const d = await r.json();
         if (d.ok) { 
-          toast(`Sesión ${sessionNum} eliminada`, 'ok'); 
+          toast(`✅ Sesión ${sessionNum} eliminada`, 'ok'); 
           stopPoller(sessionNum); 
           await loadSessions();
           if (sessionNum === currentSession) {
@@ -1953,7 +2108,7 @@ function openModal(n, tipo) {
   if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
   if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
   
-  document.getElementById('m-title').textContent = tipo === 'nombre' ? 'Nombre del bot' : 'Moneda';
+  document.getElementById('m-title').textContent = tipo === 'nombre' ? '✏️ Nombre del bot' : '💰 Moneda';
   document.getElementById('m-desc').textContent = tipo === 'nombre' ? 'Nombre en mensajes' : 'Símbolo de moneda';
   const inp = document.getElementById('m-input');
   inp.maxLength = tipo === 'nombre' ? 30 : 20;
@@ -1967,7 +2122,7 @@ function openModal(n, tipo) {
       body: JSON.stringify({ [tipo]: val })
     });
     const d = await r.json();
-    if (d.ok) { toast(`${tipo} actualizado`, 'ok'); loadSessions(); }
+    if (d.ok) { toast(`✅ ${tipo} actualizado`, 'ok'); loadSessions(); }
     else toast(d.error || 'Error', 'err');
   };
   document.getElementById('m-ov').classList.add('open');
@@ -2022,7 +2177,7 @@ async function confirmarFoto() {
         body: JSON.stringify({ foto: ev.target.result })
       });
       const d = await r.json();
-      if (d.ok) { toast('Foto actualizada', 'ok'); loadSessions(); }
+      if (d.ok) { toast('✅ Foto actualizada', 'ok'); loadSessions(); }
       else toast(d.error || 'Error', 'err');
     } catch { toast('Error de conexión', 'err'); }
   };
@@ -2031,7 +2186,7 @@ async function confirmarFoto() {
 
 document.addEventListener('keydown', (e) => {
   if (!currentUser) return;
-  if (e.key === 'r' || e.key === 'R') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); loadSessions(); toast('Sesiones recargadas', 'ok'); } }
+  if (e.key === 'r' || e.key === 'R') { if (!e.target.matches('input, select, textarea')) { e.preventDefault(); loadSessions(); toast('🔄 Sesiones recargadas', 'ok'); } }
   if (e.key === 'Escape') { closeModal(); closeFoto(); closeLidModal(); closeWallpaperModal(); closeConfirmModal(); }
 });
 
