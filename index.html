@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>FrikiBot — Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -20,6 +20,8 @@
   --font: 'Inter', -apple-system, sans-serif;
   --toggle-bg: #cccccc;
   --toggle-knob: #000000;
+  --wallpaper-opacity: 1;
+  --wallpaper-brightness: 1;
 }
 
 [data-theme="dark"] {
@@ -39,22 +41,29 @@
 
 html {
   overflow-x: hidden;
+  height: 100%;
+  position: fixed;
+  width: 100%;
 }
 
 body {
   background: transparent;
   color: var(--text);
   font-family: var(--font);
-  min-height: 100vh;
   font-weight: 400;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
   overflow-x: hidden;
+  height: 100%;
 }
 
-body::before {
-  content: '';
+.fixed-wallpaper {
   position: fixed;
   top: 0;
   left: 0;
@@ -62,12 +71,15 @@ body::before {
   height: 100%;
   background-image: url('wallpaper.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
   pointer-events: none;
   z-index: -1;
-  will-change: transform;
+  opacity: var(--wallpaper-opacity);
+  filter: brightness(var(--wallpaper-brightness));
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: opacity, filter;
 }
 
 header {
@@ -752,6 +764,14 @@ header {
   margin-bottom: 20px;
 }
 
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
 .help-box {
   border: 2px solid var(--border);
   padding: 18px;
@@ -885,6 +905,8 @@ header {
 </head>
 <body>
 
+<div class="fixed-wallpaper" id="wallpaper"></div>
+
 <div id="auth-container" class="auth-container">
   <div id="login-panel" class="auth-card">
     <h2>Acceder</h2>
@@ -935,7 +957,7 @@ header {
       <div class="theme-toggle" id="theme-toggle-btn">
         <div class="theme-toggle-knob" id="theme-knob">◐</div>
       </div>
-      <button class="control-btn" onclick="openWallpaperModal()">◐</button>
+      <button class="control-btn" onclick="openWallpaperModal()">🎨</button>
     </div>
     
     <span class="user-info" id="user-info"></span>
@@ -967,11 +989,19 @@ header {
 
 <div class="ov" id="wallpaper-ov">
   <div class="modal">
-    <h3>Ajustes</h3>
-    <p>Opacidad del fondo</p>
-    <input type="range" id="wallpaper-slider" min="0" max="100" value="100" step="1">
-    <div class="range-value" id="range-value">100%</div>
-    <div class="mbtns"><button class="ok" onclick="saveWallpaperSetting()">Guardar</button></div>
+    <h3>🎨 Ajustes</h3>
+    <p>Personalizar fondo</p>
+    
+    <div class="slider-label"><span>Opacidad</span><span id="opacity-value">100%</span></div>
+    <input type="range" id="opacity-slider" min="0" max="100" value="100" step="1">
+    
+    <div class="slider-label" style="margin-top:20px;"><span>Oscurecer</span><span id="brightness-value">100%</span></div>
+    <input type="range" id="brightness-slider" min="0" max="100" value="100" step="1">
+    
+    <div class="mbtns" style="margin-top:25px;">
+      <button onclick="closeWallpaperModal()">Cancelar</button>
+      <button class="ok" onclick="saveWallpaperSetting()">Guardar</button>
+    </div>
   </div>
 </div>
 
@@ -1040,7 +1070,9 @@ let currentUser = null, currentSession = null, isOwner = false;
 let sessions = [], qrPollers = {}, modalCb = null, fotoN = null, lidSessionN = null;
 let activityLogs = [], confirmCb = null;
 const MAX_SESSIONS = 15;
+
 let wallpaperOpacity = 1;
+let wallpaperBrightness = 1;
 
 function initTheme() {
   const saved = localStorage.getItem('friki_theme') || 'light';
@@ -1056,32 +1088,59 @@ function toggleTheme() {
 }
 
 function loadWallpaper() {
-  const saved = localStorage.getItem('friki_wallpaper');
-  if (saved) {
-    wallpaperOpacity = parseFloat(saved);
-    document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
+  const savedOpacity = localStorage.getItem('friki_wallpaper_opacity');
+  const savedBrightness = localStorage.getItem('friki_wallpaper_brightness');
+  
+  if (savedOpacity !== null) {
+    wallpaperOpacity = parseFloat(savedOpacity);
   }
+  if (savedBrightness !== null) {
+    wallpaperBrightness = parseFloat(savedBrightness);
+  }
+  
+  applyWallpaper();
+}
+
+function applyWallpaper() {
+  document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
+  document.documentElement.style.setProperty('--wallpaper-brightness', wallpaperBrightness);
 }
 
 function openWallpaperModal() {
-  const s = document.getElementById('wallpaper-slider');
-  const v = document.getElementById('range-value');
-  s.value = Math.round(wallpaperOpacity * 100);
-  v.textContent = s.value + '%';
-  s.oninput = () => v.textContent = s.value + '%';
+  const opSlider = document.getElementById('opacity-slider');
+  const opValue = document.getElementById('opacity-value');
+  const brSlider = document.getElementById('brightness-slider');
+  const brValue = document.getElementById('brightness-value');
+  
+  opSlider.value = Math.round(wallpaperOpacity * 100);
+  opValue.textContent = opSlider.value + '%';
+  brSlider.value = Math.round(wallpaperBrightness * 100);
+  brValue.textContent = brSlider.value + '%';
+  
+  opSlider.oninput = () => opValue.textContent = opSlider.value + '%';
+  brSlider.oninput = () => brValue.textContent = brSlider.value + '%';
+  
   document.getElementById('wallpaper-ov').classList.add('open');
 }
 
 function saveWallpaperSetting() {
-  const s = document.getElementById('wallpaper-slider');
-  wallpaperOpacity = s.value / 100;
-  document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
-  localStorage.setItem('friki_wallpaper', wallpaperOpacity);
+  const opSlider = document.getElementById('opacity-slider');
+  const brSlider = document.getElementById('brightness-slider');
+  
+  wallpaperOpacity = opSlider.value / 100;
+  wallpaperBrightness = brSlider.value / 100;
+  
+  applyWallpaper();
+  localStorage.setItem('friki_wallpaper_opacity', wallpaperOpacity);
+  localStorage.setItem('friki_wallpaper_brightness', wallpaperBrightness);
+  
   document.getElementById('wallpaper-ov').classList.remove('open');
-  toast('Guardado');
+  toast('Ajustes guardados');
 }
 
-function closeWallpaperModal() { document.getElementById('wallpaper-ov').classList.remove('open'); }
+function closeWallpaperModal() { 
+  document.getElementById('wallpaper-ov').classList.remove('open'); 
+}
 
 document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
 document.getElementById('wallpaper-ov').addEventListener('click', e => { if(e.target===e.currentTarget) closeWallpaperModal(); });
