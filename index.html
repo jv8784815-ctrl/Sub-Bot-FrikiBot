@@ -2,1288 +2,585 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0a0a0f">
 <title>FrikiBot — Panel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════════
-   TOKENS & THEME
-═══════════════════════════════════════════════ */
 :root {
-  --bg:          #0a0a0f;
-  --bg2:         #0f0f18;
-  --bg3:         #14141f;
-  --surface:     rgba(20, 20, 32, 0.85);
-  --surface2:    rgba(28, 28, 45, 0.6);
-  --border:      rgba(255,255,255,0.06);
-  --border2:     rgba(255,255,255,0.10);
-
-  --text:        #f0f0fa;
-  --text2:       #8888aa;
-  --text3:       #444460;
-
-  --red:         #e8394a;
-  --red-dim:     rgba(232,57,74,0.15);
-  --red-glow:    0 0 30px rgba(232,57,74,0.25);
-  --amber:       #f0a832;
-  --amber-dim:   rgba(240,168,50,0.12);
-  --green:       #3de68a;
-  --green-dim:   rgba(61,230,138,0.12);
-  --blue:        #5b8dee;
-  --blue-dim:    rgba(91,141,238,0.12);
-
-  --font:        'DM Sans', system-ui, sans-serif;
-  --font-head:   'Syne', sans-serif;
-  --font-mono:   'DM Mono', 'SF Mono', monospace;
-
-  --r-sm:        12px;
-  --r-md:        18px;
-  --r-lg:        24px;
-  --r-xl:        32px;
-
-  --sh-card:     0 4px 40px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.04) inset;
-  --sh-card-hov: 0 8px 60px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.06) inset;
-
-  /* Light theme overrides */
-  --wallpaper-opacity: 0.12;
-  --wallpaper-brightness: 1;
-  --wallpaper-contrast: 1;
-  --glass-blur: 24px;
+  --bg:      #0a0a0f;
+  --bg2:     #111118;
+  --surface: #16161f;
+  --sur2:    #1c1c28;
+  --brd:     #ffffff0f;
+  --brd2:    #ffffff18;
+  --text:    #f0f0fa;
+  --text2:   #8080a0;
+  --text3:   #40405a;
+  --red:     #e8394a;
+  --rdim:    #e8394a22;
+  --amber:   #f0a832;
+  --green:   #3de68a;
+  --fn:      'DM Sans',system-ui,sans-serif;
+  --fh:      'Syne',sans-serif;
+  --fm:      'DM Mono',monospace;
+  --wpop:    0.10;
+  --wpbr:    1;
 }
-
 [data-theme="light"] {
-  --bg:          #f4f3f8;
-  --bg2:         #edecea;
-  --bg3:         #e7e6f0;
-  --surface:     rgba(255,255,255,0.82);
-  --surface2:    rgba(245,244,252,0.7);
-  --border:      rgba(0,0,0,0.07);
-  --border2:     rgba(0,0,0,0.12);
-  --text:        #12121e;
-  --text2:       #5a5a78;
-  --text3:       #aaaacc;
-  --red-glow:    0 0 20px rgba(232,57,74,0.12);
-  --sh-card:     0 2px 24px rgba(0,0,0,0.07), 0 1px 0 rgba(255,255,255,0.8) inset;
-  --sh-card-hov: 0 6px 40px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.9) inset;
-  --wallpaper-brightness: 1;
-  --wallpaper-opacity: 0.08;
-}
-
-[data-glass="true"] {
-  --surface:  rgba(255,255,255,0.07);
-  --surface2: rgba(255,255,255,0.04);
-}
-[data-theme="light"][data-glass="true"] {
-  --surface:  rgba(255,255,255,0.45);
-  --surface2: rgba(255,255,255,0.3);
-}
-
-/* ═══════════════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════════════ */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 14px;
-  line-height: 1.6;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: background 0.5s ease, color 0.5s ease;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* ── Wallpaper ── */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url('wallpaper.jpg');
-  background-size: cover;
-  background-position: center 30%;
-  background-attachment: fixed;
-  opacity: var(--wallpaper-opacity);
-  filter: brightness(var(--wallpaper-brightness)) contrast(var(--wallpaper-contrast)) saturate(1.1);
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 0.5s ease, filter 0.5s ease;
-}
-
-/* ── Ambient noise texture ── */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-}
-
-header, .app-container, .auth-container, .ov {
-  position: relative;
-  z-index: 1;
-}
-
-/* ═══════════════════════════════════════════════
-   HEADER
-═══════════════════════════════════════════════ */
-header {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 0 40px;
-  height: 68px;
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0;
-  z-index: 100;
-}
-
-/* subtle top-line accent */
-header::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--red), transparent);
-  opacity: 0.5;
-}
-
-.logo {
-  font-family: var(--font-head);
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.logo em {
-  font-style: normal;
-  color: var(--red);
-}
-
-.logo-dot {
-  width: 6px; height: 6px;
-  background: var(--red);
-  border-radius: 50%;
-  margin-left: 3px;
-  box-shadow: 0 0 10px var(--red);
-  animation: blink 2.4s ease-in-out infinite;
-}
-
-@keyframes blink {
-  0%,100% { opacity: 1; }
-  50%      { opacity: 0.3; }
-}
-
-.owner-badge-header {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  background: var(--red-dim);
-  color: var(--red);
-  border: 1px solid rgba(232,57,74,0.25);
-  border-radius: 6px;
-  margin-left: 10px;
-}
-
-.header-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-right: auto;
-}
-
-/* theme pill toggle */
-.theme-toggle {
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  width: 52px; height: 26px;
-  border-radius: 100px;
-  padding: 2px;
-  cursor: pointer;
-  position: relative;
-  transition: border-color 0.3s ease;
-}
-.theme-toggle:hover { border-color: var(--red); }
-
-.theme-toggle-knob {
-  width: 20px; height: 20px;
-  background: var(--text);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px;
-  position: absolute;
-  left: 2px; top: 50%;
-  transform: translateY(-50%);
-  transition: left 0.3s cubic-bezier(.34,1.56,.64,1), background 0.3s ease;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.3);
-}
-[data-theme="dark"] .theme-toggle-knob,
-:root:not([data-theme="light"]) .theme-toggle-knob {
-  left: calc(100% - 22px);
-}
-
-.icon-btn {
-  width: 34px; height: 34px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--text2);
-  transition: all 0.2s ease;
-}
-.icon-btn:hover {
-  background: var(--red-dim);
-  border-color: rgba(232,57,74,0.3);
-  color: var(--red);
-}
-
-.user-pill {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text2);
-  padding: 6px 14px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  letter-spacing: 0.03em;
-}
-
-.logout-btn {
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text3);
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 6px 14px;
-  border-radius: 100px;
-  cursor: pointer;
-  letter-spacing: 0.02em;
-  transition: all 0.2s ease;
-}
-.logout-btn:hover {
-  color: var(--red);
-  border-color: rgba(232,57,74,0.4);
-  background: var(--red-dim);
-}
-
-.conn-group {
-  display: flex; align-items: center; gap: 6px;
-}
-.conn-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--text3);
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-.conn-dot.ok   { background: var(--green); box-shadow: 0 0 8px var(--green); }
-.conn-dot.err  { background: var(--red); }
-.conn-lbl {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 0.05em;
-}
-
-/* ═══════════════════════════════════════════════
-   AUTH
-═══════════════════════════════════════════════ */
-.auth-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: radial-gradient(ellipse 80% 60% at 50% 120%, rgba(232,57,74,0.08) 0%, transparent 70%);
-}
-
-.auth-card {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border2);
-  border-radius: var(--r-xl);
-  padding: 48px 40px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: var(--sh-card);
-  animation: slideUp 0.4s ease;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(16px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-
-.auth-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.auth-eyebrow::before {
-  content: '';
-  display: inline-block;
-  width: 20px; height: 1px;
-  background: var(--red);
-}
-
-.auth-card h2 {
-  font-family: var(--font-head);
-  font-size: 34px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--text);
-  margin-bottom: 6px;
-  line-height: 1.1;
-}
-
-.auth-card .auth-sub {
-  font-size: 13px;
-  color: var(--text2);
-  margin-bottom: 36px;
-  font-weight: 300;
-}
-
-.field {
-  margin-bottom: 16px;
-}
-.field label {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 7px;
-}
-.field input {
-  width: 100%;
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 14px;
-  padding: 13px 16px;
-  border-radius: var(--r-md);
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  letter-spacing: 0.01em;
-}
-.field input:focus {
-  border-color: rgba(232,57,74,0.5);
-  box-shadow: 0 0 0 3px rgba(232,57,74,0.08);
-}
-.field input::placeholder { color: var(--text3); }
-
-.btn-primary {
-  width: 100%;
-  background: var(--red);
-  color: #fff;
-  border: none;
-  font-family: var(--font-head);
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  padding: 15px;
-  border-radius: var(--r-md);
-  cursor: pointer;
-  margin-top: 20px;
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-}
-.btn-primary::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
-  pointer-events: none;
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--red-glow);
-}
-.btn-primary:active { transform: translateY(0); }
-
-.btn-ghost {
-  width: 100%;
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--text2);
-  font-family: var(--font);
-  font-size: 13px;
-  font-weight: 400;
-  padding: 13px;
-  border-radius: var(--r-md);
-  cursor: pointer;
-  margin-top: 10px;
-  transition: all 0.2s ease;
-}
-.btn-ghost:hover {
-  background: var(--surface2);
-  color: var(--text);
-  border-color: var(--border2);
-}
-
-.auth-switch {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 12px;
-  color: var(--text3);
-}
-.auth-switch a {
-  color: var(--red);
-  text-decoration: none;
-  font-weight: 500;
-  cursor: pointer;
-  margin-left: 4px;
-  transition: opacity 0.15s ease;
-}
-.auth-switch a:hover { opacity: 0.7; }
-
-/* ═══════════════════════════════════════════════
-   APP LAYOUT
-═══════════════════════════════════════════════ */
-.app-container {
-  display: none;
-  max-width: 940px;
-  margin: 0 auto;
-  padding: 0 28px 100px;
-  animation: fadeIn 0.4s ease;
-}
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
-/* ── Owner-only elements ── */
-.owner-only { display: none !important; }
-.owner-only.show { display: flex !important; }
-
-/* ═══════════════════════════════════════════════
-   STATS DASHBOARD
-═══════════════════════════════════════════════ */
-.dashboard {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  padding: 36px 0 24px;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 22px 20px;
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  box-shadow: var(--sh-card);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--red), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.stat-card:hover { transform: translateY(-3px); box-shadow: var(--sh-card-hov); }
-.stat-card:hover::before { opacity: 1; }
-
-.stat-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 10px;
-}
-.stat-value {
-  font-family: var(--font-head);
-  font-size: 46px;
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  color: var(--text);
-  line-height: 1;
-}
-
-/* ═══════════════════════════════════════════════
-   CONTROLS BAR
-═══════════════════════════════════════════════ */
-.controls-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 0 28px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 28px;
-}
-.new-area {
-  display: flex; gap: 10px; align-items: center; flex: 1;
-}
-
-.styled-select {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border2);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 13px;
-  padding: 10px 36px 10px 16px;
-  border-radius: var(--r-sm);
-  outline: none;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23444460' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  transition: border-color 0.2s ease;
-}
-.styled-select:focus { border-color: rgba(232,57,74,0.4); }
-
-.action-btn {
-  background: var(--red);
-  color: white;
-  border: none;
-  font-family: var(--font-head);
-  font-size: 13px;
-  font-weight: 700;
-  padding: 10px 20px;
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex; align-items: center; gap: 6px;
-  letter-spacing: -0.01em;
-}
-.action-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(232,57,74,0.3);
-}
-
-.ctrl-btn {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
-  color: var(--text2);
-  padding: 10px 16px;
-  border-radius: var(--r-sm);
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex; align-items: center; gap: 6px;
-  white-space: nowrap;
-}
-.ctrl-btn:hover {
-  background: var(--surface2);
-  color: var(--text);
-  border-color: var(--border2);
-}
-
-/* ═══════════════════════════════════════════════
-   SESSION CARDS
-═══════════════════════════════════════════════ */
-#sessions {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.empty {
-  color: var(--text3);
-  font-size: 13px;
-  padding: 72px 0;
-  text-align: center;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-}
-
-/* ── Session selector (no session yet) ── */
-.session-selector {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border2);
-  border-radius: var(--r-xl);
-  padding: 48px 40px;
-  text-align: center;
-  box-shadow: var(--sh-card);
-}
-.session-selector h3 {
-  font-family: var(--font-head);
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 10px;
-}
-.session-selector p {
-  font-size: 13px;
-  color: var(--text2);
-  margin-bottom: 32px;
-  font-weight: 300;
-}
-.session-selector select {
-  width: 100%; max-width: 280px;
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 15px;
-  padding: 14px 20px;
-  border-radius: var(--r-md);
-  margin-bottom: 24px;
-  outline: none;
-  cursor: pointer;
-  text-align: center;
-}
-.session-selector button {
-  background: var(--red);
-  color: white;
-  border: none;
-  font-family: var(--font-head);
-  font-size: 15px;
-  font-weight: 700;
-  padding: 15px 40px;
-  border-radius: var(--r-md);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.session-selector button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--red-glow);
-}
-
-/* ── Session card ── */
-.card {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  box-shadow: var(--sh-card);
-  transition: all 0.3s ease;
-}
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--sh-card-hov);
-  border-color: var(--border2);
-}
-
-.card-hdr {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--border);
-  cursor: default;
-  user-select: none;
-}
-
-.card-num {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--red);
-  letter-spacing: 0.08em;
-  min-width: 30px;
-}
-
-.status-pip {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--text3);
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-.status-pip.on    { background: var(--green); box-shadow: 0 0 10px var(--green); }
-.status-pip.qr    { background: var(--amber); animation: pipPulse 1.4s ease-in-out infinite; }
-.status-pip.paused { background: var(--red); }
-
-@keyframes pipPulse {
-  0%,100% { opacity:1; box-shadow: 0 0 8px var(--amber); }
-  50%     { opacity:0.4; box-shadow: 0 0 2px var(--amber); }
-}
-
-.card-name {
-  flex: 1;
-  font-family: var(--font-head);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* "dot" alias for status pip (used in JS) */
-.dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--text3);
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-.dot.on    { background: var(--green); box-shadow: 0 0 10px var(--green); }
-.dot.qr    { background: var(--amber); animation: pipPulse 1.4s ease-in-out infinite; }
-.dot.paused { background: var(--red); }
-
-.my-badge {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  background: var(--red-dim);
-  color: var(--red);
-  border: 1px solid rgba(232,57,74,0.2);
-  border-radius: 6px;
-}
-
-.owner-badge {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  background: var(--red-dim);
-  color: var(--red);
-  border: 1px solid rgba(232,57,74,0.2);
-  border-radius: 6px;
-}
-
-.card-body {
-  padding: 22px 24px;
-}
-
-/* Meta info row */
-.meta {
-  display: flex;
-  gap: 0;
-  flex-wrap: wrap;
-  margin-bottom: 18px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  overflow: hidden;
-}
-.meta-item {
-  display: flex;
-  flex-direction: column;
-  padding: 12px 16px;
-  flex: 1;
-  min-width: 80px;
-  border-right: 1px solid var(--border);
-  gap: 2px;
-}
-.meta-item:last-child { border-right: none; }
-.meta-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text3);
-}
-.meta-val {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-}
-
-/* QR area */
-.qr-area {
-  text-align: center;
-  padding: 0 0 18px;
-}
-.qr-img {
-  width: 200px; height: 200px;
-  border: 1px solid var(--border2);
-  border-radius: var(--r-md);
-  display: none;
-  background: #fff;
-  margin: 0 auto;
-  image-rendering: crisp-edges;
-}
-.qr-wait {
-  font-size: 13px;
-  color: var(--text2);
-  padding: 24px;
-  display: none;
-  font-weight: 300;
-}
-.qr-lbl {
-  font-size: 12px;
-  color: var(--text2);
-  margin-top: 12px;
-  font-weight: 300;
-}
-.qr-timeout {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text3);
-  margin-top: 4px;
-  display: none;
-  letter-spacing: 0.05em;
-}
-
-/* Paused warning */
-.paused-warning {
-  font-size: 12px;
-  color: var(--red);
-  margin-bottom: 16px;
-  padding: 10px 14px;
-  background: var(--red-dim);
-  border-radius: var(--r-sm);
-  border-left: 3px solid var(--red);
-  font-weight: 400;
-}
-
-/* ── Action buttons ── */
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.btn {
-  padding: 11px 14px;
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  color: var(--text2);
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 400;
-  cursor: pointer;
-  border-radius: var(--r-sm);
-  transition: all 0.18s ease;
-  display: flex; align-items: center; justify-content: center;
-  gap: 6px;
-  letter-spacing: 0.01em;
-}
-.btn:hover:not(:disabled) {
-  background: var(--surface2);
-  color: var(--text);
-  border-color: var(--text3);
-  transform: scale(1.01);
-}
-.btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-.btn.full { grid-column: span 2; }
-
-.btn.warning { border-color: rgba(240,168,50,0.3); color: var(--amber); }
-.btn.warning:hover:not(:disabled) { background: var(--amber-dim); border-color: var(--amber); }
-
-.btn.danger  { border-color: rgba(232,57,74,0.3); color: var(--red); }
-.btn.danger:hover:not(:disabled)  { background: var(--red-dim); border-color: var(--red); }
-
-.btn.success { border-color: rgba(61,230,138,0.3); color: var(--green); }
-.btn.success:hover:not(:disabled) { background: var(--green-dim); border-color: var(--green); }
-
-/* ═══════════════════════════════════════════════
-   OVERLAYS & MODALS
-═══════════════════════════════════════════════ */
-.ov {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 200;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.ov.open { display: flex; }
-
-.modal {
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border2);
-  border-radius: var(--r-xl);
-  padding: 36px;
-  width: 100%;
-  max-width: 440px;
-  box-shadow: var(--sh-card-hov), 0 0 80px rgba(0,0,0,0.3);
-  animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-}
-.modal::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 24px; right: 24px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--red), transparent);
-  opacity: 0.4;
-}
-
-@keyframes modalIn {
-  from { transform: translateY(24px) scale(0.97); opacity: 0; }
-  to   { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.modal h3 {
-  font-family: var(--font-head);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.modal > p {
-  font-size: 13px;
-  color: var(--text2);
-  margin-bottom: 28px;
-  font-weight: 300;
-}
-.modal input {
-  width: 100%;
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 14px;
-  padding: 13px 16px;
-  border-radius: var(--r-md);
-  outline: none;
-  margin-bottom: 20px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.modal input:focus {
-  border-color: rgba(232,57,74,0.5);
-  box-shadow: 0 0 0 3px rgba(232,57,74,0.08);
-}
-.modal input::placeholder { color: var(--text3); }
-.modal input[type="range"] {
-  padding: 0; height: 4px;
-  margin: 20px 0 24px;
-  accent-color: var(--red);
-  border: none; background: transparent; box-shadow: none;
-}
-
-.range-value {
-  text-align: center;
-  font-family: var(--font-head);
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  color: var(--red);
-  margin-bottom: 24px;
-}
-
-/* glass toggle in wallpaper modal */
-.glass-toggle {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 16px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  margin-bottom: 24px;
-}
-.glass-toggle span {
-  font-size: 13px;
-  color: var(--text2);
-}
-.glass-switch {
-  width: 42px; height: 22px;
-  background: var(--border2);
-  border-radius: 100px;
-  padding: 2px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  flex-shrink: 0;
-}
-.glass-switch-knob {
-  width: 18px; height: 18px;
-  background: var(--text2);
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-.glass-switch.active { background: var(--red); }
-.glass-switch.active .glass-switch-knob { transform: translateX(20px); background: white; }
-
-/* modal button row */
-.mbtns {
-  display: flex; gap: 10px; justify-content: flex-end;
-}
-.mbtns button {
-  padding: 12px 24px;
-  border-radius: var(--r-sm);
-  font-family: var(--font);
-  font-size: 13px;
-  cursor: pointer;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--text2);
-  transition: all 0.15s ease;
-}
-.mbtns button:hover { background: var(--surface2); color: var(--text); }
-.mbtns .ok {
-  background: var(--red);
-  color: white;
-  border-color: var(--red);
-  font-weight: 600;
-}
-.mbtns .ok:hover { opacity: 0.88; transform: translateY(-1px); }
-
-/* help-btn */
-.help-btn {
-  background: transparent; border: none;
-  color: var(--text3); cursor: pointer;
-  font-size: 16px; padding: 2px 8px;
-  border-radius: 8px; transition: all 0.15s ease;
-  margin-left: auto;
-}
-.help-btn:hover { background: var(--bg2); color: var(--amber); }
-
-/* help box */
-.help-box {
-  background: var(--bg2);
-  border: 1px solid rgba(240,168,50,0.2);
-  border-radius: var(--r-md);
-  padding: 20px;
-  margin-bottom: 20px;
-}
-.help-box .step {
-  display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start;
-}
-.help-box .step-number {
-  background: var(--red);
-  color: white;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; flex-shrink: 0;
-  font-family: var(--font-head);
-}
-.help-box .step-text { flex:1; font-size: 13px; color: var(--text2); }
-.help-box .phone-number {
-  font-family: var(--font-mono);
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--red);
-  text-align: center;
-  padding: 12px;
-  background: var(--surface);
-  border-radius: var(--r-sm);
-  margin: 12px 0;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  letter-spacing: 0.04em;
-}
-.help-box .phone-number:hover { background: var(--red-dim); }
-.help-box .code-block {
-  background: var(--surface);
-  border-radius: var(--r-sm);
-  padding: 12px 16px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  margin: 8px 0;
-  text-align: center;
-}
-.help-box .lid-example { color: var(--red); font-weight: 500; word-break: break-all; }
-
-/* ═══════════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════════ */
-#toast {
-  position: fixed;
-  bottom: 28px; right: 28px;
-  background: var(--surface);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  padding: 14px 20px;
-  border-radius: var(--r-md);
-  font-size: 13px;
-  font-weight: 400;
-  z-index: 400;
-  opacity: 0;
-  transform: translateY(12px);
-  transition: all 0.3s ease;
-  pointer-events: none;
-  max-width: 300px;
-  box-shadow: var(--sh-card-hov);
-}
-#toast.show  { opacity: 1; transform: translateY(0); }
-#toast.ok    { border-left: 3px solid var(--green); }
-#toast.err   { border-left: 3px solid var(--red); }
-#toast.warning { border-left: 3px solid var(--amber); }
-
-/* ═══════════════════════════════════════════════
-   MOBILE
-═══════════════════════════════════════════════ */
-@media (max-width: 680px) {
-  header { padding: 0 16px; gap: 10px; }
-  .logo { font-size: 20px; }
-  .user-pill { display: none; }
-  .dashboard { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 24px 0 18px; }
-  .controls-bar { flex-direction: column; align-items: stretch; }
-  .new-area { flex-direction: column; }
-  .styled-select { width: 100%; }
-  .auth-card { padding: 32px 24px; }
-  .card-hdr { padding: 16px 18px; }
-  .card-body { padding: 18px; }
-  .actions { grid-template-columns: 1fr; }
-  .btn.full { grid-column: span 1; }
-  .meta-item { padding: 10px 12px; }
-  .modal { padding: 28px 22px; }
-  #toast { bottom: 16px; right: 16px; left: 16px; max-width: none; }
+  --bg:#f2f2f7; --bg2:#e8e8f0; --surface:#ffffff; --sur2:#f5f5fc;
+  --brd:#00000010; --brd2:#0000001a;
+  --text:#111120; --text2:#555570; --text3:#aaaacc;
+  --wpop:0.06;
 }
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--fn);font-size:14px;line-height:1.55;
+  min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url('wallpaper.jpg');
+  background-size:cover;background-position:center 30%;
+  opacity:var(--wpop);filter:brightness(var(--wpbr)) saturate(1.1);
+  pointer-events:none;z-index:0;will-change:opacity;
+}
+
+header,.app-container,.auth-container,.ov{position:relative;z-index:1}
+
+/* HEADER */
+header{
+  display:flex;align-items:center;gap:8px;
+  padding:0 14px;height:54px;
+  background:var(--surface);
+  border-bottom:1px solid var(--brd2);
+  position:sticky;top:0;z-index:100;
+}
+header::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red) 50%,transparent);
+  opacity:.35;pointer-events:none;
+}
+
+.logo{
+  font-family:var(--fh);font-size:19px;font-weight:800;
+  letter-spacing:-.04em;color:var(--text);
+  display:flex;align-items:center;gap:1px;flex-shrink:0;
+}
+.logo em{font-style:normal;color:var(--red)}
+.ldot{
+  width:5px;height:5px;background:var(--red);border-radius:50%;
+  margin-left:2px;box-shadow:0 0 6px var(--red);
+  animation:blink 2.5s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+.obh{
+  font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 6px;background:var(--rdim);color:var(--red);
+  border:1px solid #e8394a33;border-radius:5px;flex-shrink:0;
+}
+
+.hc{display:flex;align-items:center;gap:6px;margin-right:auto}
+
+.ttog{
+  background:var(--sur2);border:1px solid var(--brd2);
+  width:44px;height:24px;border-radius:100px;padding:2px;
+  cursor:pointer;position:relative;flex-shrink:0;
+}
+.ttk{
+  width:18px;height:18px;background:var(--text);border-radius:50%;
+  font-size:9px;display:flex;align-items:center;justify-content:center;
+  position:absolute;left:2px;top:50%;transform:translateY(-50%);
+  transition:left .25s cubic-bezier(.34,1.56,.64,1);box-shadow:0 1px 4px #0004;
+}
+[data-theme="dark"] .ttk,:root:not([data-theme="light"]) .ttk{left:calc(100% - 20px)}
+
+.ibtn{
+  width:32px;height:32px;background:var(--sur2);border:1px solid var(--brd);
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:13px;color:var(--text2);flex-shrink:0;
+}
+.ibtn:active{background:var(--rdim);color:var(--red)}
+
+.upill{
+  font-family:var(--fm);font-size:10px;color:var(--text2);
+  padding:5px 10px;background:var(--sur2);border:1px solid var(--brd);
+  border-radius:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:110px;display:none;
+}
+@media(min-width:480px){.upill{display:block}}
+
+.lbtn{
+  font-family:var(--fn);font-size:12px;color:var(--text3);
+  background:transparent;border:1px solid var(--brd2);
+  padding:5px 11px;border-radius:100px;cursor:pointer;
+  white-space:nowrap;flex-shrink:0;-webkit-appearance:none;
+}
+.lbtn:active{color:var(--red);border-color:#e8394a55}
+
+.cgrp{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.cdot{width:6px;height:6px;border-radius:50%;background:var(--text3);transition:all .3s}
+.cdot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+.cdot.err{background:var(--red)}
+.clbl{font-family:var(--fm);font-size:10px;color:var(--text3);display:none}
+@media(min-width:400px){.clbl{display:block}}
+
+/* AUTH */
+.auth-container{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.auth-card{
+  background:var(--surface);border:1px solid var(--brd2);
+  border-radius:22px;padding:32px 24px;width:100%;max-width:360px;
+  box-shadow:0 4px 32px #00000040;animation:su .3s ease;
+}
+@keyframes su{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+.aey{
+  font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--red);margin-bottom:10px;display:flex;align-items:center;gap:7px;
+}
+.aey::before{content:'';display:inline-block;width:14px;height:1px;background:var(--red)}
+
+.auth-card h2{
+  font-family:var(--fh);font-size:28px;font-weight:800;
+  letter-spacing:-.04em;color:var(--text);margin-bottom:3px;line-height:1.1;
+}
+.auth-card .sub{font-size:13px;color:var(--text2);margin-bottom:24px}
+
+.field{margin-bottom:12px}
+.field label{
+  display:block;font-family:var(--fm);font-size:10px;
+  letter-spacing:.10em;text-transform:uppercase;color:var(--text3);margin-bottom:5px;
+}
+.field input{
+  width:100%;background:var(--bg2);border:1px solid var(--brd2);
+  color:var(--text);font-family:var(--fn);font-size:15px;
+  padding:12px 14px;border-radius:12px;outline:none;
+  transition:border-color .2s;-webkit-appearance:none;
+}
+.field input:focus{border-color:var(--red)}
+.field input::placeholder{color:var(--text3)}
+
+.bprimary{
+  width:100%;background:var(--red);color:#fff;border:none;
+  font-family:var(--fh);font-size:15px;font-weight:700;
+  padding:14px;border-radius:12px;cursor:pointer;margin-top:16px;
+  -webkit-appearance:none;
+}
+.bprimary:active{opacity:.82}
+
+.bghost{
+  width:100%;background:transparent;border:1px solid var(--brd2);
+  color:var(--text2);font-family:var(--fn);font-size:13px;
+  padding:12px;border-radius:12px;cursor:pointer;margin-top:8px;
+  -webkit-appearance:none;
+}
+.bghost:active{background:var(--sur2)}
+
+.asw{text-align:center;margin-top:18px;font-size:12px;color:var(--text3)}
+.asw a{color:var(--red);text-decoration:none;font-weight:500;cursor:pointer;margin-left:4px}
+
+/* APP */
+.app-container{
+  display:none;max-width:860px;margin:0 auto;
+  padding:0 14px 80px;animation:fi .3s ease;
+}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+
+.owner-only{display:none!important}
+.owner-only.show{display:flex!important}
+
+/* STATS */
+.dashboard{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:10px;padding:18px 0 14px;
+}
+@media(min-width:480px){.dashboard{grid-template-columns:repeat(4,1fr)}}
+
+.scard{
+  background:var(--surface);border:1px solid var(--brd);
+  border-radius:16px;padding:16px 14px;
+}
+.slbl{
+  font-family:var(--fm);font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:6px;
+}
+.sval{
+  font-family:var(--fh);font-size:36px;font-weight:800;
+  letter-spacing:-.05em;color:var(--text);line-height:1;
+}
+
+/* CONTROLS BAR */
+.cbar{
+  display:flex;flex-direction:column;gap:9px;
+  padding:0 0 18px;border-bottom:1px solid var(--brd);margin-bottom:18px;
+}
+@media(min-width:500px){.cbar{flex-direction:row;align-items:center}}
+
+.narea{display:flex;gap:8px;flex:1}
+
+.ssel{
+  flex:1;background:var(--surface);border:1px solid var(--brd2);
+  color:var(--text);font-family:var(--fn);font-size:13px;
+  padding:10px 30px 10px 12px;border-radius:10px;outline:none;cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2344445a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;min-width:0;
+}
+
+.abtn{
+  background:var(--red);color:white;border:none;
+  font-family:var(--fh);font-size:13px;font-weight:700;
+  padding:10px 14px;border-radius:10px;cursor:pointer;
+  white-space:nowrap;flex-shrink:0;-webkit-appearance:none;
+}
+.abtn:active{opacity:.82}
+
+.crow{display:flex;gap:8px}
+.cbtn{
+  background:var(--surface);border:1px solid var(--brd2);
+  color:var(--text2);padding:10px 12px;border-radius:10px;
+  font-family:var(--fn);font-size:12px;cursor:pointer;
+  display:flex;align-items:center;gap:5px;white-space:nowrap;
+  -webkit-appearance:none;
+}
+.cbtn:active{background:var(--sur2);color:var(--text)}
+
+/* SESSIONS */
+#sessions{display:flex;flex-direction:column;gap:10px}
+
+.empty{color:var(--text3);font-size:13px;padding:56px 0;text-align:center}
+
+.sess-sel{
+  background:var(--surface);border:1px solid var(--brd2);
+  border-radius:18px;padding:32px 20px;text-align:center;
+}
+.sess-sel h3{font-family:var(--fh);font-size:21px;font-weight:800;letter-spacing:-.03em;margin-bottom:7px}
+.sess-sel p{font-size:13px;color:var(--text2);margin-bottom:20px}
+.sess-sel select{
+  width:100%;max-width:240px;background:var(--bg2);border:1px solid var(--brd2);
+  color:var(--text);font-family:var(--fn);font-size:15px;
+  padding:12px 14px;border-radius:12px;margin-bottom:18px;outline:none;cursor:pointer;
+}
+.sess-sel button{
+  background:var(--red);color:white;border:none;
+  font-family:var(--fh);font-size:14px;font-weight:700;
+  padding:13px 30px;border-radius:12px;cursor:pointer;-webkit-appearance:none;
+}
+.sess-sel button:active{opacity:.82}
+
+/* CARD */
+.card{
+  background:var(--surface);border:1px solid var(--brd);
+  border-radius:16px;overflow:hidden;
+}
+
+.chdr{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px;border-bottom:1px solid var(--brd);
+}
+.cnum{font-family:var(--fm);font-size:10px;color:var(--red);letter-spacing:.06em;flex-shrink:0}
+
+.dot{
+  width:8px;height:8px;border-radius:50%;background:var(--text3);
+  flex-shrink:0;transition:all .3s;
+}
+.dot.on{background:var(--green);box-shadow:0 0 7px var(--green)}
+.dot.qr{background:var(--amber);animation:pp 1.4s ease-in-out infinite}
+.dot.paused{background:var(--red)}
+@keyframes pp{0%,100%{opacity:1;box-shadow:0 0 6px var(--amber)}50%{opacity:.4;box-shadow:none}}
+
+.cname{
+  flex:1;font-family:var(--fh);font-size:15px;font-weight:800;
+  letter-spacing:-.02em;display:flex;align-items:center;
+  gap:7px;min-width:0;overflow:hidden;
+}
+.cname span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.mbadge,.owner-badge{
+  font-family:var(--fm);font-size:9px;letter-spacing:.08em;
+  text-transform:uppercase;padding:2px 6px;
+  background:var(--rdim);color:var(--red);
+  border:1px solid #e8394a30;border-radius:5px;flex-shrink:0;
+}
+
+.cbody{padding:14px 16px}
+
+.meta{
+  display:flex;flex-wrap:wrap;
+  background:var(--bg2);border:1px solid var(--brd);
+  border-radius:11px;overflow:hidden;margin-bottom:12px;
+}
+.mi{
+  display:flex;flex-direction:column;padding:9px 11px;
+  flex:1;min-width:64px;border-right:1px solid var(--brd);gap:1px;
+}
+.mi:last-child{border-right:none}
+.ml{font-family:var(--fm);font-size:9px;letter-spacing:.10em;text-transform:uppercase;color:var(--text3)}
+.mv{font-size:12px;font-weight:500;color:var(--text)}
+
+.qr-area{text-align:center;padding:0 0 12px}
+.qr-img{
+  width:170px;height:170px;border:1px solid var(--brd2);
+  border-radius:12px;display:none;background:#fff;margin:0 auto;
+  image-rendering:crisp-edges;
+}
+.qr-wait,.qr-lbl{font-size:12px;color:var(--text2);padding:14px;display:none}
+.qr-lbl{padding:6px 0 0;display:block}
+.qr-timeout{font-family:var(--fm);font-size:10px;color:var(--text3);margin-top:2px;display:none}
+
+/* UPTIME y MS */
+.uptime-ms-container{
+  display:flex;gap:8px;margin-top:12px;
+}
+.uptime-box, .ms-box{
+  flex:1;background:var(--bg2);border:1px solid var(--brd);
+  border-radius:11px;padding:10px 8px;text-align:center;
+}
+.uptime-box .label, .ms-box .label{
+  font-family:var(--fm);font-size:9px;letter-spacing:.10em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:5px;
+}
+.uptime-box .value, .ms-box .value{
+  font-family:var(--fh);font-size:18px;font-weight:700;
+  letter-spacing:-.02em;color:var(--text);
+}
+.uptime-box .value{color:var(--green)}
+.ms-box .value{color:var(--amber)}
+
+.pw{
+  font-size:12px;color:var(--red);margin-bottom:11px;
+  padding:8px 11px;background:var(--rdim);
+  border-radius:9px;border-left:3px solid var(--red);
+}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+
+.btn{
+  padding:11px 8px;border:1px solid var(--brd2);
+  background:var(--bg2);color:var(--text2);
+  font-family:var(--fn);font-size:12px;
+  cursor:pointer;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  -webkit-appearance:none;
+}
+.btn:active:not(:disabled){background:var(--sur2);color:var(--text)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.btn.full{grid-column:span 2}
+.btn.warning{border-color:#f0a83230;color:var(--amber)}
+.btn.warning:active:not(:disabled){background:#f0a83218}
+.btn.danger{border-color:#e8394a30;color:var(--red)}
+.btn.danger:active:not(:disabled){background:var(--rdim)}
+.btn.success{border-color:#3de68a30;color:var(--green)}
+.btn.success:active:not(:disabled){background:#3de68a18}
+
+/* OVERLAYS */
+.ov{
+  position:fixed;inset:0;background:#00000088;
+  z-index:200;display:none;align-items:flex-end;justify-content:center;
+}
+@media(min-width:520px){.ov{align-items:center;padding:20px}}
+.ov.open{display:flex}
+
+.modal{
+  background:var(--surface);border:1px solid var(--brd2);
+  border-radius:20px 20px 0 0;padding:24px 20px;
+  width:100%;max-width:100%;
+  animation:shup .26s ease;
+  max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+}
+@media(min-width:520px){
+  .modal{border-radius:20px;max-width:400px;animation:min .26s ease}
+}
+@keyframes shup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes min{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+.modal::before{
+  content:'';display:block;width:32px;height:3px;
+  background:var(--brd2);border-radius:2px;margin:0 auto 18px;
+}
+@media(min-width:520px){.modal::before{display:none}}
+
+.modal h3{
+  font-family:var(--fh);font-size:17px;font-weight:800;
+  letter-spacing:-.025em;margin-bottom:4px;
+  display:flex;align-items:center;gap:8px;
+}
+.modal>p{font-size:13px;color:var(--text2);margin-bottom:20px}
+
+.modal input{
+  width:100%;background:var(--bg2);border:1px solid var(--brd2);
+  color:var(--text);font-family:var(--fn);font-size:15px;
+  padding:12px 14px;border-radius:12px;outline:none;
+  margin-bottom:14px;transition:border-color .2s;-webkit-appearance:none;
+}
+.modal input:focus{border-color:var(--red)}
+.modal input::placeholder{color:var(--text3)}
+.modal input[type="range"]{
+  padding:0;height:4px;border:none;background:transparent;
+  margin:14px 0 18px;accent-color:var(--red);
+}
+
+.rval{
+  text-align:center;font-family:var(--fh);font-size:28px;
+  font-weight:800;letter-spacing:-.05em;color:var(--red);margin-bottom:18px;
+}
+
+.gtogg{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 13px;background:var(--bg2);border:1px solid var(--brd);
+  border-radius:11px;margin-bottom:18px;
+}
+.gtogg span{font-size:13px;color:var(--text2)}
+.gsw{
+  width:40px;height:22px;background:var(--brd2);border-radius:100px;
+  padding:2px;cursor:pointer;transition:background .2s;flex-shrink:0;
+}
+.gswk{width:18px;height:18px;background:var(--text2);border-radius:50%;transition:all .2s}
+.gsw.active{background:var(--red)}
+.gsw.active .gswk{transform:translateX(18px);background:white}
+
+.hbtn{
+  background:transparent;border:none;color:var(--text3);
+  cursor:pointer;font-size:16px;padding:2px 8px;
+  border-radius:7px;margin-left:auto;
+}
+.hbtn:active{background:var(--bg2);color:var(--amber)}
+
+.helpbox{
+  background:var(--bg2);border:1px solid #f0a83230;
+  border-radius:11px;padding:14px;margin-bottom:14px;
+}
+.helpbox .step{display:flex;gap:9px;margin-bottom:11px;align-items:flex-start}
+.snum{
+  background:var(--red);color:white;width:21px;height:21px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--fh);
+}
+.stxt{flex:1;font-size:13px;color:var(--text2)}
+.pnum{
+  font-family:var(--fm);font-size:14px;color:var(--red);text-align:center;
+  padding:9px;background:var(--surface);border-radius:9px;
+  margin:9px 0;cursor:pointer;
+}
+.pnum:active{background:var(--rdim)}
+.cblk{
+  background:var(--surface);border-radius:8px;padding:9px 13px;
+  font-family:var(--fm);font-size:13px;margin:7px 0;text-align:center;
+}
+.lidex{color:var(--red);word-break:break-all}
+
+.mbtns{display:flex;gap:8px;justify-content:flex-end}
+.mbtns button{
+  padding:10px 18px;border-radius:9px;font-family:var(--fn);
+  font-size:13px;cursor:pointer;border:1px solid var(--brd2);
+  background:transparent;color:var(--text2);-webkit-appearance:none;
+}
+.mbtns button:active{background:var(--sur2)}
+.mbtns .ok{background:var(--red);color:white;border-color:var(--red);font-weight:600}
+.mbtns .ok:active{opacity:.82}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:18px;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:var(--surface);border:1px solid var(--brd2);
+  color:var(--text);padding:11px 16px;border-radius:11px;
+  font-size:13px;z-index:400;opacity:0;
+  transition:opacity .22s,transform .22s;pointer-events:none;
+  white-space:nowrap;max-width:calc(100vw - 28px);
+  box-shadow:0 4px 18px #00000044;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.ok{border-left:3px solid var(--green)}
+#toast.err{border-left:3px solid var(--red)}
+#toast.warning{border-left:3px solid var(--amber)}
 </style>
 </head>
 <body>
 
-<!-- ═══════ AUTH ═══════ -->
+<!-- AUTH -->
 <div id="auth-container" class="auth-container">
-
   <div id="login-panel" class="auth-card">
-    <div class="auth-eyebrow">Panel de control</div>
+    <div class="aey">Panel de control</div>
     <h2>Bienvenido</h2>
-    <p class="auth-sub">Accede a tu espacio en FrikiBot</p>
-    <div class="field">
-      <label>Usuario</label>
-      <input type="text" id="login-user" placeholder="tu_usuario" autocomplete="off">
-    </div>
-    <div class="field">
-      <label>Contraseña</label>
-      <input type="password" id="login-pass" placeholder="••••••••">
-    </div>
-    <button class="btn-primary" onclick="login()">Iniciar sesión</button>
-    <button class="btn-ghost" onclick="showRegister()">Crear cuenta nueva</button>
-    <div class="auth-switch">¿Primera vez?<a onclick="showRegister()">Regístrate →</a></div>
+    <p class="sub">Accede a tu espacio en FrikiBot</p>
+    <div class="field"><label>Usuario</label><input type="text" id="login-user" placeholder="tu_usuario" autocomplete="off"></div>
+    <div class="field"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+    <button class="bprimary" onclick="login()">Iniciar sesión</button>
+    <button class="bghost" onclick="showRegister()">Crear cuenta nueva</button>
+    <div class="asw">¿Primera vez?<a onclick="showRegister()">Regístrate →</a></div>
   </div>
-
-  <div id="register-panel" class="auth-card" style="display:none;">
-    <div class="auth-eyebrow">Nueva cuenta</div>
+  <div id="register-panel" class="auth-card" style="display:none">
+    <div class="aey">Nueva cuenta</div>
     <h2>Únete</h2>
-    <p class="auth-sub">Crea tu acceso a FrikiBot</p>
-    <div class="field">
-      <label>Usuario</label>
-      <input type="text" id="register-user" placeholder="Elige un usuario" autocomplete="off">
-    </div>
-    <div class="field">
-      <label>Contraseña</label>
-      <input type="password" id="register-pass" placeholder="Mínimo 4 caracteres">
-    </div>
-    <div class="field">
-      <label>Confirmar contraseña</label>
-      <input type="password" id="register-pass2" placeholder="Repite la contraseña">
-    </div>
-    <button class="btn-primary" onclick="register()">Registrarse</button>
-    <button class="btn-ghost" onclick="showLogin()">← Volver al inicio</button>
-    <div class="auth-switch"><a onclick="showLogin()">← Ya tengo cuenta</a></div>
+    <p class="sub">Crea tu acceso a FrikiBot</p>
+    <div class="field"><label>Usuario</label><input type="text" id="register-user" placeholder="Elige un usuario" autocomplete="off"></div>
+    <div class="field"><label>Contraseña</label><input type="password" id="register-pass" placeholder="Mínimo 4 caracteres"></div>
+    <div class="field"><label>Confirmar</label><input type="password" id="register-pass2" placeholder="Repite la contraseña"></div>
+    <button class="bprimary" onclick="register()">Registrarse</button>
+    <button class="bghost" onclick="showLogin()">← Volver</button>
+    <div class="asw"><a onclick="showLogin()">← Ya tengo cuenta</a></div>
   </div>
-
 </div>
 
-<!-- ═══════ APP ═══════ -->
+<!-- APP -->
 <div id="app-container" class="app-container">
-
   <header>
-    <div class="logo">Friki<em>Bot</em><div class="logo-dot"></div></div>
-    <span class="owner-badge-header" id="owner-badge-header"></span>
-
-    <div class="header-controls">
-      <div class="theme-toggle" id="theme-toggle-btn">
-        <div class="theme-toggle-knob" id="theme-knob">☀️</div>
-      </div>
-      <button class="icon-btn" onclick="openWallpaperModal()" title="Personalizar">🎨</button>
+    <div class="logo">Friki<em>Bot</em><div class="ldot"></div></div>
+    <span class="obh" id="owner-badge-header"></span>
+    <div class="hc">
+      <div class="ttog" id="theme-toggle-btn"><div class="ttk" id="theme-knob">☀️</div></div>
+      <button class="ibtn" onclick="openWallpaperModal()">🎨</button>
     </div>
-
-    <span class="user-pill" id="user-info"></span>
-    <button class="logout-btn" onclick="logout()">Salir</button>
-    <div class="conn-group">
-      <span class="conn-dot" id="conn-dot"></span>
-      <span class="conn-lbl" id="conn-lbl"></span>
-    </div>
+    <span class="upill" id="user-info"></span>
+    <button class="lbtn" onclick="logout()">Salir</button>
+    <div class="cgrp"><span class="cdot" id="conn-dot"></span><span class="clbl" id="conn-lbl"></span></div>
   </header>
 
-  <!-- Dashboard stats (owner) -->
   <div class="dashboard owner-only" id="owner-dashboard">
-    <div class="stat-card">
-      <div class="stat-label">Activas</div>
-      <div class="stat-value" id="stat-active">0</div>
+    <div class="scard"><div class="slbl">Activas</div><div class="sval" id="stat-active">0</div></div>
+    <div class="scard"><div class="slbl">QR Pendiente</div><div class="sval" id="stat-qr">0</div></div>
+    <div class="scard"><div class="slbl">Pausadas</div><div class="sval" id="stat-paused">0</div></div>
+    <div class="scard"><div class="slbl">Usuarios</div><div class="sval" id="stat-users">0</div></div>
+  </div>
+
+  <div class="cbar owner-only" id="owner-controls">
+    <div class="narea">
+      <select class="ssel" id="new-n"><option value="">Nueva sesión...</option></select>
+      <button class="abtn" onclick="iniciarNueva()">＋ Crear</button>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">QR Pendiente</div>
-      <div class="stat-value" id="stat-qr">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Pausadas</div>
-      <div class="stat-value" id="stat-paused">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Usuarios</div>
-      <div class="stat-value" id="stat-users">0</div>
+    <div class="crow">
+      <button class="cbtn" onclick="exportData()">📦 Exportar</button>
+      <button class="cbtn" onclick="showLogs()">📋 Historial</button>
     </div>
   </div>
 
-  <!-- Controls (owner) -->
-  <div class="controls-bar owner-only" id="owner-controls">
-    <div class="new-area">
-      <select class="styled-select" id="new-n"><option value="">Nueva sesión...</option></select>
-      <button class="action-btn" onclick="iniciarNueva()">＋ Crear sesión</button>
-    </div>
-    <button class="ctrl-btn" onclick="exportData()">📦 Exportar</button>
-    <button class="ctrl-btn" onclick="showLogs()">📋 Historial</button>
-  </div>
-
-  <!-- Session list -->
   <div id="sessions"><p class="empty">Cargando sesiones…</p></div>
-
 </div>
 
-<!-- ═══════ TOAST ═══════ -->
 <div id="toast"></div>
 
-<!-- ═══════ MODAL: wallpaper ═══════ -->
+<!-- Modal apariencia -->
 <div class="ov" id="wallpaper-ov">
   <div class="modal">
     <h3>🎨 Apariencia</h3>
     <p>Ajusta el fondo y el efecto vidrio</p>
-    <div class="glass-toggle">
+    <div class="gtogg">
       <span>🔮 Modo vidrio</span>
-      <div class="glass-switch" id="glass-switch" onclick="toggleGlassMode()">
-        <div class="glass-switch-knob"></div>
-      </div>
+      <div class="gsw" id="glass-switch" onclick="toggleGlassMode()"><div class="gswk"></div></div>
     </div>
-    <label style="font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;">Opacidad del wallpaper</label>
-    <input type="range" id="wallpaper-slider" min="0" max="100" value="12" step="1">
-    <div class="range-value" id="range-value">12%</div>
+    <label style="font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Opacidad del wallpaper</label>
+    <input type="range" id="wallpaper-slider" min="0" max="100" value="10" step="1">
+    <div class="rval" id="range-value">10%</div>
     <div class="mbtns">
       <button onclick="closeWallpaperModal()">Cancelar</button>
       <button class="ok" onclick="saveWallpaperSetting()">Guardar</button>
@@ -1291,7 +588,7 @@ header::before {
   </div>
 </div>
 
-<!-- ═══════ MODAL: nombre / moneda ═══════ -->
+<!-- Modal nombre/moneda -->
 <div class="ov" id="m-ov">
   <div class="modal">
     <h3 id="m-title"></h3>
@@ -1304,56 +601,39 @@ header::before {
   </div>
 </div>
 
-<!-- ═══════ MODAL: foto ═══════ -->
+<!-- Modal foto -->
 <div class="ov" id="f-ov">
   <div class="modal">
     <h3>📸 Foto del menú</h3>
-    <p>Selecciona una imagen para personalizar</p>
+    <p>Selecciona una imagen</p>
     <input type="file" id="f-input" accept="image/*" onchange="prevFoto(event)">
-    <img id="f-prev" style="width:80px;height:80px;object-fit:cover;border-radius:14px;border:1px solid var(--border);display:none;margin-top:16px;">
-    <div class="mbtns" style="margin-top:20px;">
+    <img id="f-prev" style="width:68px;height:68px;object-fit:cover;border-radius:11px;border:1px solid var(--brd);display:none;margin-top:12px">
+    <div class="mbtns" style="margin-top:16px">
       <button onclick="closeFoto()">Cancelar</button>
       <button class="ok" onclick="confirmarFoto()">Guardar</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════ MODAL: LID ═══════ -->
+<!-- Modal LID -->
 <div class="ov" id="lid-ov">
   <div class="modal">
-    <h3>
-      🔑 Ingresar LID
-      <button class="help-btn" onclick="toggleHelp()" title="¿Cómo obtener mi LID?">❓</button>
-    </h3>
-    <p>Pega tu LID para vincular esta sesión a tu cuenta</p>
-
-    <div id="help-content" style="display:none;">
-      <div class="help-box">
-        <p style="font-weight:600;margin-bottom:16px;font-size:13px;">📱 ¿Cómo obtener tu LID?</p>
-        <div class="step">
-          <div class="step-number">1</div>
-          <div class="step-text">Escribe al número principal del bot:</div>
-        </div>
-        <div class="phone-number" onclick="copyPhoneNumber()">📞 +593 99 194 4530</div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-text">Envía el comando:</div>
-        </div>
-        <div class="code-block">.id</div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-text">El bot responderá con tu LID:</div>
-        </div>
-        <div class="code-block"><span class="lid-example">97788486537432@lid</span></div>
-        <div class="step">
-          <div class="step-number">4</div>
-          <div class="step-text">Copia y pega el LID aquí</div>
-        </div>
+    <h3>🔑 Ingresar LID<button class="hbtn" onclick="toggleHelp()">❓</button></h3>
+    <p>Pega tu LID para vincular esta sesión</p>
+    <div id="help-content" style="display:none">
+      <div class="helpbox">
+        <p style="font-weight:600;margin-bottom:12px;font-size:13px">📱 ¿Cómo obtener tu LID?</p>
+        <div class="step"><div class="snum">1</div><div class="stxt">Escribe al número del bot:</div></div>
+        <div class="pnum" onclick="copyPhoneNumber()">📞 +593 99 194 4530</div>
+        <div class="step"><div class="snum">2</div><div class="stxt">Envía el comando:</div></div>
+        <div class="cblk">.id</div>
+        <div class="step"><div class="snum">3</div><div class="stxt">El bot te responde con tu LID:</div></div>
+        <div class="cblk"><span class="lidex">97788486537432@lid</span></div>
+        <div class="step"><div class="snum">4</div><div class="stxt">Cópialo y pégalo aquí</div></div>
       </div>
     </div>
-
     <input id="lid-input" type="text" placeholder="Ej: 97788486537432@lid" autocomplete="off">
-    <p style="font-size:11px;color:var(--text3);margin-top:-12px;margin-bottom:20px;font-family:var(--font-mono);">El LID siempre termina con @lid</p>
+    <p style="font-size:11px;color:var(--text3);margin-top:-8px;margin-bottom:14px;font-family:var(--fm)">Siempre termina con @lid</p>
     <div class="mbtns">
       <button onclick="closeLidModal()">Cancelar</button>
       <button class="ok" onclick="confirmLid()">Guardar LID</button>
@@ -1361,7 +641,7 @@ header::before {
   </div>
 </div>
 
-<!-- ═══════ MODAL: confirmar ═══════ -->
+<!-- Modal confirmar -->
 <div class="ov" id="confirm-ov">
   <div class="modal">
     <h3 id="confirm-title">Confirmar</h3>
@@ -1373,732 +653,491 @@ header::before {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     JAVASCRIPT — idéntico al original, sin cambios funcionales
-═══════════════════════════════════════════════ -->
 <script>
-let API = '';
-let currentUser = null;
-let currentSession = null;
-let isOwner = false;
-let sessions = [];
-let qrPollers = {};
-let modalCb = null;
-let fotoN = null;
-let lidSessionN = null;
-let activityLogs = [];
-let confirmCb = null;
-const MAX_SESSIONS = 15;
+let API='',cu=null,cs=null,io=false;
+let sessions=[],qrp={},mcb=null,fn=null,lsn=null;
+let logs=[],ccb=null;
+const MAX=15;
+let wop=0.10,gm=false;
 
-let wallpaperOpacity = 0.12;
-let glassMode = false;
-
-function initTheme() {
-  const savedTheme = localStorage.getItem('friki_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeUI(savedTheme);
-  loadWallpaperSetting();
-  loadGlassMode();
+function initTheme(){
+  const t=localStorage.getItem('friki_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  updateThemeUI(t);loadWP();loadGlass();
 }
-
-function updateThemeUI(theme) {
-  const knob = document.getElementById('theme-knob');
-  knob.textContent = theme === 'light' ? '☀️' : '🌙';
+function updateThemeUI(t){document.getElementById('theme-knob').textContent=t==='light'?'☀️':'🌙'}
+function toggleTheme(){
+  const c=document.documentElement.getAttribute('data-theme')||'dark';
+  const n=c==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',n);
+  localStorage.setItem('friki_theme',n);updateThemeUI(n);
 }
-
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme') || 'dark';
-  const next = current === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('friki_theme', next);
-  updateThemeUI(next);
+function loadWP(){
+  const s=localStorage.getItem('friki_wallpaper_opacity');
+  if(s!==null){wop=parseFloat(s);document.documentElement.style.setProperty('--wpop',wop)}
 }
-
-function loadWallpaperSetting() {
-  const saved = localStorage.getItem('friki_wallpaper_opacity');
-  if (saved !== null) {
-    wallpaperOpacity = parseFloat(saved);
-    document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
-  }
+function loadGlass(){
+  const s=localStorage.getItem('friki_glass_mode');
+  if(s!==null){gm=s==='true';document.documentElement.setAttribute('data-glass',gm);ugui()}
 }
-
-function loadGlassMode() {
-  const saved = localStorage.getItem('friki_glass_mode');
-  if (saved !== null) {
-    glassMode = saved === 'true';
-    document.documentElement.setAttribute('data-glass', glassMode);
-    updateGlassUI();
-  }
+function ugui(){
+  const sw=document.getElementById('glass-switch');
+  gm?sw.classList.add('active'):sw.classList.remove('active');
 }
-
-function updateGlassUI() {
-  const sw = document.getElementById('glass-switch');
-  glassMode ? sw.classList.add('active') : sw.classList.remove('active');
+function toggleGlassMode(){gm=!gm;document.documentElement.setAttribute('data-glass',gm);localStorage.setItem('friki_glass_mode',gm);ugui()}
+function openWallpaperModal(){
+  const sl=document.getElementById('wallpaper-slider'),rv=document.getElementById('range-value');
+  sl.value=Math.round(wop*100);rv.textContent=sl.value+'%';
+  sl.oninput=()=>{rv.textContent=sl.value+'%'};
+  ugui();document.getElementById('wallpaper-ov').classList.add('open');
 }
-
-function toggleGlassMode() {
-  glassMode = !glassMode;
-  document.documentElement.setAttribute('data-glass', glassMode);
-  localStorage.setItem('friki_glass_mode', glassMode);
-  updateGlassUI();
-}
-
-function openWallpaperModal() {
-  const slider = document.getElementById('wallpaper-slider');
-  const rv = document.getElementById('range-value');
-  slider.value = Math.round(wallpaperOpacity * 100);
-  rv.textContent = slider.value + '%';
-  slider.oninput = () => { rv.textContent = slider.value + '%'; };
-  updateGlassUI();
-  document.getElementById('wallpaper-ov').classList.add('open');
-}
-
-function saveWallpaperSetting() {
-  const slider = document.getElementById('wallpaper-slider');
-  wallpaperOpacity = slider.value / 100;
-  document.documentElement.style.setProperty('--wallpaper-opacity', wallpaperOpacity);
-  localStorage.setItem('friki_wallpaper_opacity', wallpaperOpacity);
+function saveWallpaperSetting(){
+  wop=document.getElementById('wallpaper-slider').value/100;
+  document.documentElement.style.setProperty('--wpop',wop);
+  localStorage.setItem('friki_wallpaper_opacity',wop);
   document.getElementById('wallpaper-ov').classList.remove('open');
-  toast('Apariencia guardada', 'ok');
+  toast('Apariencia guardada','ok');
 }
+function closeWallpaperModal(){document.getElementById('wallpaper-ov').classList.remove('open')}
 
-function closeWallpaperModal() {
-  document.getElementById('wallpaper-ov').classList.remove('open');
+document.getElementById('theme-toggle-btn').addEventListener('click',toggleTheme);
+document.getElementById('wallpaper-ov').addEventListener('click',e=>{if(e.target===e.currentTarget)closeWallpaperModal()});
+
+function toggleHelp(){
+  const h=document.getElementById('help-content');
+  h.style.display=h.style.display==='none'?'block':'none';
 }
-
-document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
-document.getElementById('wallpaper-ov').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeWallpaperModal();
-});
-
-function toggleHelp() {
-  const h = document.getElementById('help-content');
-  h.style.display = h.style.display === 'none' ? 'block' : 'none';
+function copyPhoneNumber(){
+  navigator.clipboard?.writeText('+593991944530').then(()=>toast('📋 Copiado','ok')).catch(()=>toast('No se pudo copiar','err'));
 }
-
-function copyPhoneNumber() {
-  navigator.clipboard?.writeText('+593991944530').then(() => {
-    toast('📋 Número copiado', 'ok');
-  }).catch(() => { toast('No se pudo copiar', 'err'); });
-}
-
-function toggleOwnerUI(owner) {
-  document.querySelectorAll('.owner-only').forEach(el => {
-    if (owner) {
-      el.style.display = el.classList.contains('dashboard') ? 'grid' : 'flex';
-    } else {
-      el.style.display = 'none';
-    }
+function toggleOwnerUI(o){
+  document.querySelectorAll('.owner-only').forEach(el=>{
+    if(o){el.style.display=el.classList.contains('dashboard')?'grid':'flex'}
+    else{el.style.display='none'}
   });
-  document.getElementById('owner-badge-header').textContent = owner ? 'OWNER' : '';
-  document.getElementById('user-info').textContent = owner
-    ? `${currentUser} · Owner`
-    : (currentSession ? `${currentUser} · Sesión ${currentSession}` : currentUser);
+  document.getElementById('owner-badge-header').textContent=o?'OWNER':'';
+  document.getElementById('user-info').textContent=o?`${cu} · Owner`:(cs?`${cu} · S${cs}`:cu||'');
+}
+function showConfirm(t,m,cb){
+  document.getElementById('confirm-title').textContent=t;
+  document.getElementById('confirm-message').textContent=m;
+  ccb=cb;document.getElementById('confirm-ov').classList.add('open');
+}
+function closeConfirmModal(){document.getElementById('confirm-ov').classList.remove('open');ccb=null}
+document.getElementById('confirm-ok').addEventListener('click',()=>{if(ccb)ccb();closeConfirmModal()});
+
+function addLog(t,m){if(!io)return;logs.unshift({time:new Date().toLocaleTimeString(),type:t,message:m});if(logs.length>50)logs.pop()}
+function showLogs(){if(!io)return;alert(logs.map(l=>`[${l.time}] ${l.type}: ${l.message}`).join('\n')||'Sin actividad')}
+function exportData(){
+  if(!io)return;
+  const blob=new Blob([JSON.stringify({sessions,exportDate:new Date().toISOString(),exportedBy:cu},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=`frikibot-backup-${Date.now()}.json`;a.click();URL.revokeObjectURL(url);
+  toast('📦 Exportado','ok');
 }
 
-function showConfirm(title, message, onConfirm) {
-  document.getElementById('confirm-title').textContent = title;
-  document.getElementById('confirm-message').textContent = message;
-  confirmCb = onConfirm;
-  document.getElementById('confirm-ov').classList.add('open');
+function showRegister(){document.getElementById('login-panel').style.display='none';document.getElementById('register-panel').style.display='block'}
+function showLogin(){document.getElementById('register-panel').style.display='none';document.getElementById('login-panel').style.display='block'}
+
+async function register(){
+  const u=document.getElementById('register-user').value.trim();
+  const p=document.getElementById('register-pass').value;
+  const p2=document.getElementById('register-pass2').value;
+  if(!u||!p){toast('Completa todos los campos','err');return}
+  if(u.length<3){toast('Usuario: mínimo 3 caracteres','err');return}
+  if(p.length<4){toast('Contraseña: mínimo 4 caracteres','err');return}
+  if(p!==p2){toast('Las contraseñas no coinciden','err');return}
+  try{
+    const r=await fetch(`${API}/api/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+    const d=await r.json();
+    if(d.ok){toast('✅ Cuenta creada','ok');showLogin();document.getElementById('login-user').value=u;document.getElementById('login-pass').value=''}
+    else toast(d.error||'Error','err');
+  }catch{toast('Error de conexión','err')}
 }
 
-function closeConfirmModal() {
-  document.getElementById('confirm-ov').classList.remove('open');
-  confirmCb = null;
+async function login(){
+  const u=document.getElementById('login-user').value.trim();
+  const p=document.getElementById('login-pass').value;
+  if(!u||!p){toast('Ingresa usuario y contraseña','err');return}
+  try{
+    const r=await fetch(`${API}/api/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+    const d=await r.json();
+    if(d.ok){
+      cu=d.username;cs=d.sessionNum;io=d.isOwner;
+      localStorage.setItem('friki_token',d.token);localStorage.setItem('friki_user',d.username);
+      document.getElementById('auth-container').style.display='none';
+      document.getElementById('app-container').style.display='block';
+      toggleOwnerUI(io);if(io)addLog('success',`Inicio: ${cu}`);
+      await loadSessions();setInterval(loadSessions,10000);
+      if(io){loadStats();setInterval(loadStats,30000)}
+    }else toast(d.error||'Error','err');
+  }catch{toast('Error de conexión','err')}
 }
 
-document.getElementById('confirm-ok').addEventListener('click', () => {
-  if (confirmCb) confirmCb();
-  closeConfirmModal();
-});
-
-function addLog(type, message) {
-  if (!isOwner) return;
-  activityLogs.unshift({ time: new Date().toLocaleTimeString(), type, message });
-  if (activityLogs.length > 50) activityLogs.pop();
-}
-
-function showLogs() {
-  if (!isOwner) return;
-  alert(activityLogs.map(l => `[${l.time}] ${l.type}: ${l.message}`).join('\n') || 'Sin actividad');
-}
-
-function exportData() {
-  if (!isOwner) return;
-  const data = { sessions, exportDate: new Date().toISOString(), exportedBy: currentUser };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `frikibot-backup-${Date.now()}.json`; a.click();
-  URL.revokeObjectURL(url);
-  toast('📦 Datos exportados', 'ok');
-}
-
-function showRegister() {
-  document.getElementById('login-panel').style.display = 'none';
-  document.getElementById('register-panel').style.display = 'block';
-}
-
-function showLogin() {
-  document.getElementById('register-panel').style.display = 'none';
-  document.getElementById('login-panel').style.display = 'block';
-}
-
-async function register() {
-  const username = document.getElementById('register-user').value.trim();
-  const password = document.getElementById('register-pass').value;
-  const password2 = document.getElementById('register-pass2').value;
-  if (!username || !password) { toast('Completa todos los campos', 'err'); return; }
-  if (username.length < 3) { toast('Usuario: mínimo 3 caracteres', 'err'); return; }
-  if (password.length < 4) { toast('Contraseña: mínimo 4 caracteres', 'err'); return; }
-  if (password !== password2) { toast('Las contraseñas no coinciden', 'err'); return; }
-  try {
-    const res = await fetch(`${API}/api/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-    if (data.ok) { toast('✅ Cuenta creada', 'ok'); showLogin(); document.getElementById('login-user').value = username; document.getElementById('login-pass').value = ''; }
-    else toast(data.error || 'Error', 'err');
-  } catch { toast('Error de conexión', 'err'); }
-}
-
-async function login() {
-  const username = document.getElementById('login-user').value.trim();
-  const password = document.getElementById('login-pass').value;
-  if (!username || !password) { toast('Ingresa usuario y contraseña', 'err'); return; }
-  try {
-    const res = await fetch(`${API}/api/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-    if (data.ok) {
-      currentUser = data.username;
-      currentSession = data.sessionNum;
-      isOwner = data.isOwner;
-      localStorage.setItem('friki_token', data.token);
-      localStorage.setItem('friki_user', data.username);
-      document.getElementById('auth-container').style.display = 'none';
-      document.getElementById('app-container').style.display = 'block';
-      toggleOwnerUI(isOwner);
-      if (isOwner) addLog('success', `Inicio de sesión: ${currentUser}`);
-      await loadSessions();
-      setInterval(loadSessions, 10000);
-      if (isOwner) { loadStats(); setInterval(loadStats, 30000); }
-    } else toast(data.error || 'Error', 'err');
-  } catch { toast('Error de conexión', 'err'); }
-}
-
-function logout() {
-  fetch(`${API}/api/logout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: currentUser }) }).catch(() => {});
-  if (isOwner) addLog('info', `Cierre de sesión: ${currentUser}`);
-  localStorage.removeItem('friki_token');
-  localStorage.removeItem('friki_user');
-  currentUser = null; currentSession = null;
-  document.getElementById('auth-container').style.display = 'flex';
-  document.getElementById('app-container').style.display = 'none';
+function logout(){
+  fetch(`${API}/api/logout`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:cu})}).catch(()=>{});
+  localStorage.removeItem('friki_token');localStorage.removeItem('friki_user');
+  cu=null;cs=null;
+  document.getElementById('auth-container').style.display='flex';
+  document.getElementById('app-container').style.display='none';
   showLogin();
-  for (let id in qrPollers) { clearInterval(qrPollers[id]); delete qrPollers[id]; }
+  for(let id in qrp){clearInterval(qrp[id]);delete qrp[id]}
 }
 
-function checkAutoLogin() {
-  const token = localStorage.getItem('friki_token');
-  const user  = localStorage.getItem('friki_user');
-  if (token && user) { document.getElementById('login-user').value = user; login(); }
+function checkAutoLogin(){
+  const t=localStorage.getItem('friki_token'),u=localStorage.getItem('friki_user');
+  if(t&&u){document.getElementById('login-user').value=u;login()}
 }
 
-function toast(msg, tipo = 'ok') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = `show ${tipo}`;
-  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 3000);
+function toast(msg,tipo='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`show ${tipo}`;
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-async function apiFetch(url, opts = {}) {
-  const ctrl = new AbortController();
-  const tid = setTimeout(() => ctrl.abort(), 10000);
-  try { const r = await fetch(API + url, { ...opts, signal: ctrl.signal }); clearTimeout(tid); return r; }
-  catch (e) { clearTimeout(tid); throw e; }
+async function apiFetch(url,opts={}){
+  const ctrl=new AbortController();
+  const tid=setTimeout(()=>ctrl.abort(),10000);
+  try{const r=await fetch(API+url,{...opts,signal:ctrl.signal});clearTimeout(tid);return r}
+  catch(e){clearTimeout(tid);throw e}
 }
 
-function setConn(ok) {
-  document.getElementById('conn-dot').className = `conn-dot ${ok ? 'ok' : 'err'}`;
-  document.getElementById('conn-lbl').textContent = ok ? 'online' : 'offline';
+function setConn(ok){
+  document.getElementById('conn-dot').className=`cdot ${ok?'ok':'err'}`;
+  document.getElementById('conn-lbl').textContent=ok?'online':'offline';
 }
 
-async function loadStats() {
-  if (!isOwner) return;
-  try {
-    const users = await apiFetch('/api/users').then(r => r.json()).catch(() => ({}));
-    document.getElementById('stat-users').textContent = Object.keys(users).length;
-  } catch {}
+async function loadStats(){
+  if(!io)return;
+  try{
+    const u=await apiFetch('/api/users').then(r=>r.json()).catch(()=>({}));
+    document.getElementById('stat-users').textContent=Object.keys(u).length;
+  }catch{}
 }
 
-async function loadSessions() {
-  try {
-    const r = await apiFetch('/api/sessions');
-    if (!r.ok) throw new Error();
-    setConn(true);
-    let allSessions = await r.json();
-    if (!isOwner) {
-      sessions = allSessions.filter(s => s.n === currentSession);
-    } else {
-      sessions = allSessions;
-      const active = sessions.filter(s => s.hasCreds).length;
-      const qr     = sessions.filter(s => s.pendingQR || s.hasQR).length;
-      const paused = sessions.filter(s => s.pausada).length;
-      document.getElementById('stat-active').textContent = active;
-      document.getElementById('stat-qr').textContent = qr;
-      document.getElementById('stat-paused').textContent = paused;
+async function loadSessions(){
+  try{
+    const r=await apiFetch('/api/sessions');if(!r.ok)throw new Error();
+    setConn(true);let all=await r.json();
+    if(!io){sessions=all.filter(s=>s.n===cs)}
+    else{
+      sessions=all;
+      document.getElementById('stat-active').textContent=sessions.filter(s=>s.hasCreds).length;
+      document.getElementById('stat-qr').textContent=sessions.filter(s=>s.pendingQR||s.hasQR).length;
+      document.getElementById('stat-paused').textContent=sessions.filter(s=>s.pausada).length;
       actualizarSelect();
     }
     renderSessions();
-  } catch {
-    setConn(false);
-    document.getElementById('sessions').innerHTML = '<p class="empty">Sin conexión</p>';
-  }
+  }catch{setConn(false);document.getElementById('sessions').innerHTML='<p class="empty">Sin conexión</p>'}
 }
 
-function actualizarSelect() {
-  if (!isOwner) return;
-  const usados = sessions.filter(s => s.owner && s.owner !== 'web_pending@lid' && s.owner !== 'web@lid').map(s => s.n);
-  const sel = document.getElementById('new-n');
-  sel.innerHTML = '<option value="">Nueva sesión...</option>';
-  for (let i = 1; i <= MAX_SESSIONS; i++) {
-    if (!usados.includes(i)) {
-      const o = document.createElement('option');
-      o.value = i; o.textContent = `Sesión ${i}`; sel.appendChild(o);
-    }
-  }
+function actualizarSelect(){
+  if(!io)return;
+  const usados=sessions.filter(s=>s.owner&&s.owner!=='web_pending@lid'&&s.owner!=='web@lid').map(s=>s.n);
+  const sel=document.getElementById('new-n');
+  sel.innerHTML='<option value="">Nueva sesión...</option>';
+  for(let i=1;i<=MAX;i++){if(!usados.includes(i)){const o=document.createElement('option');o.value=i;o.textContent=`Sesión ${i}`;sel.appendChild(o)}}
 }
 
-function puedeModificarSesion(sessionNum) {
-  if (isOwner) return true;
-  return currentSession === sessionNum;
+function puedeModificarSesion(n){return io||cs===n}
+
+async function elegirSesion(){
+  const n=parseInt(document.getElementById('session-select').value,10);
+  if(!n){toast('Selecciona una sesión','err');return}
+  try{
+    const r=await apiFetch('/api/elegir-sesion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:cu,sessionNum:n})});
+    const d=await r.json();
+    if(d.ok){cs=n;toast(`✨ Sesión ${n} asignada`,'ok');await loadSessions();toggleOwnerUI(io)}
+    else toast(d.error||'Error','err');
+  }catch{toast('Error de conexión','err')}
 }
 
-async function elegirSesion() {
-  const sel = document.getElementById('session-select');
-  const newSession = parseInt(sel.value, 10);
-  if (!newSession) return toast('Selecciona una sesión', 'err');
-  try {
-    const res = await apiFetch('/api/elegir-sesion', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: currentUser, sessionNum: newSession })
-    });
-    const data = await res.json();
-    if (data.ok) {
-      currentSession = newSession;
-      toast(`✨ Sesión ${newSession} asignada`, 'ok');
-      await loadSessions();
-      toggleOwnerUI(isOwner);
-    } else toast(data.error || 'Error', 'err');
-  } catch { toast('Error de conexión', 'err'); }
-}
-
-function openLidModal(n) {
-  const sessionNum = Number(n);
-  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
-  lidSessionN = sessionNum;
-  document.getElementById('lid-input').value = '';
-  document.getElementById('help-content').style.display = 'none';
+function openLidModal(n){
+  const sn=Number(n);
+  if(isNaN(sn)||sn<1||sn>MAX){toast('Sesión inválida','err');return}
+  if(!puedeModificarSesion(sn)){toast('No tienes permiso','err');return}
+  lsn=sn;document.getElementById('lid-input').value='';
+  document.getElementById('help-content').style.display='none';
   document.getElementById('lid-ov').classList.add('open');
-  setTimeout(() => document.getElementById('lid-input').focus(), 80);
+  setTimeout(()=>document.getElementById('lid-input').focus(),80);
+}
+function closeLidModal(){document.getElementById('lid-ov').classList.remove('open');lsn=null}
+
+async function confirmLid(){
+  const lid=document.getElementById('lid-input').value.trim();
+  if(!lid){toast('Ingresa tu LID','err');return}
+  if(!lid.includes('@lid')){toast('El LID debe terminar con @lid','err');return}
+  if(!lsn){toast('Error: sesión no definida','err');return}
+  const sn=lsn;closeLidModal();toast('Actualizando LID...');
+  try{
+    const r=await apiFetch(`/api/set-lid/${sn}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lid})});
+    const d=await r.json();
+    if(d.ok){toast('✅ LID actualizado','ok');await loadSessions();if(io)addLog('success',`S${sn}: LID`)}
+    else toast(d.error||'Error','err');
+  }catch{toast('Error de conexión','err')}
 }
 
-function closeLidModal() {
-  document.getElementById('lid-ov').classList.remove('open');
-  lidSessionN = null;
+function esc(s){if(!s)return'';return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]||m)}
+
+function formatUptime(startTime){
+  if(!startTime)return '--';
+  const diff=Date.now()-startTime;
+  const hours=Math.floor(diff/3600000);
+  const minutes=Math.floor((diff%3600000)/60000);
+  if(hours>0)return `${hours}h ${minutes}m`;
+  return `${minutes}m`;
 }
 
-async function confirmLid() {
-  const lid = document.getElementById('lid-input').value.trim();
-  if (!lid) return toast('Ingresa tu LID', 'err');
-  if (!lid.includes('@lid')) return toast('El LID debe terminar con @lid', 'err');
-  const sessionNum = lidSessionN;
-  if (!sessionNum) { toast('Error: Sesión no definida', 'err'); return; }
-  closeLidModal();
-  toast('Actualizando LID...');
-  try {
-    const r = await apiFetch(`/api/set-lid/${sessionNum}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ lid })
-    });
-    const d = await r.json();
-    if (d.ok) { toast('✅ LID actualizado', 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum}: LID actualizado`); }
-    else toast(d.error || 'Error', 'err');
-  } catch { toast('Error de conexión', 'err'); }
-}
-
-function renderSessions() {
-  const c = document.getElementById('sessions');
-
-  if (!isOwner && !currentSession) {
-    const usados = sessions.filter(s => s.owner && s.owner !== 'web_pending@lid' && s.owner !== 'web@lid').map(s => s.n);
-    const libres = [];
-    for (let i = 1; i <= MAX_SESSIONS; i++) { if (!usados.includes(i)) libres.push(i); }
-    if (libres.length === 0) {
-      c.innerHTML = `<div class="session-selector"><h3>😕 Sin sesiones disponibles</h3><p>Todas las sesiones están ocupadas.</p></div>`;
-      return;
-    }
-    c.innerHTML = `
-      <div class="session-selector">
-        <h3>🎯 Elige tu sesión</h3>
-        <p>Selecciona una sesión para empezar</p>
-        <select id="session-select">
-          <option value="">-- Seleccionar --</option>
-          ${libres.map(i => `<option value="${i}">Sesión ${i}</option>`).join('')}
-        </select><br>
-        <button onclick="elegirSesion()">✨ Asignar sesión</button>
-      </div>`;
+function renderSessions(){
+  const c=document.getElementById('sessions');
+  if(!io&&!cs){
+    const usados=sessions.filter(s=>s.owner&&s.owner!=='web_pending@lid'&&s.owner!=='web@lid').map(s=>s.n);
+    const libres=[];for(let i=1;i<=MAX;i++){if(!usados.includes(i))libres.push(i)}
+    if(!libres.length){c.innerHTML='<div class="sess-sel"><h3>😕 Sin sesiones</h3><p>Todas ocupadas.</p></div>';return}
+    c.innerHTML=`<div class="sess-sel">
+      <h3>🎯 Elige tu sesión</h3><p>Selecciona una para empezar</p>
+      <select id="session-select"><option value="">-- Seleccionar --</option>${libres.map(i=>`<option value="${i}">Sesión ${i}</option>`).join('')}</select><br>
+      <button onclick="elegirSesion()">✨ Asignar sesión</button></div>`;
     return;
   }
-
-  if (!sessions.length) { c.innerHTML = '<p class="empty">No hay sesiones disponibles</p>'; return; }
-
-  c.innerHTML = '';
-  for (const s of sessions) {
-    let dotClass = '', dotTitle = '';
-    if      (s.hasCreds)              { dotClass = 'on';     dotTitle = 'Conectado'; }
-    else if (s.pausada)               { dotClass = 'paused'; dotTitle = 'Pausado'; }
-    else if (s.pendingQR || s.hasQR)  { dotClass = 'qr';     dotTitle = 'Esperando QR'; }
-    else                              { dotClass = '';        dotTitle = 'Inactivo'; }
-
-    const puedeModificar = puedeModificarSesion(s.n);
-    const esMiSesion = currentSession === s.n;
-    const sessionNum = Number(s.n);
-
-    let actionButtons = '';
-    let pausedWarning = s.pausada ? '<div class="paused-warning">⚠️ Pausada — se eliminará en 2 horas</div>' : '';
-
-    if (isOwner) {
-      actionButtons = `
-        ${!s.hasCreds && !s.pausada ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar</button>` : ''}
-        ${s.hasCreds ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 LID</button>` : ''}
-        ${!s.pausada && s.hasCreds ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">⏸️ Pausar</button>` : ''}
-        ${s.pausada ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">▶️ Reanudar</button>` : ''}
-        <button class="btn danger" data-action="eliminar" data-session="${sessionNum}">🗑️ Eliminar</button>
-        <button class="btn" data-action="nombre" data-session="${sessionNum}">✏️ Nombre</button>
-        <button class="btn" data-action="moneda" data-session="${sessionNum}">💰 Moneda</button>
-        <button class="btn full" data-action="foto" data-session="${sessionNum}">📸 Foto</button>
-      `;
-    } else {
-      actionButtons = `
-        ${!s.hasCreds && !s.pausada && puedeModificar ? `<button class="btn" data-action="iniciar" data-session="${sessionNum}">▶️ Iniciar</button>` : ''}
-        ${s.hasCreds && puedeModificar ? `<button class="btn success" data-action="ingresar-lid" data-session="${sessionNum}">🔑 LID</button>` : ''}
-        ${!s.pausada && s.hasCreds && puedeModificar ? `<button class="btn warning" data-action="pausar" data-session="${sessionNum}">⏸️ Pausar</button>` : ''}
-        ${s.pausada && puedeModificar ? `<button class="btn" data-action="reanudar" data-session="${sessionNum}">▶️ Reanudar</button>` : ''}
-        ${puedeModificar ? `<button class="btn" data-action="nombre" data-session="${sessionNum}">✏️ Nombre</button>` : ''}
-        ${puedeModificar ? `<button class="btn" data-action="moneda" data-session="${sessionNum}">💰 Moneda</button>` : ''}
-        ${puedeModificar ? `<button class="btn full" data-action="foto" data-session="${sessionNum}">📸 Foto</button>` : ''}
-        ${puedeModificar ? `<button class="btn danger full" data-action="eliminar" data-session="${sessionNum}" style="margin-top:2px;">🗑️ Eliminar</button>` : ''}
-      `;
+  if(!sessions.length){c.innerHTML='<p class="empty">No hay sesiones</p>';return}
+  c.innerHTML='';
+  for(const s of sessions){
+    let dc='',dt='';
+    if(s.hasCreds){dc='on';dt='Conectado'}
+    else if(s.pausada){dc='paused';dt='Pausado'}
+    else if(s.pendingQR||s.hasQR){dc='qr';dt='Esperando QR'}
+    else{dc='';dt='Inactivo'}
+    const pm=puedeModificarSesion(s.n),em=cs===s.n,sn=Number(s.n);
+    let btns='',pw=s.pausada?'<div class="pw">⚠️ Pausada — se eliminará en 2 horas</div>':'';
+    
+    const uptime=s.startTime?formatUptime(s.startTime):'--';
+    const ping=s.ping||'--';
+    
+    if(io){btns=`
+      ${!s.hasCreds&&!s.pausada?`<button class="btn" data-action="iniciar" data-session="${sn}">▶️ Iniciar</button>`:''}
+      ${s.hasCreds?`<button class="btn success" data-action="ingresar-lid" data-session="${sn}">🔑 LID</button>`:''}
+      ${!s.pausada&&s.hasCreds?`<button class="btn warning" data-action="pausar" data-session="${sn}">⏸️ Pausar</button>`:''}
+      ${s.pausada?`<button class="btn" data-action="reanudar" data-session="${sn}">▶️ Reanudar</button>`:''}
+      <button class="btn danger" data-action="eliminar" data-session="${sn}">🗑️ Eliminar</button>
+      <button class="btn" data-action="nombre" data-session="${sn}">✏️ Nombre</button>
+      <button class="btn" data-action="moneda" data-session="${sn}">💰 Moneda</button>
+      <button class="btn full" data-action="foto" data-session="${sn}">📸 Foto del menú</button>`
+    }else{btns=`
+      ${!s.hasCreds&&!s.pausada&&pm?`<button class="btn" data-action="iniciar" data-session="${sn}">▶️ Iniciar</button>`:''}
+      ${s.hasCreds&&pm?`<button class="btn success" data-action="ingresar-lid" data-session="${sn}">🔑 LID</button>`:''}
+      ${!s.pausada&&s.hasCreds&&pm?`<button class="btn warning" data-action="pausar" data-session="${sn}">⏸️ Pausar</button>`:''}
+      ${s.pausada&&pm?`<button class="btn" data-action="reanudar" data-session="${sn}">▶️ Reanudar</button>`:''}
+      ${pm?`<button class="btn" data-action="nombre" data-session="${sn}">✏️ Nombre</button>`:''}
+      ${pm?`<button class="btn" data-action="moneda" data-session="${sn}">💰 Moneda</button>`:''}
+      ${pm?`<button class="btn full" data-action="foto" data-session="${sn}">📸 Foto del menú</button>`:''}
+      ${pm?`<button class="btn danger full" data-action="eliminar" data-session="${sn}" style="margin-top:2px">🗑️ Eliminar</button>`:''}`
     }
-
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.id = `card-${sessionNum}`;
-    div.dataset.session = sessionNum;
-    div.innerHTML = `
-      <div class="card-hdr">
-        <span class="card-num">#${String(sessionNum).padStart(2,'0')}</span>
-        <span class="card-name">
-          ${escapeHtml(s.nombre)}
-          ${esMiSesion ? '<span class="my-badge">Tu sesión</span>' : ''}
-        </span>
-        <span class="dot ${dotClass}" title="${dotTitle}"></span>
+    const div=document.createElement('div');
+    div.className='card';div.id=`card-${sn}`;div.dataset.session=sn;
+    div.innerHTML=`
+      <div class="chdr">
+        <span class="cnum">#${String(sn).padStart(2,'0')}</span>
+        <span class="cname"><span>${esc(s.nombre)}</span>${em?'<span class="mbadge">Tuya</span>':''}</span>
+        <span class="dot ${dc}" title="${dt}"></span>
       </div>
-      <div class="card-body">
+      <div class="cbody">
         <div class="meta">
-          <div class="meta-item">
-            <span class="meta-label">Moneda</span>
-            <span class="meta-val">${escapeHtml(s.moneda)}</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Foto</span>
-            <span class="meta-val">${s.foto ? 'Custom' : 'Default'}</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Estado</span>
-            <span class="meta-val">${dotTitle}</span>
-          </div>
-          ${s.numero ? `<div class="meta-item"><span class="meta-label">Número</span><span class="meta-val">+${s.numero}</span></div>` : ''}
+          <div class="mi"><span class="ml">Moneda</span><span class="mv">${esc(s.moneda)}</span></div>
+          <div class="mi"><span class="ml">Foto</span><span class="mv">${s.foto?'Custom':'Default'}</span></div>
+          <div class="mi"><span class="ml">Estado</span><span class="mv">${dt}</span></div>
+          ${s.numero?`<div class="mi"><span class="ml">Número</span><span class="mv">+${s.numero}</span></div>`:''}
         </div>
-        ${pausedWarning}
+        ${pw}
         <div class="qr-area">
-          <img class="qr-img" id="qi-${sessionNum}" alt="QR">
-          <p class="qr-wait" id="qw-${sessionNum}">Generando QR…</p>
-          <p class="qr-lbl" id="ql-${sessionNum}"></p>
-          <p class="qr-timeout" id="qt-${sessionNum}"></p>
+          <img class="qr-img" id="qi-${sn}" alt="QR">
+          <p class="qr-wait" id="qw-${sn}">Generando QR…</p>
+          <p class="qr-lbl" id="ql-${sn}"></p>
+          <p class="qr-timeout" id="qt-${sn}"></p>
         </div>
-        <div class="actions">${actionButtons}</div>
+        <div class="uptime-ms-container">
+          <div class="uptime-box"><div class="label">UPTIME</div><div class="value" id="uptime-${sn}">${uptime}</div></div>
+          <div class="ms-box"><div class="label">MS</div><div class="value" id="ms-${sn}">${ping}</div></div>
+        </div>
+        <div class="actions">${btns}</div>
       </div>`;
-
     c.appendChild(div);
-
-    div.querySelectorAll('[data-action]').forEach(btn => {
-      const action = btn.dataset.action;
-      const sess = Number(btn.dataset.session);
-      btn.addEventListener('click', e => {
-        e.preventDefault(); e.stopPropagation();
-        switch(action) {
-          case 'iniciar':      iniciar(sess); break;
-          case 'ingresar-lid': openLidModal(sess); break;
-          case 'pausar':       pausar(sess); break;
-          case 'reanudar':     reanudar(sess); break;
-          case 'eliminar':     eliminar(sess); break;
-          case 'nombre':       openModal(sess, 'nombre'); break;
-          case 'moneda':       openModal(sess, 'moneda'); break;
-          case 'foto':         openFoto(sess); break;
+    div.querySelectorAll('[data-action]').forEach(btn=>{
+      const a=btn.dataset.action,ss=Number(btn.dataset.session);
+      btn.addEventListener('click',e=>{
+        e.preventDefault();e.stopPropagation();
+        switch(a){
+          case'iniciar':iniciar(ss);break;
+          case'ingresar-lid':openLidModal(ss);break;
+          case'pausar':pausar(ss);break;
+          case'reanudar':reanudar(ss);break;
+          case'eliminar':eliminar(ss);break;
+          case'nombre':openModal(ss,'nombre');break;
+          case'moneda':openModal(ss,'moneda');break;
+          case'foto':openFoto(ss);break;
         }
       });
     });
-
-    if (s.pendingQR || s.hasQR) mostrarQR(sessionNum);
-    if (s.hasCreds)   conectado(sessionNum);
-    if (s.pausada)    pausado(sessionNum);
-    startPoller(sessionNum);
+    if(s.pendingQR||s.hasQR)mostrarQR(sn);
+    if(s.hasCreds)conectado(sn);
+    if(s.pausada)pausado(sn);
+    startPoller(sn);
   }
 }
 
-function escapeHtml(str) {
-  if (!str) return '';
-  return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' })[m] || m);
+function startPoller(n){stopPoller(n);pollQR(n);qrp[n]=setInterval(()=>pollQR(n),3000)}
+function stopPoller(n){if(qrp[n]){clearInterval(qrp[n]);delete qrp[n]}}
+
+async function pollQR(n){
+  try{
+    const r=await apiFetch(`/api/qr-status/${n}`);if(!r.ok)return;
+    const d=await r.json();
+    if(d.hasCreds)conectado(n);else if(d.paused)pausado(n);else if(d.exists)mostrarQR(n);else ocultarQR(n);
+  }catch{}
 }
 
-function startPoller(n) { stopPoller(n); pollQR(n); qrPollers[n] = setInterval(() => pollQR(n), 3000); }
-function stopPoller(n)  { if (qrPollers[n]) { clearInterval(qrPollers[n]); delete qrPollers[n]; } }
-
-async function pollQR(n) {
-  try {
-    const r = await apiFetch(`/api/qr-status/${n}`);
-    if (!r.ok) return;
-    const d = await r.json();
-    if      (d.hasCreds) conectado(n);
-    else if (d.paused)   pausado(n);
-    else if (d.exists)   mostrarQR(n);
-    else                 ocultarQR(n);
-  } catch {}
+function mostrarQR(n){
+  const img=document.getElementById(`qi-${n}`),wai=document.getElementById(`qw-${n}`);
+  const lbl=document.getElementById(`ql-${n}`),tl=document.getElementById(`qt-${n}`);
+  if(!img)return;
+  img.src=`${API}/qr/${n}?t=${Date.now()}`;img.style.display='block';
+  img.onerror=()=>{img.style.display='none';if(wai)wai.style.display='block'};
+  if(wai)wai.style.display='none';
+  if(lbl)lbl.textContent='📱 Escanea con WhatsApp';
+  if(tl){tl.textContent='⏰ Válido por 2 minutos';tl.style.display='block'}
+}
+function ocultarQR(n){
+  const img=document.getElementById(`qi-${n}`),wai=document.getElementById(`qw-${n}`);
+  const lbl=document.getElementById(`ql-${n}`),tl=document.getElementById(`qt-${n}`);
+  if(img)img.style.display='none';if(wai)wai.style.display='block';
+  if(lbl)lbl.textContent='';if(tl)tl.style.display='none';
+}
+function conectado(n){
+  const img=document.getElementById(`qi-${n}`),wai=document.getElementById(`qw-${n}`);
+  const lbl=document.getElementById(`ql-${n}`),tl=document.getElementById(`qt-${n}`);
+  if(img)img.style.display='none';if(wai)wai.style.display='none';
+  if(lbl)lbl.textContent='✅ Conectado';if(tl)tl.style.display='none';
+}
+function pausado(n){
+  const img=document.getElementById(`qi-${n}`),wai=document.getElementById(`qw-${n}`);
+  const lbl=document.getElementById(`ql-${n}`),tl=document.getElementById(`qt-${n}`);
+  if(img)img.style.display='none';if(wai)wai.style.display='none';
+  if(lbl)lbl.textContent='⏸️ Pausado';if(tl)tl.style.display='none';
 }
 
-function mostrarQR(n) {
-  const img = document.getElementById(`qi-${n}`);
-  const wai = document.getElementById(`qw-${n}`);
-  const lbl = document.getElementById(`ql-${n}`);
-  const tl  = document.getElementById(`qt-${n}`);
-  if (!img) return;
-  img.src = `${API}/qr/${n}?t=${Date.now()}`;
-  img.style.display = 'block';
-  img.onerror = () => { img.style.display='none'; if(wai) wai.style.display='block'; };
-  if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '📱 Escanea con WhatsApp';
-  if (tl)  { tl.textContent = '⏰ Válido por 2 minutos'; tl.style.display = 'block'; }
+async function iniciarNueva(){
+  if(!io)return;
+  const n=parseInt(document.getElementById('new-n').value,10);
+  if(!n){toast('Selecciona un número','err');return}
+  await iniciar(n);loadSessions();addLog('success',`S${n} creada`);
 }
-
-function ocultarQR(n) {
-  const img = document.getElementById(`qi-${n}`);
-  const wai = document.getElementById(`qw-${n}`);
-  const lbl = document.getElementById(`ql-${n}`);
-  const tl  = document.getElementById(`qt-${n}`);
-  if (img) img.style.display = 'none';
-  if (wai) wai.style.display = 'block';
-  if (lbl) lbl.textContent = '';
-  if (tl)  tl.style.display = 'none';
+async function iniciar(n){
+  const sn=Number(n);toast(`Iniciando sesión ${sn}…`);
+  try{
+    const r=await apiFetch(`/api/iniciar/${sn}`,{method:'POST'});
+    const d=await r.json();
+    if(d.ok){toast(`✅ Sesión ${sn} iniciada`,'ok');await loadSessions();if(io)addLog('success',`S${sn} iniciada`)}
+    else toast(d.error||'Error','err');
+  }catch{toast('Error de conexión','err')}
 }
-
-function conectado(n) {
-  const img = document.getElementById(`qi-${n}`);
-  const wai = document.getElementById(`qw-${n}`);
-  const lbl = document.getElementById(`ql-${n}`);
-  const tl  = document.getElementById(`qt-${n}`);
-  if (img) img.style.display = 'none';
-  if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '✅ Conectado';
-  if (tl)  tl.style.display = 'none';
+async function pausar(n){
+  const sn=Number(n);if(!puedeModificarSesion(sn)){toast('No tienes permiso','err');return}
+  showConfirm('⏸️ Pausar sesión',`¿Pausar sesión ${sn}?\n⚠️ Se eliminará en 2 horas.`,async()=>{
+    try{
+      const r=await apiFetch(`/api/pausar/${sn}`,{method:'POST'});
+      const d=await r.json();
+      if(d.ok){toast(`⏸️ Pausada`,'warning');await loadSessions();if(io)addLog('info',`S${sn} pausada`)}
+      else toast(d.error||'Error','err');
+    }catch{toast('Error de conexión','err')}
+  });
 }
-
-function pausado(n) {
-  const img = document.getElementById(`qi-${n}`);
-  const wai = document.getElementById(`qw-${n}`);
-  const lbl = document.getElementById(`ql-${n}`);
-  const tl  = document.getElementById(`qt-${n}`);
-  if (img) img.style.display = 'none';
-  if (wai) wai.style.display = 'none';
-  if (lbl) lbl.textContent = '⏸️ Pausado';
-  if (tl)  tl.style.display = 'none';
+async function reanudar(n){
+  const sn=Number(n);if(!puedeModificarSesion(sn)){toast('No tienes permiso','err');return}
+  toast(`Reanudando…`);
+  try{
+    const r=await apiFetch(`/api/reanudar/${sn}`,{method:'POST'});
+    const d=await r.json();
+    if(d.ok){toast(`✅ Reanudada`,'ok');await loadSessions();if(io)addLog('success',`S${sn} reanudada`)}
+    else toast(d.error||'Error','err');
+  }catch{toast('Error de conexión','err')}
 }
-
-async function iniciarNueva() {
-  if (!isOwner) return;
-  const n = parseInt(document.getElementById('new-n').value, 10);
-  if (!n) return toast('Selecciona un número', 'err');
-  await iniciar(n);
-  loadSessions();
-  addLog('success', `Sesión ${n} creada`);
-}
-
-async function iniciar(n) {
-  const sessionNum = Number(n);
-  toast(`Iniciando sesión ${sessionNum}…`);
-  try {
-    const r = await apiFetch(`/api/iniciar/${sessionNum}`, { method: 'POST' });
-    const d = await r.json();
-    if (d.ok) { toast(`✅ Sesión ${sessionNum} iniciada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} iniciada`); }
-    else toast(d.error || 'Error', 'err');
-  } catch { toast('Error de conexión', 'err'); }
-}
-
-async function pausar(n) {
-  const sessionNum = Number(n);
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
-  showConfirm('⏸️ Pausar sesión', `¿Pausar sesión ${sessionNum}?\n\n⚠️ Se eliminará en 2 horas.`, async () => {
-    try {
-      const r = await apiFetch(`/api/pausar/${sessionNum}`, { method: 'POST' });
-      const d = await r.json();
-      if (d.ok) { toast(`⏸️ Sesión ${sessionNum} pausada`, 'warning'); await loadSessions(); if (isOwner) addLog('info', `Sesión ${sessionNum} pausada`); }
-      else toast(d.error || 'Error', 'err');
-    } catch { toast('Error de conexión', 'err'); }
+async function eliminar(n){
+  const sn=Number(n);if(!puedeModificarSesion(sn)){toast('No tienes permiso','err');return}
+  showConfirm('🗑️ Eliminar','¿Eliminar sesión '+sn+'?',async()=>{
+    try{
+      const r=await apiFetch(`/api/eliminar/${sn}`,{method:'DELETE'});
+      const d=await r.json();
+      if(d.ok){
+        toast(`✅ Eliminada`,'ok');stopPoller(sn);await loadSessions();
+        if(sn===cs){cs=null;toggleOwnerUI(io)}
+        if(io)addLog('error',`S${sn} eliminada`);
+      }else toast(d.error||'Error','err');
+    }catch{toast('Error de conexión','err')}
   });
 }
 
-async function reanudar(n) {
-  const sessionNum = Number(n);
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
-  toast(`Reanudando sesión ${sessionNum}…`);
-  try {
-    const r = await apiFetch(`/api/reanudar/${sessionNum}`, { method: 'POST' });
-    const d = await r.json();
-    if (d.ok) { toast(`✅ Sesión ${sessionNum} reanudada`, 'ok'); await loadSessions(); if (isOwner) addLog('success', `Sesión ${sessionNum} reanudada`); }
-    else toast(d.error || 'Error', 'err');
-  } catch { toast('Error de conexión', 'err'); }
-}
-
-async function eliminar(n) {
-  const sessionNum = Number(n);
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
-  showConfirm('🗑️ Eliminar sesión', `¿Eliminar sesión ${sessionNum}?`, async () => {
-    try {
-      const r = await apiFetch(`/api/eliminar/${sessionNum}`, { method: 'DELETE' });
-      const d = await r.json();
-      if (d.ok) {
-        toast(`✅ Sesión ${sessionNum} eliminada`, 'ok');
-        stopPoller(sessionNum);
-        await loadSessions();
-        if (sessionNum === currentSession) { currentSession = null; toggleOwnerUI(isOwner); }
-        if (isOwner) addLog('error', `Sesión ${sessionNum} eliminada`);
-      } else toast(d.error || 'Error', 'err');
-    } catch { toast('Error de conexión', 'err'); }
-  });
-}
-
-function openModal(n, tipo) {
-  const sessionNum = Number(n);
-  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
-  document.getElementById('m-title').textContent = tipo === 'nombre' ? '✏️ Nombre del bot' : '💰 Moneda';
-  document.getElementById('m-desc').textContent  = tipo === 'nombre' ? 'Nombre en mensajes' : 'Símbolo de moneda';
-  const inp = document.getElementById('m-input');
-  inp.maxLength   = tipo === 'nombre' ? 30 : 20;
-  inp.placeholder = tipo === 'nombre' ? 'ej: NeoBot' : 'ej: COINS';
-  inp.value = '';
-  modalCb = async (val) => {
-    const r = await apiFetch(`/api/${tipo}/${sessionNum}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ [tipo]: val })
-    });
-    const d = await r.json();
-    if (d.ok) { toast(`✅ ${tipo} actualizado`, 'ok'); loadSessions(); }
-    else toast(d.error || 'Error', 'err');
+function openModal(n,tipo){
+  const sn=Number(n);
+  if(isNaN(sn)||sn<1||sn>MAX){toast('Sesión inválida','err');return}
+  if(!puedeModificarSesion(sn)){toast('No tienes permiso','err');return}
+  document.getElementById('m-title').textContent=tipo==='nombre'?'✏️ Nombre del bot':'💰 Moneda';
+  document.getElementById('m-desc').textContent=tipo==='nombre'?'Nombre en mensajes':'Símbolo de moneda';
+  const inp=document.getElementById('m-input');
+  inp.maxLength=tipo==='nombre'?30:20;inp.placeholder=tipo==='nombre'?'ej: NeoBot':'ej: COINS';inp.value='';
+  mcb=async val=>{
+    const r=await apiFetch(`/api/${tipo}/${sn}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({[tipo]:val})});
+    const d=await r.json();
+    if(d.ok){toast(`✅ Actualizado`,'ok');loadSessions()}else toast(d.error||'Error','err');
   };
   document.getElementById('m-ov').classList.add('open');
-  setTimeout(() => inp.focus(), 80);
+  setTimeout(()=>inp.focus(),80);
+}
+function closeModal(){document.getElementById('m-ov').classList.remove('open');mcb=null}
+async function confirmModal(){
+  const v=document.getElementById('m-input').value.trim();
+  if(!v){toast('Campo requerido','err');return}
+  closeModal();if(mcb)await mcb(v);
 }
 
-function closeModal() { document.getElementById('m-ov').classList.remove('open'); modalCb = null; }
-
-async function confirmModal() {
-  const val = document.getElementById('m-input').value.trim();
-  if (!val) return toast('Campo requerido', 'err');
-  closeModal();
-  if (modalCb) await modalCb(val);
-}
-
-function openFoto(n) {
-  const sessionNum = Number(n);
-  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Sesión inválida', 'err'); return; }
-  if (!puedeModificarSesion(sessionNum)) { toast('No tienes permiso', 'err'); return; }
-  fotoN = sessionNum;
-  document.getElementById('f-input').value = '';
-  document.getElementById('f-prev').style.display = 'none';
+function openFoto(n){
+  const sn=Number(n);
+  if(isNaN(sn)||sn<1||sn>MAX){toast('Sesión inválida','err');return}
+  if(!puedeModificarSesion(sn)){toast('No tienes permiso','err');return}
+  fn=sn;document.getElementById('f-input').value='';document.getElementById('f-prev').style.display='none';
   document.getElementById('f-ov').classList.add('open');
 }
-
-function closeFoto() { document.getElementById('f-ov').classList.remove('open'); fotoN = null; }
-
-function prevFoto(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = ev => { const img = document.getElementById('f-prev'); img.src = ev.target.result; img.style.display = 'block'; };
-  r.readAsDataURL(file);
+function closeFoto(){document.getElementById('f-ov').classList.remove('open');fn=null}
+function prevFoto(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>{const img=document.getElementById('f-prev');img.src=ev.target.result;img.style.display='block'};r.readAsDataURL(f);
+}
+async function confirmarFoto(){
+  const f=document.getElementById('f-input').files[0];if(!f){toast('Selecciona una imagen','err');return}
+  const sn=Number(fn);
+  if(isNaN(sn)||sn<1||sn>MAX){toast('Error: sesión no definida','err');return}
+  const r2=new FileReader();
+  r2.onload=async ev=>{
+    closeFoto();toast('Subiendo…');
+    try{
+      const r=await apiFetch(`/api/foto/${sn}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({foto:ev.target.result})});
+      const d=await r.json();
+      if(d.ok){toast('✅ Foto actualizada','ok');loadSessions()}else toast(d.error||'Error','err');
+    }catch{toast('Error de conexión','err')}
+  };r2.readAsDataURL(f);
 }
 
-async function confirmarFoto() {
-  const file = document.getElementById('f-input').files[0];
-  if (!file) return toast('Selecciona una imagen', 'err');
-  const sessionNum = Number(fotoN);
-  if (isNaN(sessionNum) || sessionNum < 1 || sessionNum > MAX_SESSIONS) { toast('Error: Sesión no definida', 'err'); return; }
-  const r2 = new FileReader();
-  r2.onload = async ev => {
-    closeFoto();
-    toast('Subiendo…');
-    try {
-      const r = await apiFetch(`/api/foto/${sessionNum}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ foto: ev.target.result })
-      });
-      const d = await r.json();
-      if (d.ok) { toast('✅ Foto actualizada', 'ok'); loadSessions(); }
-      else toast(d.error || 'Error', 'err');
-    } catch { toast('Error de conexión', 'err'); }
-  };
-  r2.readAsDataURL(file);
-}
-
-/* ── Keyboard shortcuts ── */
-document.addEventListener('keydown', e => {
-  if (!currentUser) return;
-  if ((e.key === 'r' || e.key === 'R') && !e.target.matches('input,select,textarea')) {
-    e.preventDefault(); loadSessions(); toast('🔄 Sesiones recargadas', 'ok');
-  }
-  if (e.key === 'Escape') {
-    closeModal(); closeFoto(); closeLidModal(); closeWallpaperModal(); closeConfirmModal();
-  }
+document.addEventListener('keydown',e=>{
+  if(!cu)return;
+  if((e.key==='r'||e.key==='R')&&!e.target.matches('input,select,textarea')){e.preventDefault();loadSessions();toast('🔄 Recargado','ok')}
+  if(e.key==='Escape'){closeModal();closeFoto();closeLidModal();closeWallpaperModal();closeConfirmModal()}
 });
+document.getElementById('m-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmModal();if(e.key==='Escape')closeModal()});
+document.getElementById('lid-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmLid();if(e.key==='Escape')closeLidModal()});
+document.getElementById('m-ov').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
+document.getElementById('f-ov').addEventListener('click',e=>{if(e.target===e.currentTarget)closeFoto()});
+document.getElementById('lid-ov').addEventListener('click',e=>{if(e.target===e.currentTarget)closeLidModal()});
+document.getElementById('confirm-ov').addEventListener('click',e=>{if(e.target===e.currentTarget)closeConfirmModal()});
 
-document.getElementById('m-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') confirmModal();
-  if (e.key === 'Escape') closeModal();
-});
-document.getElementById('lid-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') confirmLid();
-  if (e.key === 'Escape') closeLidModal();
-});
-
-document.getElementById('m-ov').addEventListener('click',       e => { if(e.target===e.currentTarget) closeModal(); });
-document.getElementById('f-ov').addEventListener('click',       e => { if(e.target===e.currentTarget) closeFoto(); });
-document.getElementById('lid-ov').addEventListener('click',     e => { if(e.target===e.currentTarget) closeLidModal(); });
-document.getElementById('confirm-ov').addEventListener('click', e => { if(e.target===e.currentTarget) closeConfirmModal(); });
-
-/* ── Init ── */
 initTheme();
 checkAutoLogin();
 </script>
